@@ -6483,7 +6483,7 @@ hr {
   right: 1rem;
   background: none;
   width: 287px;
-  margin: 1rem 0;
+  margin: 1rem 1rem;
   z-index: 1000;
 }
 
@@ -7388,7 +7388,7 @@ ul#flashes li {
 
 .legend {
   position: absolute;
-  left: 1rem;
+  left: 2rem;
   background: none;
   width: 260px;
   z-index: 1002;
