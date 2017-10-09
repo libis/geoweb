@@ -7,21 +7,25 @@
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 
-<div class="legend">
-          <div id="dem_eig_lege_chk" class="legend-top">
+<div class="control legend">
+          <div id="dem_eig_lege_chk" class="control-top legend-top">
              <button data-toggle="collapse" data-target="#legend-form"><span>Legende</span></button>
-          </div>       
-          <div id="legend-form" class="collapse">
-          </div>            
-</div>
-<div class="metadata">
-          <div id="dem_eig_lege_metadata" class="metadata-top">
              <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
-          </div>       
+          </div>
+          <div id="legend-form" class="collapse">
+          </div>
           <div id="metadata-form" class="collapse">
-            <div id="infobox" style="display:none" ></div>          
-          </div>            
+            <div id="infobox" style="display:none" ></div>
+          </div>
 </div>
+<!--<div class="control metadata">
+          <div id="dem_eig_lege_metadata" class="control-top metadata-top">
+             <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
+          </div>
+          <div id="metadata-form" class="collapse">
+            <div id="infobox" style="display:none" ></div>
+          </div>
+</div>-->
 <div class="control">
   <div class="control-top">
      <button data-toggle="collapse" data-target="#control-form"><span>Menu</span></button>
@@ -84,7 +88,7 @@
               </ul>
           </div>
       </div>
-         
+
   </div>
 </div>
 <div id="map" class="map"></div>
@@ -106,11 +110,11 @@ var firstOpenLg = true;
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
-     
+
      demZoekLagen();
-     
+
 getMapStartup();
-     
+
      var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
      $("#legend-form").html(imag);
      $('#dem_demeente').on('select.editable-select', function (e) {
@@ -275,7 +279,7 @@ function getEigenaars(gem,nm,vnm,art,selLg) {
     $('#metadata-form').collapse('hide');
     $('#legend-form').collapse('hide');
     $("#lagenbox").css('display','none');
-     
+
     demGetEigenaars(gem,nm,vnm,art,selLg);
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();

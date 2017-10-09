@@ -20,7 +20,7 @@ $sid = session_id();
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>LGGI - Geografisch kaartenbestand</title>
 
-        <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="../css/layout.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="../css/map.css" media="screen" />
 
