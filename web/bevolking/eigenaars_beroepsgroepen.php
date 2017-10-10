@@ -4,26 +4,22 @@
 <script type="text/javascript" src="../js/mapBeroepsgroep.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
-<div class="legend">
-          <div id="dem_eig_lege_chk" class="legend-top">
+<div class="control legend">
+          <div id="dem_eig_lege_chk" class="control-top legend-top">
              <button data-toggle="collapse" data-target="#legend-form"><span>Legende</span></button>
-          </div>       
-          <div id="legend-form" class="collapse">
-          </div>            
-</div>
-<div class="metadata">
-          <div id="dem_eig_lege_metadata" class="metadata-top">
              <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
-          </div>       
+          </div>
+          <div id="legend-form" class="collapse">
+          </div>
           <div id="metadata-form" class="collapse">
-            <div id="infobox" style="display:none" ></div>          
-          </div>            
+            <div id="infobox" style="display:none" ></div>
+          </div>
 </div>   
 <div class="control">
   <div class="control-top">
      <button data-toggle="collapse" data-target="#control-form"><span>Menu</span></button>
   </div>
-  <div id="control-form" class="collapse">
+  <div id="control-form" class="collapse in">
     <h2>Beroepsgroep Eigenaar </h2>
 
     <div>

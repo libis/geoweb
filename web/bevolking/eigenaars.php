@@ -28,9 +28,9 @@
 </div>-->
 <div class="control">
   <div class="control-top">
-     <button data-toggle="collapse" data-target="#control-form"><span>Menu</span></button>
+     <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
   </div>
-  <div id="control-form" class="collapse">
+  <div id="control-form" class="collapse in" >
       <h2>Kadastrale Eigenaar </h2>
       <div>
           <button id ="dem_toon_kaart" onclick="getEigenaars(gem,nm,vnm,art,selLg);">
@@ -103,6 +103,7 @@ var firstOpenLg = true;
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+     
      $("#dem_zoek_artikelnummer").hide();
      $("#dem_zoek_familenaam").hide();
      $("#dem_zoek_voornaam").hide();
@@ -112,8 +113,7 @@ var firstOpenLg = true;
      $("#dem_eig_reset").hide();
 
      demZoekLagen();
-
-getMapStartup();
+     getMapStartup();
 
      var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
      $("#legend-form").html(imag);
