@@ -7390,8 +7390,12 @@ ul#flashes li {
   position: absolute;
   left: 2rem;
   background: none;
-  max-width: 500px;
+  width: 50%;
   z-index: 1002;
+}
+
+.legend .collapse.in {
+  display: inline-block;
 }
 
 .legend .legend-top {
@@ -7417,8 +7421,10 @@ ul#flashes li {
 }
 
 .legend #legend-form {
-  padding: 3.5rem 1rem 1rem 1rem;
-  background: #f6f6f6;
+  padding: 1rem 1rem 1rem 1rem;
+  background: white;
+  width: auto;
+  margin-top: 2.8rem;
 }
 
 .legend #legend-form h2 {
@@ -7474,8 +7480,9 @@ ul#flashes li {
 }
 
 #metadata-form {
-  padding: 3.5rem 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
   background: #f6f6f6;
+  margin-top: 2.8rem;
 }
 
 #metadata-form h2 {
@@ -7528,6 +7535,17 @@ ul#flashes li {
 
 .metadata_img {
   background: #66afe9;
+}
+
+table.fixed {
+  table-layout: fixed;
+  background: #f6f6f6;
+  padding: 1rem;
+}
+
+table.fixed td {
+  overflow: hidden;
+  max-width: 150px;
 }
 
 .ol-box {
@@ -7992,6 +8010,4 @@ ul#flashes li {
   color: black;
 }
 
-table.fixed { table-layout:fixed; }
-table.fixed td { overflow: hidden; max-width: 150px}
 /*# sourceMappingURL=style.css.map */
