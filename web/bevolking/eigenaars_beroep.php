@@ -100,6 +100,8 @@ var vnm="";
 var nm="";
 var brp="";
 var selLg=[];
+var firstOpenLg = true;
+
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
@@ -250,35 +252,43 @@ $('#dem_demeente').click(function () {
     $('#dem_demeente').val('');
 });
 
+function hideLagenbox() {
+   if (firstOpenLg == false) {
+        $("#lagenbox").css('display','none');
+    } else {
+        $('#eig_lagen_btn').attr('aria-expanded','false');
+    }
+}
 function resetMap(){
      $('#map').empty();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $( "#dem_eig_legend_chk").prop('checked', false);
-     $("#lagenbox").css('display','none');
+    hideLagenbox();
 }
 
 function resetEigenaarsBeroep()
 {
-resetMap();
-$('#dem_gemeente_beroep').val('');
-$('#dem_gemeente_voornaam').val('');
-$('#dem_gemeente_familienaam').val('');
-$('#dem_gemeente_artikelnummer').val('');
+    resetMap();
+    $('#dem_gemeente_beroep').val('');
+    $('#dem_gemeente_voornaam').val('');
+    $('#dem_gemeente_familienaam').val('');
+    $('#dem_gemeente_artikelnummer').val('');
 
-        $('#dem_gemeente_beroep').attr("placeholder","Even geduld...");
-        $('#dem_gemeente_voornaam').attr("placeholder","Even geduld...");
-        $('#dem_gemeente_familienaam').attr("placeholder","Even geduld...");
-        $('#dem_gemeente_artikelnummer').attr("placeholder","Even geduld..");
+    $('#dem_gemeente_beroep').attr("placeholder","Even geduld...");
+    $('#dem_gemeente_voornaam').attr("placeholder","Even geduld...");
+    $('#dem_gemeente_familienaam').attr("placeholder","Even geduld...");
+    $('#dem_gemeente_artikelnummer').attr("placeholder","Even geduld..");
 
     demZoekBeroepenByGemeente(gem);
     demZoekArtikelnummersByGemeente(gem);
     demZoekFamilienamenByGemeente(gem);
     demZoekVoornamenByGemeente(gem);
-                 brp = "Alle beroepen";
-                 art = "Alle artikelnummers";
-                 vnm = "Alle voornamen";
-                 nm = "Alle namen";
+
+    brp = "Alle beroepen";
+    art = "Alle artikelnummers";
+    vnm = "Alle voornamen";
+    nm = "Alle namen";
 }
 
 
@@ -308,16 +318,13 @@ function getEigenaarsBeroep(gem,nm,vnm,art,brp,selLg) {
 demGetEigenaarsBeroep(gem,nm,vnm,art,brp,selLg);
     $('#metadata-form').collapse('hide');
     $('#legend-form').collapse('hide');
-    $("#lagenbox").css('display','none');
-     $("#dem_eig_legend_chk").show();
-     $("#eig_legende_spam").show();
+    hideLagenbox();
+    $("#dem_eig_legend_chk").show();
+    $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();
     var bodyHeight = $(window).height();     
     $("#map").height(bodyHeight-headerHeight);    
 }
-
-
-
 
 </script>
 <?php include 'common/footer.php'; ?>

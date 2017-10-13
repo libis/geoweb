@@ -98,6 +98,7 @@ var vnm="";
 var nm="";
 var wpl="";
 var selLg=[];
+var firstOpenLg = true;
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -249,12 +250,20 @@ $('#dem_demeente').click(function () {
     $('#dem_demeente').val('');
 });
 
+function hideLagenbox() {
+   if (firstOpenLg == false) {
+        $("#lagenbox").css('display','none');
+    } else {
+        $('#eig_lagen_btn').attr('aria-expanded','false');
+    }
+}
+
 function resetMap(){
      $('#map').empty();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $( "#dem_eig_legend_chk").prop('checked', false);
-     $("#lagenbox").css('display','none');
+     hideLagenbox();
 }
 
 function resetEigenaarsWoonplaats()
@@ -307,7 +316,7 @@ function getEigenaarsWoonplaats(gem,nm,vnm,art,wpl,selLg) {
 demGetEigenaarsWoonplaats(gem,nm,vnm,art,wpl,selLg);
     $('#metadata-form').collapse('hide');
     $('#legend-form').collapse('hide');
-    $("#lagenbox").css('display','none');
+    hideLagenbox();
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();
