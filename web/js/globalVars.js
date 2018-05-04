@@ -10,3 +10,5 @@ var mapviewerIP = "http://test.heron-net.be";
 
 var mylegendberoepwindow = null;
 // Tot hier global vars
+
+var lagenprefix = 'aezel';

@@ -30,9 +30,6 @@
             Reset
         </button>
     </div>
-    <div>
-        <INPUT TYPE="checkbox" id="dem_eig_legend_chk" NAME="eig_legende" VALUE="appel"><span id="eig_legende_spam">Legende</span>
-    </div>
      <div>
         <label for="dem_gemeente" class="keuzelijstlabel">Gemeente:</label>
         <div id="dem_demeente" class="wrapper" >

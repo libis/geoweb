@@ -27,17 +27,77 @@ class demMapController {
         $this->conn = $pcontroller->getConn();
    }
    
-   function getEigenaars($gemeente,$naam,$voornaam,$artikelnr){
+   function getEigenaars($gemeente,$naam,$voornaam,$artikelnummer){
     
         $result = array();
         $index = 0;       
        
         $query = "select objkoppel from aezelschema.oat";
-        $query .= " where gemeente = '".$gemeente."'";
-        if ($naam != "Alle namen") { $query .= " and naam = '".$naam."'";  }
-        if ($voornaam != "Alle voornamen") { $query .= " and voornamen = '".$voornaam."'";  }
-        if ($artikelnr != "Alle artikelnummers") { $query .= " and artnr = '".$artikelnr."'";  }
 
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " where (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+
+       if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        } 
+        
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        
+        
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {

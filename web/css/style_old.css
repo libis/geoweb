@@ -408,6 +408,12 @@ ul#flashes li {
     height: 25px;
     border: none;
 }
+.gemeenteTextBox {
+    width: 185px;
+    margin-left: -210px;
+    height: 25px;
+    border: none;
+}
 
 .artikelnummerTextBox {
     width: 185px;

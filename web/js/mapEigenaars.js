@@ -1,5 +1,66 @@
 
 
+function setCookie(cname, cvalue) {
+    var d = new Date();
+    d.setTime(d.getTime() + (60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            var str = c.substring(name.length, c.length);
+            return str.split(",");
+        }
+    }
+    return "";
+}
+
+function demGetEigenaars(gem,nm,vnm,art,selLg){
+
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+   
+    var keyValueList = new Array;
+
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaars.script.php";
+    $('#map').html('');
+    if ((ln == 0) && (la == 0) && (lv == 0)) {
+        keyValueList[0] = 'gemeente##'+gem;
+        getMapEig(keyValueList,selGem,selLg);
+    } else {
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            data = data.trim();
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapEig(keyValueList,selGem,selLg);
+                i_count = 0;
+        })
+    }
+}
+
+
+/*
 function demGetEigenaars(gem,nm,vnm,art,selLg){
 
     var gemeente=gem;
@@ -32,15 +93,15 @@ function demGetEigenaars(gem,nm,vnm,art,selLg){
     }
 
 }
-
-function getMapEig(keyValueList,gemeente,selLg)
+*/
+function getMapEig(keyValueList,selGem,selLg)
 {
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
     var imgwms;
     for (var i=0;i<selLg.length;i++)  {
-        var laag = "aezel:"+selLg[i];
+        var laag = lagenprefix+":"+selLg[i];
         imgwms = new ol.source.ImageWMS({
           url: mapviewerIP+'/geoserver/ows',
           params: {'LAYERS':laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
@@ -192,6 +253,7 @@ function getMapEig(keyValueList,gemeente,selLg)
 //show feature
 
     var farray = [];
+    var farray2 = [];
     var i_count=0;
     var featureRequest;
     var featureGemRequest;
@@ -199,7 +261,26 @@ function getMapEig(keyValueList,gemeente,selLg)
     if (keyValueList.length == 1) {
 
         keyvaluearray=keyValueList[i_count].split("##");
-        wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
+
+                    var i_count2 = 0;
+            var targetToPush = "gemeente = ";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += " OR gemeente = "
+                } else {
+                    first = false;
+                    targetToPush += "'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'"
+                    i_count2++;                
+                }
+            }
+
+    wmsPerceel.updateParams({'cql_filter': targetToPush});
+        
+//        wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
 
         if (keyvaluearray[0] == 'gemeente'){
 
@@ -230,9 +311,24 @@ function getMapEig(keyValueList,gemeente,selLg)
       });
     }
   } else {
+            var i_count2 = 0;
+            var targetToPush = "gemeente = ";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += " OR gemeente = "
+                } else {
+                    first = false;
+                    targetToPush += "'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'"
+                    i_count2++;                
+                }
+            }
 
-
-    wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
+    wmsPerceel.updateParams({'cql_filter': targetToPush});
+    //wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
 
     while(i_count<keyValueList.length)
     {
@@ -255,6 +351,13 @@ function getMapEig(keyValueList,gemeente,selLg)
       });
   }
   
+            var i_count2 = 0;
+            while(i_count2<selGem.length)
+            {            
+                farray2[i_count2] = ol.format.filter.equalTo('gemeente', selGem[i_count2]);
+            }
+
+    wmsPerceel.updateParams({'cql_filter': targetToPush});  
   
       // generate a GetFeature request voor hele gemeente 
         featureGemRequest = new ol.format.WFS().writeGetFeature({
@@ -264,7 +367,9 @@ function getMapEig(keyValueList,gemeente,selLg)
         featureTypes: ['vw_minperceel0'],
         outputFormat: 'application/json',
         //maxFeatures : 1,
-        filter: ol.format.filter.equalTo('gemeente', gemeente)
+        //filter: ol.format.filter.equalTo('gemeente', gemeente)
+        filter:                 ol.format.filter.or.apply(null, farray2)
+        
     });
 
       // then post the request and add the received features to a layer

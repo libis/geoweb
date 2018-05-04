@@ -5,17 +5,15 @@ include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
 
 
-$filter = $_GET['gemeente'];
-//$familienaam = $_GET['familienaam'];
-//$artikelnummer = $_GET['artikelnummer'];
-$familienaam = $_POST['selNm'];
+$naam = $_GET['naam'];
+$gemeente = $_GET['gemeente'];
 $artikelnummer = $_POST['selArt'];
+$woonplaatsen = $_POST['selWpl'];
 $beroepen = $_POST['selBrp'];
 $beroepsgroepen = $_POST['selBgp'];
-$woonplaats = $_GET['woonplaats'];
 $result="";
 
-foreach ($lijstenController->getWoonplaatsenStat($filter,$familienaam,$artikelnummer,$woonplaats,$beroepen,$beroepsgroepen) as $key => $value)
+foreach ($lijstenController->getFamilienamenStat($gemeente,$naam,$artikelnummer,$beroepsgroepen,$woonplaatsen,$beroepen) as $key => $value)
 {
     if($result!="")
     {
@@ -26,3 +24,5 @@ foreach ($lijstenController->getWoonplaatsenStat($filter,$familienaam,$artikelnu
 echo $result;
 
 ?>
+
+

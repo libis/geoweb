@@ -6,8 +6,10 @@ $statController = new demStatisticsController();
 
 
 $gemeente = $_GET['gemeente'];
-$naam = $_GET['naam'];
-$artikelnr = $_GET['artikelnr'];
+//$naam = $_GET['naam'];
+//$artikelnr = $_GET['artikelnr'];
+$artikelnr = $_POST['selArt'];
+$naam = $_POST['selNm'];
 $woonplaatsen = $_POST['selWpl'];
 $beroepen = $_POST['selBrp'];
 $beroepsgroepen = $_POST['selBgp'];
@@ -20,7 +22,7 @@ foreach ($statController->getGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$wo
     {
         $result .= "%%";
     }
-    $result .= $key."##".$value[1]."##".$value[2];
+    $result .= $key."##".$value[1]."##".$value[2]."##".$value[3];
 }
 echo $result;
 

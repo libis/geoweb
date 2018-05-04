@@ -5,13 +5,13 @@ include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
 
 
-$familienaam = $_GET['familienaam'];
-$filter = $_GET['gemeente'];
-$artikelnummer = $_GET['artikelnummer'];
-$voornaam = $_GET['voornaam'];
+$filter = $_GET['naam'];
+$voornaam = $_POST['selVnm'];
+$gemeente = $_POST['selGem'];
+$artikelnummer = $_POST['selArt'];
 $result="";
 
-foreach ($lijstenController->getFamilenamenFilter($filter,$familienaam,$voornaam,$artikelnummer) as $key => $value)
+foreach ($lijstenController->getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer) as $key => $value)
 {
     if($result!="")
     {

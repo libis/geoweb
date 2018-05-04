@@ -7,8 +7,10 @@ $lijstenController = new lijstenController();
 
 $beroep = $_GET['beroep'];
 $filter = $_GET['gemeente'];
-$familienaam = $_GET['familienaam'];
-$artikelnummer = $_GET['artikelnummer'];
+//$familienaam = $_GET['familienaam'];
+//$artikelnummer = $_GET['artikelnummer'];
+$familienaam = $_POST['selNm'];
+$artikelnummer = $_POST['selArt'];
 $woonplaatsen = $_POST['selWpl'];
 $beroepsgroepen = $_POST['selBgp'];
 $result="";

@@ -7390,7 +7390,7 @@ ul#flashes li {
   position: absolute;
   left: 2rem;
   background: none;
-  width: 50%;
+  width: 300px;
   z-index: 1002;
 }
 

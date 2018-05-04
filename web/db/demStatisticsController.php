@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 if(!defined('DS'))
     define('DS', DIRECTORY_SEPARATOR);
 require_once (dirname(__FILE__).DS.'/parameterController.php');
@@ -25,10 +25,28 @@ class demstatisticsController {
         $this->conn = $pcontroller->getConn();
    }
    
+   function getGemGrondbezit($gemeente)
+   {
+        if (!isset($_SESSION[$gemeente])) {
+            $query = "select sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
+            $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+            $query .= " where oat.gemeente = '".$gemeente."'";
+            $s = pg_query($this->conn, $query);
+            while($row = pg_fetch_row($s))
+            {
+                $_SESSION[$gemeente] = $row[0];
+            }
+            pg_free_result($s);
+        }           
+       return $_SESSION[$gemeente];
+    }
+   
    function getAantalGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
-        $index = 0;       
+        $index = 0;    
+        
+        $gemOpp = $this->getGemGrondbezit($gemeente);
        
         $query = "select aantal,naam || ' ' || voornamen from ( ";
         $query .= "select count(naam) as aantal,naam,voornamen from aezelschema.oat ";
@@ -87,6 +105,7 @@ class demstatisticsController {
         {
             $tssres[1]= $row[0];
             $tssres[2]= $row[1];
+            $tssres[3]= $gemOpp;
             $result[$index++]= $tssres;
         }
         pg_free_result($s);
@@ -97,14 +116,43 @@ class demstatisticsController {
     
         $result = array();
         $index = 0;       
+
+        $gemOpp = $this->getGemGrondbezit($gemeente);
        
         $query = "select sum(sqm),naam || ' ' || voornamen from ( ";
         $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
         $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
         $query .= "where naam is not null and voornamen is not null ";
         $query .= " and oat.gemeente = '".$gemeente."'";
-        if ($naam != "Alle namen") { $query .= " and naam = '".$naam."'";  }
-        if (count($woonplaatsen) > 0) {
+//        if ($naam != "Alle namen") { $query .= " and naam = '".$naam."'";  }
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        if (count($artikelnr) > 0) {
+            $first = true;
+            foreach ($artikelnr as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          if (count($woonplaatsen) > 0) {
             $first = true;
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
@@ -132,7 +180,7 @@ class demstatisticsController {
             }
             if ($first == false){ $query .= ")"; }
         }
-                 if (count($beroepsgroepen) > 0) {
+        if (count($beroepsgroepen) > 0) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
@@ -146,8 +194,21 @@ class demstatisticsController {
             }
             if ($first == false){ $query .= ")"; }
         }
-       // if ($woonplaats != "Alle woonplaatsen") { $query .= " and woonplaats = '".$woonplaats."'";  }
-        if ($artikelnr != "Alle artikelnummers") { $query .= " and artnr = '".$artikelnr."'";  }
+        if (count($beroepsgroepen) > 0) {
+            $first = true;
+            foreach ($beroepsgroepen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroepsgroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+//        if ($artikelnr != "Alle artikelnummers") { $query .= " and artnr = '".$artikelnr."'";  }
         
         $query .= "group by naam,voornamen,minperceel.geom ";
         $query .= "order by naam,voornamen ";
@@ -162,6 +223,7 @@ class demstatisticsController {
             
             $tssres[1]= $row[0];
             $tssres[2]= $row[1];
+            $tssres[3]= $gemOpp;
             $result[$index++]= $tssres;
         }
         pg_free_result($s);
