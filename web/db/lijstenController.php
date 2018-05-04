@@ -491,24 +491,39 @@ class lijstenController {
     }    
     
     
-    public function getVoornamenFilter($filter,$gemeente,$naam,$artikelnummer)
+    public function getVoornamenFilter($voornaam,$gemeente,$naam,$artikelnummer)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from aezelschema.oat " ;
      
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
             foreach ($gemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " where (gemeente = '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or gemeente = '".$value."'";
                 }
                 }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
             }
             if ($first == false){ $query .= ")"; }
         }         
@@ -706,21 +721,21 @@ class lijstenController {
         return $result;
     }        
 
-    public function getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam)
+    public function getArtikelnummersFilterEig($artikelnummer,$gemeente,$familienaam,$voornaam)
     {
         $result = array();
         $index = 0;
         
         
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        $query="select distinct to_number(artnr,'9999') from aezelschema.oat " ;
         
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
             foreach ($gemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " where (gemeente = '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or gemeente = '".$value."'";
@@ -728,7 +743,23 @@ class lijstenController {
                 }
             }
             if ($first == false){ $query .= ")"; }
-        }         
+        }
+        
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {

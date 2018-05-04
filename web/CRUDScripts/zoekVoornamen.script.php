@@ -5,7 +5,7 @@ include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
 
 
-$filter = $_GET['voornaam'];
+$filter = $_POST['selVnm'];
 $naam = $_POST['selNm'];
 $gemeente = $_POST['selGem'];
 $artikelnummer = $_POST['selArt'];

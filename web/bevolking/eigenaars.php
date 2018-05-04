@@ -25,7 +25,7 @@
   <div id="control-form" class="collapse in" >
       <h2>Kadastrale Eigenaar </h2>
       <div>
-          <button id ="dem_toon_kaart" onclick="getEigenaars(gem,nm,vnm,art,selLg);">
+          <button id ="dem_toon_kaart" onclick="getEigenaars(/*gem,nm,vnm,art,selLg*/);">
               Toon kaart
           </button>
           <button id ="dem_eig_reset" onclick="resetEigenaars();">
@@ -141,28 +141,9 @@ $(document).on('click','#gemeentebox a',function(event){
 
    if (( idx = selGem.indexOf( href.trim()))  > -1 ) {
       selGem.splice( idx, 1 );
+      setCookie('selGem',selGem);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-      if (href.trim() == 'Alle gemeenten') {
-          selGem.splice(0,selGem.length)
-         $( "#gemeentebox a" ).each(function( index ) {
-            $(this).find('input').prop('checked',false);
-         });
-      }
    } else {
-      if (href.trim() == 'Alle gemeenten') {
-         selGem.splice(0,selGem.length)
-         $( "#gemeentebox a" ).each(function( index ) {
-            $(this).find('input').prop('checked',false);
-         });
-     }
-
-      if (val > 0) {
-        if ($( "#gemeentebox a" ).first().find('input').prop('checked')==true) {
-            $( "#gemeentebox a" ).first().find('input').prop('checked',false);
-            selGem.splice( "Alle namen", 1 );
-        }
-      }
-
       selGem.push(href.trim());
       setCookie('selGem',selGem);
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
@@ -179,6 +160,10 @@ $(document).on('click','#gemeentebox a',function(event){
     selNmTmp.splice(0,selNm.length);
     selArtTmp.splice(0,selArt.length);
     selVnmTmp.splice(0,selVnm.length);
+
+    setCookie('selArt',selArt);
+    setCookie('selVnm',selVnm);
+    setCookie('selNm',selNm);
 
    demZoekArtikelnummersByGemeente(selGem);
    demZoekFamilienamenByGemeente(/*selGem*/);
@@ -212,16 +197,19 @@ $(document).on('click','#familienaambox a',function(event){
 
    if (( idx = selNm.indexOf( href.trim()))  > -1 ) {
       selNm.splice( idx, 1 );
+      setCookie('selNm',selNm);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
       if (href.trim() == 'Alle namen') {
-          selNm.splice(0,selNm.length)
+            selNm.splice(0,selNm.length);
+            setCookie('selNm',selNm);
          $( "#familienaambox a" ).each(function( index ) {
             $(this).find('input').prop('checked',false);
          });
       }
    } else {
       if (href.trim() == 'Alle namen') {
-         selNm.splice(0,selNm.length)
+            selNm.splice(0,selNm.length);
+            setCookie('selNm',selNm);
          $( "#familienaambox a" ).each(function( index ) {
             $(this).find('input').prop('checked',false);
          });
@@ -231,6 +219,7 @@ $(document).on('click','#familienaambox a',function(event){
         if ($( "#familienaambox a" ).first().find('input').prop('checked')==true) {
             $( "#familienaambox a" ).first().find('input').prop('checked',false);
             selNm.splice( "Alle namen", 1 );
+            setCookie('selNm',selNm);
         }
       }
 
@@ -271,18 +260,21 @@ $(document).on('click','#voornaambox a',function(event){
 
    if (( idx = selVnm.indexOf( href.trim()))  > -1 ) {
       selVnm.splice( idx, 1 );
+      setCookie('selVnm',selVnm);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
       if (href.trim() == 'Alle voornamen') {
-          selVnm.splice(0,selVnm.length)
+          selVnm.splice(0,selVnm.length);
+          setCookie('selVnm',selVnm);
          $( "#voornaambox a" ).each(function( index ) {
             $(this).find('input').prop('checked',false);
          });
       }
    } else {
       if (href.trim() == 'Alle voornamen') {
-         selVnm.splice(0,selVnm.length)
-         $( "#voornaambox a" ).each(function( index ) {
-            $(this).find('input').prop('checked',false);
+           selVnm.splice(0,selVnm.length);
+           setCookie('selVnm',selVnm);
+           $( "#voornaambox a" ).each(function( index ) {
+           $(this).find('input').prop('checked',false);
          });
      }
 
@@ -290,6 +282,7 @@ $(document).on('click','#voornaambox a',function(event){
         if ($( "#voornaambox a" ).first().find('input').prop('checked')==true) {
             $( "#voornaambox a" ).first().find('input').prop('checked',false);
             selVnm.splice( "Alle voornamen", 1 );
+            setCookie('selVnm',selVnm);
         }
       }
 
@@ -332,16 +325,19 @@ $(document).on('click','#artikelnummerbox a',function(event){
 
    if (( idx = selArt.indexOf( href.trim()))  > -1 ) {
       selArt.splice( idx, 1 );
+      setCookie('selArt',selArt);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
       if (href.trim() == 'Alle artikelnummers') {
-          selArt.splice(0,selArt.length)
+          selArt.splice(0,selArt.length);
+          setCookie('selArt',selArt);
          $( "#artikelnummerbox a" ).each(function( index ) {
             $(this).find('input').prop('checked',false);
          });
       }
    } else {
       if (href.trim() == 'Alle artikelnummers') {
-         selArt.splice(0,selArt.length)
+         selArt.splice(0,selArt.length);
+         setCookie('selArt',selArt);
          $( "#artikelnummerbox a" ).each(function( index ) {
             $(this).find('input').prop('checked',false);
          });
@@ -351,6 +347,7 @@ $(document).on('click','#artikelnummerbox a',function(event){
         if ($( "#artikelnummerbox a" ).first().find('input').prop('checked')==true) {
             $( "#artikelnummerbox a" ).first().find('input').prop('checked',false);
             selArt.splice( "Alle artikelnummers", 1 );
+            setCookie('selArt',selArt);
         }
       }
       selArt.push(href.trim());
@@ -374,6 +371,7 @@ $(document).on('click','#lagenbox a',function(event){
 
    if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
       selLg.splice( idx, 1 );
+      setCookie('selLg',selLg);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
    } else {
       selLg.push(href.trim());
@@ -478,24 +476,40 @@ function resetMap(){
 function resetEigenaars()
 {
 resetMap();
+     $("#dem_toon_kaart").hide();
+     $("#dem_eig_reset").hide();
 
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+
+    selGem.splice(0,selGem.length);
     selNm.splice(0,selNm.length);
     selArt.splice(0,selArt.length);
     selVnm.splice(0,selVnm.length);
+    selGemTmp.splice(0,selGem.length);
     selNmTmp.splice(0,selNm.length);
     selArtTmp.splice(0,selArt.length);
     selVnmTmp.splice(0,selVnm.length);
-
-    $('#dem_gemeente_voornaam').val('');
-    $('#dem_gemeente_familienaam').val('');
-    $('#dem_gemeente_artikelnummer').val('');
+    
+    setCookie('selArt',selArt);
+    setCookie('selVnm',selVnm);
+    setCookie('selNm',selNm);
+    setCookie('selGem',selGem);
 
     $('.naamTextBox').attr("placeholder","Even geduld..");
     $('.artikelnummerTextBox').attr("placeholder","Even geduld..");
-    $('.voornaamTextBox').attr("placeholder","Even geduld..");
-    demZoekArtikelnummersByGemeente(selGem);
-    demZoekFamilienamenByGemeente(selGem);
-    demZoekVoornamenByGemeente(selGem);
+    $('.voornaamBox').attr("placeholder","Even geduld..");
+   demZoekArtikelnummersByGemeente(selGem);
+   demZoekFamilienamenByGemeente(/*selGem*/);
+   demZoekVoornamenByGemeente(selGem);
+     demZoekGemeenten();
+     getMapStartup();
+
+     var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
+     $("#legend-form").html(imag);
+   
 }
 
 
@@ -521,13 +535,13 @@ function eigenaars_statistieken() {
  window.open("./eigenaars_statistieken.php","_self");
 }
 
-function getEigenaars(gem,nm,vnm,art,selLg) {
+function getEigenaars(/*gem,nm,vnm,art,selLg*/) {
 
 
     $('#metadata-form').collapse('hide');
     $('#legend-form').collapse('hide');
     hideLagenbox();
-    demGetEigenaars(gem,nm,vnm,art,selLg);
+    demGetEigenaars();
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();

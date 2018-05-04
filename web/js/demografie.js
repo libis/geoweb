@@ -15,14 +15,13 @@ function demZoekVoornamen(selGem,selNm,selVnm,selArt)
    selArt = getCookie('selArt');
    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamen.script.php";
-    var naam = $(".voornaamTextBox").val();   
-    argumenten = '?voornaam='+naam;
+    
     var lg,lv,ln,la;
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selArt}, function(data) {    
+    $.post(targetUrl,{selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -166,11 +165,11 @@ function demZoekVoornamenByGemeente(selGem)
     $.post(targetUrl,{selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
+        var poutput = [];
         if(data.length>0)
         {
             keyValueList = data.split("%%");
             i_count =0;
-            var poutput = [];
             var targetToPush = '';  
             targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle voornamen</a></li>';
             while(i_count<keyValueList.length)
@@ -277,14 +276,12 @@ function demZoekArtikelnummers(selGem,selNm,selVnm,selArt)
    selVnm = getCookie('selVnm');
    selArt = getCookie('selArt');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummers.script.php";
-    var naam = $(".artTextBox").val();   
-    argumenten = '?artikelnummer='+naam;
     var lg,lv,ln,la;
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm}, function(data) {    
+    $.post(targetUrl,{selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -429,8 +426,9 @@ function demZoekArtikelnummersByGemeente(selGem)
             keyValueList = data.split("%%");
             i_count =0;
             var poutput = [];
-            var targetToPush = '';  
+            var targetToPush='';
             targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle artikelnummers</a></li>';
+
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -1817,11 +1815,12 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
     $.post(targetUrl,{selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
+        var poutput = [];
+        
         if(data.length>0)
         {
             keyValueList = data.split("%%");
             i_count =0;
-            var poutput = [];
             var targetToPush = '';  
             targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle namen</a></li>';
             while(i_count<keyValueList.length)
@@ -1931,6 +1930,7 @@ function demZoekGemeenten()
             i_count = 0;
         
             var targetToPush = '';  
+            
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -2027,6 +2027,7 @@ function getCookie(cname) {
         }
         if (c.indexOf(name) == 0) {
             var str = c.substring(name.length, c.length);
+            if (str=="") return [];
             return str.split(",");
         }
     }
