@@ -428,7 +428,7 @@ class lijstenController {
     }    
 
     
-       public function getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer)
+       public function getFamilenamenFilterEig($filter,$gemeente,$naam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
@@ -464,7 +464,26 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($voornaam) > 0) {
+/*        
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+ * 
+ */
+         if (count($voornaam) > 0) {
+ 
             $first = true;
             foreach ($voornaam as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
@@ -491,19 +510,19 @@ class lijstenController {
     }    
     
     
-    public function getVoornamenFilter($voornaam,$gemeente,$naam,$artikelnummer)
+    public function getVoornamenFilter($filter,$gemeente,$naam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat " ;
+        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')";
      
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
             foreach ($gemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " and (gemeente = '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or gemeente = '".$value."'";
@@ -512,6 +531,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }         
+/*        
         if (count($voornaam) > 0) {
             $first = true;
             foreach ($voornaam as $value) {
@@ -527,6 +547,8 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }         
+ * 
+ */
         if (count($artikelnummer) > 0) {
             $first = true;
             foreach ($artikelnummer as $value) {
@@ -721,21 +743,21 @@ class lijstenController {
         return $result;
     }        
 
-    public function getArtikelnummersFilterEig($artikelnummer,$gemeente,$familienaam,$voornaam)
+    public function getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
         
         
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat " ;
+        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
         
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
             foreach ($gemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " and (gemeente = '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or gemeente = '".$value."'";
@@ -744,7 +766,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-        
+/*        
         if (count($artikelnummer) > 0) {
             $first = true;
             foreach ($artikelnummer as $value) {
@@ -760,6 +782,8 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
+ * 
+ */
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {

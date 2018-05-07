@@ -22,60 +22,54 @@
   <div id="control-form" class="collapse in">
     <h2>Beroep Eigenaar </h2>
     <div>
-        <button id ="dem_toon_kaart" onclick="getEigenaarsBeroep(gem,nm,vnm,art,brp,selLg);">
+        <button id ="dem_toon_kaart" onclick="getEigenaarsBeroep();">
             Toon kaart
         </button>
         <button id ="dem_eig_reset" onclick="resetEigenaarsBeroep();">
             Reset
         </button>
     </div>
-    <div>
-    <label for="dem_gemeente" class="keuzelijstlabel">Gemeente:</label>
-    <div id="dem_demeente" class="wrapper" >
-        <select placeholder="Zoek thuisgemeente"  id=gemeentebox class="geoselect editableEigenaarBox">
-            <?php
-                if(!defined('DS'))
-                    define('DS', DIRECTORY_SEPARATOR);
-                require_once (dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
-                $thelijstenController=new lijstenController();
-                foreach($thelijstenController->getGemeenten() as $key => $value)
-                {
-                    echo "<option value=\"".$key."\">".$value."</option>" ;
-                }
-            ?>
-        </select>
-    </div>
-    </div>
+    
     <label for="dem_gemeente_beroep">Beroep:</label>
     <div id="dem_gemeente_beroep" class="wrapper">
         <select id=beroepbox class="geoselect editableBeroepBox">
         </select>
-    </div>
+    </div>    
+    
     <div>
-      <label for="dem_gemeente_familienaam">Naam:</label>
-      <div id="dem_gemeente_familienaam" class="wrapper">
-          <select id=familienaambox class="geoselect editableFamilienaamBox">
-          </select>
+    <label for="dem_gemeente" class="keuzelijstlabel">Gemeente:</label>
+      <div id="multilayer">
+      <div class="button-group">
+        <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
+        <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul id=gemeentebox class="dropdown-menu">
+        </ul>
+       </div>
+      <div class="button-group">
+        <input class="geotextbox beroepTextBox" name="beroepbox" placeholder="Zoek beroep" onkeyup="demZoekBeroepen();" maxlength="20"/>
+        <button id="beroep_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul id=beroepbox class="dropdown-menu">
+        </ul>
       </div>
-    </div>
-    <div>
-      <div>
-         <label for="dem_gemeente_voornaam">Voornaam:</label>
-         <div id="dem_gemeente_voornaam" class="wrapper">
-            <select id=voornaambox class="geoselect editableVoornaamBox">
-            </select>
-          </div>
-        </div>
-     </div>
-
-    <div>
-      <label for="dem_gemeente_artikelnummer">Artikelnummer:</label>
-
-      <div id="dem_gemeente_artikelnummer" class="wrapper">
-          <select id=artikelnummerbox class="geoselect editableArtikelnummerBox">
-          </select>
+      <div class="button-group">
+        <input class="geotextbox familienaamTextBox" name="familienaambox" placeholder="Zoek naam" onkeyup="demZoekFamilienamenBeroep();" maxlength="20"/>
+        <button id="naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul id=familienaambox class="dropdown-menu">
+        </ul>
       </div>
-    </div>
+      <div class="button-group">
+        <input class="geotextbox voornaamTextBox" name="voornaambox" placeholder="Zoek voornaam" onkeyup="demZoekVoornamenBeroep();" maxlength="20"/>
+        <button id="voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul id=voornaambox class="dropdown-menu">
+        </ul>
+      </div>
+      <div class="button-group">
+        <input class="geotextbox artTextBox" name="artikelnummerbox" placeholder="Zoek artikelnummer" onkeyup="demZoekArtikelnummersBeroep();" maxlength="20"/>
+        <button id="artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <ul id=artikelnummerbox class="dropdown-menu">
+        </ul>
+      </div>
+
       <div id="multilayer">
           <div class="button-group">
               <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>

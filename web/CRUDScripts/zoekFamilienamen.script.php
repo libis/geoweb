@@ -7,11 +7,12 @@ $lijstenController = new lijstenController();
 
 $filter = $_GET['naam'];
 $voornaam = $_POST['selVnm'];
+$naam = $_POST['selNm'];
 $gemeente = $_POST['selGem'];
 $artikelnummer = $_POST['selArt'];
 $result="";
 
-foreach ($lijstenController->getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer) as $key => $value)
+foreach ($lijstenController->getFamilenamenFilterEig($filter,$gemeente,$naam,$voornaam,$artikelnummer) as $key => $value)
 {
     if($result!="")
     {

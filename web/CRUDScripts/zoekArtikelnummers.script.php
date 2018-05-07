@@ -4,14 +4,14 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
 
-
-$filter = $_POST['selArt'];
+$filter = $_GET['artnr'];
+$artikelnummers = $_POST['selArt'];
 $familienaam = $_POST['selNm'];
 $gemeente = $_POST['selGem'];
 $voornaam = $_POST['selVnm'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam) as $key => $value)
+foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummers) as $key => $value)
 {
     if($result!="")
     {

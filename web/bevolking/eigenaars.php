@@ -25,7 +25,7 @@
   <div id="control-form" class="collapse in" >
       <h2>Kadastrale Eigenaar </h2>
       <div>
-          <button id ="dem_toon_kaart" onclick="getEigenaars(/*gem,nm,vnm,art,selLg*/);">
+          <button id ="dem_toon_kaart" onclick="getEigenaars();">
               Toon kaart
           </button>
           <button id ="dem_eig_reset" onclick="resetEigenaars();">
@@ -35,31 +35,31 @@
          
       <div id="multilayer">
       <div class="button-group">
-        <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString(/*selGem*/);" maxlength="20"/>
+        <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
         <button id="eig_stat_gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=gemeentebox class="dropdown-menu">
         </ul>
        </div>
       <div class="button-group">
-        <input class="geotextbox familienaamTextBox" name="familienaambox" placeholder="Zoek naam" onkeyup="demZoekFamilienamen(/*selGem,selNm/*,selVnm,selArt*/);" maxlength="20"/>
+        <input class="geotextbox familienaamTextBox" name="familienaambox" placeholder="Zoek naam" onkeyup="demZoekFamilienamen();" maxlength="20"/>
         <button id="eig_stat_naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=familienaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
-        <input class="geotextbox voornaamTextBox" name="voornaambox" placeholder="Zoek voornaam" onkeyup="demZoekVoornamen(selGem,selNm,selVnm,selArt);" maxlength="20"/>
+        <input class="geotextbox voornaamTextBox" name="voornaambox" placeholder="Zoek voornaam" onkeyup="demZoekVoornamen();" maxlength="20"/>
         <button id="eig_stat_voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=voornaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
-        <input class="geotextbox artTextBox" name="artikelnummerbox" placeholder="Zoek artikelnummer" onkeyup="demZoekArtikelnummers(selGem,selNm,selVnm,selArt);" maxlength="20"/>
+        <input class="geotextbox artTextBox" name="artikelnummerbox" placeholder="Zoek artikelnummer" onkeyup="demZoekArtikelnummers();" maxlength="20"/>
         <button id="eig_stat_artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=artikelnummerbox class="dropdown-menu">
         </ul>
       </div>
           <div class="button-group">
-              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>
+              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString();" maxlength="25"/>
               <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
               <ul id=lagenbox class="dropdown-menu">
               </ul>
@@ -185,7 +185,7 @@ $(document).on('click','.familienaamTextBox',function(event){
     firstOpenNm = false;    
 });
 $(document).on('click','#familienaambox a',function(event){
-
+    selNm = getCookie('selNm');
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
     $('#voornaambox').slideUp();
@@ -214,14 +214,6 @@ $(document).on('click','#familienaambox a',function(event){
             $(this).find('input').prop('checked',false);
          });
      }
-
-      if (val > 0) {
-        if ($( "#familienaambox a" ).first().find('input').prop('checked')==true) {
-            $( "#familienaambox a" ).first().find('input').prop('checked',false);
-            selNm.splice( "Alle namen", 1 );
-            setCookie('selNm',selNm);
-        }
-      }
 
       selNm.push(href.trim());
       setCookie('selNm',selNm);
@@ -277,14 +269,6 @@ $(document).on('click','#voornaambox a',function(event){
            $(this).find('input').prop('checked',false);
          });
      }
-
-      if (val > 0) {
-        if ($( "#voornaambox a" ).first().find('input').prop('checked')==true) {
-            $( "#voornaambox a" ).first().find('input').prop('checked',false);
-            selVnm.splice( "Alle voornamen", 1 );
-            setCookie('selVnm',selVnm);
-        }
-      }
 
       selVnm.push(href.trim());
       setCookie('selVnm',selVnm);
@@ -343,13 +327,6 @@ $(document).on('click','#artikelnummerbox a',function(event){
          });
      }
 
-      if (val > 0) {
-        if ($( "#artikelnummerbox a" ).first().find('input').prop('checked')==true) {
-            $( "#artikelnummerbox a" ).first().find('input').prop('checked',false);
-            selArt.splice( "Alle artikelnummers", 1 );
-            setCookie('selArt',selArt);
-        }
-      }
       selArt.push(href.trim());
       setCookie('selArt',selArt);
 
@@ -483,6 +460,10 @@ resetMap();
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();
+    $('#artikelnummerbox').empty();
+    $('#gemeentebox').empty();
+    $('#familienaambox').empty();
+    $('#voornaambox').empty();
 
     selGem.splice(0,selGem.length);
     selNm.splice(0,selNm.length);
@@ -501,9 +482,7 @@ resetMap();
     $('.naamTextBox').attr("placeholder","Even geduld..");
     $('.artikelnummerTextBox').attr("placeholder","Even geduld..");
     $('.voornaamBox').attr("placeholder","Even geduld..");
-   demZoekArtikelnummersByGemeente(selGem);
-   demZoekFamilienamenByGemeente(/*selGem*/);
-   demZoekVoornamenByGemeente(selGem);
+
      demZoekGemeenten();
      getMapStartup();
 
