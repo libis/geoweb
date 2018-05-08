@@ -98,82 +98,88 @@ class lijstenController {
         return $result;
     }
     
-    public function getVoornamenFilterByFamilenaam($filter,$familienaam)
-    {
+    public function getVoornamenBeroepFilter($filter,$gemeente,$naam,$artikelnummer,$beroep) {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."' and naam = '".$familienaam."' order by voornamen";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }
-    
-    public function getVoornamenFilterByArtikelnummer($filter,$artikelnummer)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."' and artnr = '".$artikelnummer."' order by voornamen";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }
-    
- /*   
-    public function getVoornamenFilter($filter,$voornaam,$familienaam,$artikelnummer)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam like '".$familienaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and lower(voornamen) like lower('%".$voornaam."%')" ;             
-        $query .= " order by voornamen";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }
-  * 
-  */
+        
+        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
 
-    public function getVoornamenBeroepFilter($filter,$voornaam,$familienaam,$artikelnummer,$beroep) {
-        $result = array();
-        $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and lower(voornamen) like lower('%".$voornaam."%')" ;             
-        if (strncasecmp($beroep,"alle ",5) != 0) $query .=" and lower(beroep) like lower('%".$beroep."%')" ;             
-        $query .= " order by voornamen";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
         }
-        pg_free_result($s);
-        return $result;
-    }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
 
-    public function getVoornamenWoonplaatsFilter($filter,$voornaam,$familienaam,$artikelnummer,$woonplaats) {
-        $result = array();
-        $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and lower(voornamen) like lower('%".$voornaam."%')" ;             
-        if (strncasecmp($woonplaats,"alle ",5) != 0) $query .=" and woonplaats = '".$woonplaats."'" ;             
-        $query .= " order by voornamen";
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }    
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }            
+        
+         if (($beroep != NULL) || (count($beroep)) > 0) {
+            $first = true;
+            foreach ($beroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
+        $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -181,17 +187,91 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }
+    } 
     
-    public function getVoornamenBeroepsgroepFilter($filter,$voornaam,$familienaam,$artikelnummer,$beroepsgroep) {
+
+    public function getVoornamenWoonplaatsFilter($filter,$gemeente,$naam,$artikelnummer,$woonplaats) {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and lower(voornamen) like lower('%".$voornaam."%')" ;             
-        if (strncasecmp($beroepsgroep,"alle ",5) != 0) $query .=" and lower(beroepsgroep) like lower('%".$beroepsgroep."%')" ;             
-        $query .= " order by voornamen";
+        
+        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }    
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }            
+        
+         if (($woonplaats != NULL) || (count($woonplaats)) > 0) {
+            $first = true;
+            foreach ($woonplaats as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (woonplaats = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or woonplaats = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
+        $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -199,14 +279,152 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }
-            
+    } 
     
-    public function getFamilienamen()
+    public function getVoornamenBeroepsgroepFilter($filter,$voornaam,$naam,$artikelnummer,$beroepsgroep) {
+        $result = array();
+        $index = 0;
+        
+        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }    
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }            
+        
+         if (($beroepsgroep != NULL) || (count($beroepsgroep)) > 0) {
+            $first = true;
+            foreach ($beroepsgroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroepsgroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
+        $query .= " order by naam";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        return $result;
+    } 
+    
+    public function getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat";
+        
+        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -215,17 +433,74 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }
-
+    }    
     
-    public function getFamilenamenFilter($filter,$familienaam,$voornaam,$artikelnummer)
+    public function getFamilenamenBeroepFilter($filter,$gemeente,$voornaam,$artikelnummer,$beroep) 
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) like lower('%".$familienaam."%')";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and lower(voornamen) like lower('%".$voornaam."%')" ;        
+        
+        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+         if (($beroep != NULL) || (count($beroep)) > 0) {
+            $first = true;
+            foreach ($beroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -234,17 +509,74 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }
+    } 
     
-    public function getFamilenamenBeroepFilter($filter,$familienaam,$voornaam,$artikelnummer,$beroep) 
-     {
+    public function getFamilenamenWoonplaatsFilter($filter,$gemeente,$voornaam,$artikelnummer,$woonplaats) 
+   {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) like lower('%".$familienaam."%')";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen like '".$voornaam."'" ;        
-        if (strncasecmp($beroep,"alle ",5) != 0) $query .=" and beroep like '".$beroep."'" ;        
+        
+        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+         if (($woonplaats != NULL) || (count($woonplaats)) > 0) {
+            $first = true;
+            foreach ($woonplaats as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (woonplaats = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or woonplaats = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -253,17 +585,74 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }
+    }  
     
-    public function getFamilenamenWoonplaatsFilter($filter,$familienaam,$voornaam,$artikelnummer,$woonplaats) 
-     {
+    public function getFamilenamenBeroepsgroepFilter($filter,$gemeente,$voornaam,$artikelnummer,$beroepsgroep) 
+    {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) like lower('%".$familienaam."%')";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen like '".$voornaam."'" ;        
-        if (strncasecmp($woonplaats,"alle ",5) != 0) $query .=" and woonplaats like '".$woonplaats."'" ;        
+        
+        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+     
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }         
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+         if (count($voornaam) > 0) {
+ 
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+         if (($beroepsgroep != NULL) || (count($beroepsgroep)) > 0) {
+            $first = true;
+            foreach ($beroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroepsgroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -272,26 +661,7 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }   
-    
-    public function getFamilenamenBeroepsgroepFilter($filter,$familienaam,$voornaam,$artikelnummer,$beroepsgroep) 
-     {
-        $result = array();
-        $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) like lower('%".$familienaam."%')";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen like '".$voornaam."'" ;        
-        if (strncasecmp($beroepsgroep,"alle ",5) != 0) $query .=" and beroepsgroep like '".$beroepsgroep."'" ;        
-        $query .= " order by naam";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }   
+    }  
 
     public function getFamilenamenFilterByGemeente($gemeente)
     {
@@ -349,7 +719,7 @@ class lijstenController {
         return $result;
     }
     
-       public function getFamilienamenStat($filter,$familienaam,$artikelnummer,$beroepen,$woonplaatsen,$beroepsgroepen)
+       public function getFamilienamenStat($filter,$familienaam,$artikelnummer,$beroep,$woonplaatsen,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -403,9 +773,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (($beroepen != NULL) || (count($beroepen)) > 0) {
+         if (($beroep != NULL) || (count($beroep)) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -428,89 +798,7 @@ class lijstenController {
     }    
 
     
-       public function getFamilenamenFilterEig($filter,$gemeente,$naam,$voornaam,$artikelnummer)
-    {
-        $result = array();
-        $index = 0;
-        
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
-     
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
-            $first = true;
-            foreach ($gemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
-                if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or gemeente = '".$value."'";
-                }
-                }
-            }
-            if ($first == false){ $query .= ")"; }
-        }         
-        if (count($artikelnummer) > 0) {
-            $first = true;
-            foreach ($artikelnummer as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or artnr = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }
-/*        
-        if (count($naam) > 0) {
-            $first = true;
-            foreach ($naam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (naam = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or naam = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }
- * 
- */
-         if (count($voornaam) > 0) {
- 
-            $first = true;
-            foreach ($voornaam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (voornamen = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or voornamen = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }        
-        
-        $query .= " order by naam";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }    
-    
-    
-    public function getVoornamenFilter($filter,$gemeente,$naam,$voornaam,$artikelnummer)
+    public function getVoornamenFilter($filter,$gemeente,$naam,$artikelnummer)
     {
         $result = array();
         $index = 0;
@@ -531,24 +819,6 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }         
-/*        
-        if (count($voornaam) > 0) {
-            $first = true;
-            foreach ($voornaam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (voornamen = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or voornamen = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }         
- * 
- */
         if (count($artikelnummer) > 0) {
             $first = true;
             foreach ($artikelnummer as $value) {
@@ -607,25 +877,6 @@ class lijstenController {
     }
 
     
-    public function getArtikelnummersFilter($filter,$artikelnummer,$familienaam,$voornaam)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where gemeente = '".$filter."'";
-        
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and lower(artnr) like lower('%".$artikelnummer."%')";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen ='".$voornaam."'";
-        $query .= " order by to_number(artnr,'9999')";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }   
-    
     public function getArtikelnummersFilterByGemeente($gemeente)
     {
         $result = array();
@@ -656,99 +907,10 @@ class lijstenController {
         return $result;
     }    
     
-    public function getArtikelnummersBeroepFilter($filter,$artikelnummer,$familienaam,$voornaam,$beroep)    
+    public function getArtikelnummersBeroepFilter($filter,$gemeente,$familienaam,$voornaam,$beroep)    
     {
         $result = array();
         $index = 0;
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where gemeente = '".$filter."'";
-        
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and lower(artnr) = lower('%".$artikelnummer."%')";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen =('".$voornaam."')";
-        if (strncasecmp($beroep,"alle ",5) != 0) $query .=" and lower(beroep) = ('".$beroep."')";
-        $query .= " order by to_number(artnr,'9999')";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }    
-    public function getArtikelnummersWoonplaatsFilter($filter,$artikelnummer,$familienaam,$voornaam,$woonplaats)    
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where gemeente = '".$filter."'";
-        
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and lower(artnr) = lower('%".$artikelnummer."%')";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen =('".$voornaam."')";
-        if (strncasecmp($woonplaats,"alle ",5) != 0) $query .=" and woonplaats = '".$woonplaats."'";
-        $query .= " order by to_number(artnr,'9999')";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }
-    public function getArtikelnummersBeroepsgroepFilter($filter,$artikelnummer,$familienaam,$voornaam,$beroepsgroep)    
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where gemeente = '".$filter."'";
-        
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and lower(artnr) = lower('%".$artikelnummer."%')";
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'" ;
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen =('".$voornaam."')";
-        if (strncasecmp($beroepsgroep,"alle ",5) != 0) $query .=" and lower(beroepsgroep) = ('".$beroepsgroep."')";
-        $query .= " order by to_number(artnr,'9999')";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }
-
-        public function getArtikelnummersFilterByVoornaam($filter,$voornaam)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct artnr naam from aezelschema.oat where gemeente = '".$filter."' and voornamen = '".$voornaam."'" ;
-        $query .= " order by artnr";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }        
-    public function getArtikelnummersFilterByFamiienaam($filter,$familienaam)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct artnr naam from aezelschema.oat where gemeente = '".$filter."' and naam = '".$familienaam."'" ;
-        $query .= " order by artnr";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
-        }
-        pg_free_result($s);
-        return $result;
-    }        
-
-    public function getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
-    {
-        $result = array();
-        $index = 0;
-        
-        
         
         $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
         
@@ -766,24 +928,247 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-/*        
-        if (count($artikelnummer) > 0) {
+
+        if (count($familienaam) > 0) {
             $first = true;
-            foreach ($artikelnummer as $value) {
+            foreach ($familienaam as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (naam = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or naam = '".$value."'";
                 }
             }
             }
             if ($first == false){ $query .= ")"; }
         }        
- * 
- */
+        
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        if (count($beroep) > 0) {
+            $first = true;
+            foreach ($beroep as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (beroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroep = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        $query .= " order by to_number(artnr,'9999')";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        return $result;
+    }
+    
+    public function getArtikelnummersWoonplaatsFilter($filter,$gemeente,$familienaam,$voornaam,$woonplaats)    
+    {
+        $result = array();
+        $index = 0;
+        
+        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+
+        if (count($familienaam) > 0) {
+            $first = true;
+            foreach ($familienaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        if (count($woonplaats) > 0) {
+            $first = true;
+            foreach ($woonplaats as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (woonplaats = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or woonplaats = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        $query .= " order by to_number(artnr,'9999')";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        return $result;
+    }
+
+    public function getArtikelnummersBeroepsgroepFilter($filter,$gemeente,$familienaam,$voornaam,$beroepsgroep)    
+    {
+        $result = array();
+        $index = 0;
+        
+        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+
+        if (count($familienaam) > 0) {
+            $first = true;
+            foreach ($familienaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        if (count($beroepsgroep) > 0) {
+            $first = true;
+            foreach ($beroepsgroep as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroepsgroep = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        
+        $query .= " order by to_number(artnr,'9999')";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        return $result;
+    }
+
+    public function getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam)
+    {
+        $result = array();
+        $index = 0;
+        
+        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -867,24 +1252,24 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($beroepsgroepen) > 0) {
+        if (count($voornaam) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($voornaam as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $query .= " and (voornamen = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or beroepsgroep = '".$value."'";
+                    $query .= " or voornamen = '".$value."'";
                 }
             }
             }
             if ($first == false){ $query .= ")"; }
-        }
-         if (($beroepen != NULL) || (count($beroepen)) > 0) {
+        }    
+         if (($beroep != NULL) || (count($beroep)) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -908,15 +1293,71 @@ class lijstenController {
 
     
     
-    public function getBeroepen($filter,$familienaam,$voornaam,$artikelnummer,$beroep)
+    public function getBeroepen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($beroep,"alle ",5) != 0) $query .=" and lower(beroep) like lower('%".$beroep."%')" ;
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen = '".$voornaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;        
+        $query="select distinct beroep from aezelschema.oat where lower(beroep) like lower('%".$filter."%')" ;
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($familienaam) > 0) {
+            $first = true;
+            foreach ($familienaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+       
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }       
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }       
         $query .= " order by beroep";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -926,35 +1367,73 @@ class lijstenController {
         pg_free_result($s);
         return $result;
     }    
-    public function getWoonplaatsen($filter,$familienaam,$voornaam,$artikelnummer,$woonplaats)
+    
+    public function getBeroepsgroepen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($woonplaats,"alle ",5) != 0) $query .=" and lower(woonplaats) like lower('%".$woonplaats."%')" ;
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen = '".$voornaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;        
-        $query .= " order by woonplaats";
-        $s = pg_query($this->conn, $query);
-        while($row = pg_fetch_row($s))
-        {
-            $result[$index++]= $row[0];
+        $query="select distinct beroep from aezelschema.oat where lower(beroep) like lower('%".$filter."%')" ;
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (gemeente = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or gemeente = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
         }
-        pg_free_result($s);
-        return $result;
-    }
+        if (count($familienaam) > 0) {
+            $first = true;
+            foreach ($familienaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
 
-    public function getBeroepsgroepen($filter,$familienaam,$voornaam,$artikelnummer,$beroepsgroep)
-    {
-        $result = array();
-        $index = 0;
-        $query="select distinct beroepsgroep from aezelschema.oat where gemeente = '".$filter."'";
-        if (strncasecmp($beroepsgroep,"alle ",5) != 0) $query .=" and lower(beroepsgroep) like lower('%".$beroepsgroep."%')" ;
-        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and naam = '".$familienaam."'";
-        if (strncasecmp($voornaam,"alle ",5) != 0) $query .=" and voornamen = '".$voornaam."'";
-        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;        
-        $query .= " order by beroepsgroep";
+                if ($first == true){
+                    $query .= " and (naam = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or naam = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+      
+        if (count($artikelnummer) > 0) {
+            $first = true;
+            foreach ($artikelnummer as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (artnr = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or artnr = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }       
+        if (count($voornaam) > 0) {
+            $first = true;
+            foreach ($voornaam as $value) {
+            if (strncasecmp($value,"alle ",5) != 0) {
+
+                if ($first == true){
+                    $query .= " and (voornamen = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or voornamen = '".$value."'";
+                }
+            }
+            }
+            if ($first == false){ $query .= ")"; }
+        }       
+        $query .= " order by beroep";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -962,15 +1441,13 @@ class lijstenController {
         }
         pg_free_result($s);
         return $result;
-    }    
+    }       
     
     public function getBeroepenStat($filter,$familienaam,$artikelnummer,$beroep,$woonplaatsen,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
         $query="select distinct beroep from aezelschema.oat where gemeente = '".$filter."' and lower(beroep) like lower('%".$beroep."%')" ;
-//        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;        
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -1184,7 +1661,7 @@ class lijstenController {
         pg_free_result($s);
         return $result;
     }
-    public function getStatBeroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroepen,$beroepsgroepen)
+    public function getStatBeroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1237,9 +1714,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($beroepen) > 0) {
+         if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -1275,7 +1752,7 @@ class lijstenController {
         return $result;
     }
     
-    public function getWoonplaatsenStat($filter,$familienaam,$artikelnummer,$woonplaats,$beroepen,$beroepsgroepen)
+    public function getWoonplaatsenStat($filter,$familienaam,$artikelnummer,$woonplaats,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1310,9 +1787,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-         if (($beroepen != NULL) || (count($beroepen)) > 0) {
+         if (($beroep != NULL) || (count($beroep)) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -1349,7 +1826,7 @@ class lijstenController {
     }
     
     
-    public function getStatWoonplaatsen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroepen,$beroepsgroepen)
+    public function getStatWoonplaatsen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1386,9 +1863,9 @@ class lijstenController {
             }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($beroepen) > 0) {
+        }          if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -1439,7 +1916,7 @@ class lijstenController {
         return $result;
     }
 
-    public function getBeroepsgroepenStat($filter,$familienaam,$artikelnummer,$beroepsgroep,$woonplaatsen,$beroepen)
+    public function getBeroepsgroepenStat($filter,$familienaam,$artikelnummer,$beroepsgroep,$woonplaatsen,$beroep)
     {
         $result = array();
         $index = 0;
@@ -1491,9 +1968,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($beroepen) > 0) {
+        if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
@@ -1516,7 +1993,7 @@ class lijstenController {
         return $result;
     } 
     
-    public function getStatBeroepsgroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroepen,$beroepsgroepen)
+    public function getStatBeroepsgroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1569,9 +2046,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($beroepen) > 0) {
+         if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -1607,7 +2084,7 @@ class lijstenController {
         return $result;
     }
     
-    public function getStatFamilienamen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroepen,$beroepsgroepen)
+    public function getStatFamilienamen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1660,9 +2137,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($beroepen) > 0) {
+         if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 
@@ -1698,7 +2175,7 @@ class lijstenController {
         return $result;
     }
     
-public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroepen,$beroepsgroepen)
+public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
     {
         $result = array();
         $index = 0;
@@ -1751,9 +2228,9 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($beroepen) > 0) {
+         if (count($beroep) > 0) {
             $first = true;
-            foreach ($beroepen as $value) {
+            foreach ($beroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep = '".$value."'"; 

@@ -88,17 +88,17 @@ function demZoekVoornamenWoonplaats()
    argumenten = '?voornaam='+voornaam;
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenWoonplaats.script.php";
     
-    var lg,lv,ln,la;
+    var lg,lv,ln,la,lw;
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
-    if (lv=selWpl.length == 0) selWpl=['Alle '];
+    if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl+argumenten,{selGem,selNm,selWpl,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
-        if (lv==true) selBrp.splice(0,selBrp.length);
+        if (lw==true) selBrp.splice(0,selWpl.length);
         if (lg==true) selGem.splice(0,selGem.length);
         
         data = data.trim();
@@ -156,17 +156,17 @@ function demZoekVoornamenBeroep()
    argumenten = '?voornaam='+voornaam;
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroepsgroep.script.php";
     
-    var lg,lv,ln,la;
+    var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
-    if (lv=selBrp.length == 0) selBrp=['Alle '];
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl+argumenten,{selGem,selNm,selBrp,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
-        if (lv==true) selBrp.splice(0,selBrp.length);
+        if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selGem.splice(0,selGem.length);
         
         data = data.trim();
@@ -213,7 +213,7 @@ function demZoekVoornamenBeroep()
         });
 }
 
-function demZoekVoornamenBeroepsgroep(gem,nm,vnm,art,bgp)
+function demZoekVoornamenBeroepsgroep()
 {
    selGem = getCookie('selGem');
    selNm = getCookie('selNm');
@@ -224,17 +224,17 @@ function demZoekVoornamenBeroepsgroep(gem,nm,vnm,art,bgp)
    argumenten = '?voornaam='+voornaam;
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroepsgroep.script.php";
     
-    var lg,lv,ln,la;
+    var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
-    if (lv=selBgp.length == 0) selBgp=['Alle '];
+    if (lb=selBgp.length == 0) selBgp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl+argumenten,{selGem,selNm,selBgp,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
-        if (lv==true) selBgp.splice(0,selBgp.length);
+        if (lb==true) selBgp.splice(0,selBgp.length);
         if (lg==true) selGem.splice(0,selGem.length);
         
         data = data.trim();
@@ -295,7 +295,6 @@ function demZoekVoornamenByGemeente(selGem)
             keyValueList = data.split("%%");
             i_count =0;
             var targetToPush = '';  
-//            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle voornamen</a></li>';
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -331,7 +330,6 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
             keyValueList = data.split("%%");
             i_count =0;
             var targetToPush = '';  
-//            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle namen</a></li>';
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -352,7 +350,7 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
     });
 }    
 
-    function demZoekFamilienamen(selGem,selNm,selVnm,selArt)
+    function demZoekFamilienamen()
 {
     selGem = getCookie('selGem');
     selNm = getCookie('selNm');
@@ -934,83 +932,215 @@ function demZoekArtikelnummersByGemeente(selGem)
         });
         
 } 
-/*
 
-function demZoekBeroepen(gem,nm,vnm,art,brp)
+
+function demZoekBeroepen()
 {
+   selGem = getCookie('selGem');
+   selNm = getCookie('selNm');
+   selVnm = getCookie('selVnm');
+   selArt = getCookie('selArt');    
+   selBrp = getCookie('selBrp');    
+   var beroep = $(".beroepTextBox").val();
+   
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekberoepen.script.php";
-    $('#dem_gemeente_beroep').editableSelect('clear');
-    argumenten = '?gemeente='+gem+'&artikelnummer='+art+'&familienaam='+nm+'&voornaam='+vnm+'&beroep='+brp;
-    $.post(targetUrl+argumenten, function(data) {
+    argumenten='?beroep='+beroep;
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+        if (ln==true) selNm.splice(0,selNm.length);
+        if (la==true) selArt.splice(0,selArt.length);
+        if (lv==true) selVnm.splice(0,selVnm.length);
+        if (lg==true) selGem.splice(0,selGem.length);
+        if (lb==true) selBrp.splice(0,selBrp.length);
+        
         data = data.trim();
+        var poutput = [];// voorbereiding
         if(data.length>0)
         {
             keyValueList = data.split("%%");
             i_count = 0;
+            i_count2 = 0;
         
-            $('#dem_gemeente_beroep').editableSelect( 'add','Alle beroepen');
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                $('#dem_gemeente_beroep').editableSelect( 'add',keyvaluearray[1]);  
-                i_count++;
+            var targetToPush = ''; 
+            while(i_count2<selBrp.length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += selBrp[i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
             }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selBrp )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+            poutput.push(targetToPush);
         }
-        $('#dem_gemeente_beroep').attr("placeholder","Kies een beroep...");
-   });
+        $('#beroepbox').html('');
+        $('#beroepbox').html(poutput.join(''));
+        });
 }
 
-function demZoekWoonplaatsen(gem,nm,vnm,art,wpl)
+function demZoekWoonplaatsen()
 {
+   selGem = getCookie('selGem');
+   selNm = getCookie('selNm');
+   selVnm = getCookie('selVnm');
+   selArt = getCookie('selArt');    
+   selWpl = getCookie('selWpl');    
+   var woonplaats = $(".woonplaatsTextBox").val();
+   
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekwoonplaatsen.script.php";
-    $('#dem_gemeente_woonplaats').editableSelect('clear');
-    argumenten = '?gemeente='+gem+'&artikelnummer='+art+'&familienaam='+nm+'&voornaam='+vnm+'&woonplaats='+wpl;
-    $.post(targetUrl+argumenten, function(data) {
+    argumenten='?artnr='+artnr;
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selWpl.length == 0) selWpl=['Alle '];
+    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+        if (ln==true) selNm.splice(0,selNm.length);
+        if (la==true) selArt.splice(0,selArt.length);
+        if (lv==true) selVnm.splice(0,selVnm.length);
+        if (lg==true) selGem.splice(0,selGem.length);
+        if (lb==true) selWpl.splice(0,selWpl.length);
+        
         data = data.trim();
+        var poutput = [];// voorbereiding
         if(data.length>0)
         {
             keyValueList = data.split("%%");
             i_count = 0;
+            i_count2 = 0;
         
-            $('#dem_gemeente_woonplaats').editableSelect( 'add','Alle woonplaatsen');
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                $('#dem_gemeente_woonplaats').editableSelect( 'add',keyvaluearray[1]);  
-                i_count++;
+            var targetToPush = ''; 
+            while(i_count2<selWpl.length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += selWpl[i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
             }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selWpl )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+            poutput.push(targetToPush);
         }
-        $('#dem_gemeente_woonplaats').attr("placeholder","Kies een woonplaats...");
-   });
+        $('#woonplaatsbox').html('');
+        $('#woonplaatsbox').html(poutput.join(''));
+        });
 }
 
-function demZoekBeroepsgroepen(gem,nm,vnm,art,bgp)
+function demZoekBeroepsgroepen()
 {
+   selGem = getCookie('selGem');
+   selNm = getCookie('selNm');
+   selVnm = getCookie('selVnm');
+   selArt = getCookie('selArt');    
+   selBgp = getCookie('selBgp');    
+   var beroepsgroep = $(".beroepsgroepTextBox").val();
+   
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekberoepsgroepen.script.php";
-    $('#dem_gemeente_beroepsgroep').editableSelect('clear');
-    argumenten = '?gemeente='+gem+'&artikelnummer='+art+'&familienaam='+nm+'&voornaam='+vnm+'&beroepsgroep='+bgp;
-    $.post(targetUrl+argumenten, function(data) {
+    argumenten='?beroepsgroep='+beroepsgroep;
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selBgp.length == 0) selBgp=['Alle '];
+    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+        if (ln==true) selNm.splice(0,selNm.length);
+        if (la==true) selArt.splice(0,selArt.length);
+        if (lv==true) selVnm.splice(0,selVnm.length);
+        if (lg==true) selGem.splice(0,selGem.length);
+        if (lb==true) selBgp.splice(0,selBgp.length);
+        
         data = data.trim();
+        var poutput = [];// voorbereiding
         if(data.length>0)
         {
             keyValueList = data.split("%%");
             i_count = 0;
+            i_count2 = 0;
         
-            $('#dem_gemeente_beroepsgroep').editableSelect( 'add','Alle beroepsgroepen');
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                $('#dem_gemeente_beroepsgroep').editableSelect( 'add',keyvaluearray[1]);  
-                i_count++;
+            var targetToPush = ''; 
+            while(i_count2<selBgp.length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += selBgp[i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
             }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selBgp )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+            poutput.push(targetToPush);
         }
-        $('#dem_gemeente_beroepsgroep').attr("placeholder","Kies een beroepsgroep...");
-   });
+        $('#woonplaatsbox').html('');
+        $('#woonplaatsbox').html(poutput.join(''));
+        });
 }
-*/
+
 function demZoekBeroepenByGemeente(selGem)
 {
-    
+   selGem = getCookie('selGem');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl,{selGem}, function(data) {
@@ -1044,7 +1174,7 @@ function demZoekBeroepenByGemeente(selGem)
 
 function demZoekWoonplaatsenByGemeente(selGem)
 {
-    
+       selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl,{selGem}, function(data) {
@@ -1079,6 +1209,7 @@ function demZoekWoonplaatsenByGemeente(selGem)
 
 function demZoekBeroepsgroepenByGemeente(selGem)
 {
+       selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
     $.post(targetUrl,{selGem}, function(data) {

@@ -4,12 +4,11 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demMapController.php');
 $demMapController = new demMapController();
 
-
-$gemeente = $_GET['gemeente'];
-$naam = $_GET['naam'];
-$voornaam = $_GET['voornaam'];
-$artikelnr = $_GET['artikelnr'];
-$woonplaats = $_GET['woonplaats'];
+$gemeente = $_POST['selGem'];
+$naam = $_POST['selNm'];
+$voornaam = $_POST['selVnm'];
+$artikelnr = $_POST['selArt'];
+$woonplaats = $_POST['selWpl'];
 $result="";
 
 foreach ($demMapController->getWoonplaatsEigenaars($gemeente,$naam,$voornaam,$artikelnr,$woonplaats) as $key => $value)

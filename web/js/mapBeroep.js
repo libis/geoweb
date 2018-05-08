@@ -1,34 +1,41 @@
-function demGetEigenaarsBeroep(gem,nm,vnm,art,brp,selLg){
+function demGetEigenaarsBeroep(){
+
     
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm[0] == "") selNm=['Alle '];
+    if (la=selArt[0] == "") selArt=['Alle '];
+    if (lv=selVnm[0] == "") selVnm=['Alle '];
+    if (lb=selBrp[0] == "") selBrp=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];    
 
     var keyValueList = new Array;
-
-    if (nm == "") nm = 'Alle';
-    if (vnm == "") vnm = 'Alle';
-    if (art == "") art = 'Alle';
-    if (brp == "") art = 'Alle';
     
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroep.script.php";
     $('#map').html('');
-    if ((vnm.includes('Alle')) &&
-            (nm.includes('Alle')) &&
-            (brp.includes('Alle')) &&
-            (art.includes('Alle'))) {
-        
-        keyValueList[0] = 'gemeente##'+gem;
+    if ((ln == true) && (la == true) && (lv == true) && (lb==true)) {
+        keyValueList[0] = 'gemeente##'+selGem[0];
         getMapBrp(keyValueList,gem,selLg);
     } else {
             
-    argumenten = '?gemeente='+gem+'&voornaam='+vnm+'&naam='+nm+'&artikelnr='+art+'&beroep='+brp;
-   $.post(targetUrl+argumenten, function(data) {
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selBrp}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selBrp.splice(0,selBrp.length);
         data = data.trim();
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            getMapBrp(keyValueList,gem,selLg);
-            i_count = 0;
-        }
-    });
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapBrp(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
     }
        
 }
@@ -178,8 +185,7 @@ function getMapBrp(keyValueList,gemeente,selLg)
                 $('#infobox').html('');
                 $('#infobox').html(poutput.join(''));                
                 $('#infobox').show();
-                $('#metadata-form').collapse('show');
-            }
+                $('#metadata-form').collapse('show');            }
         }
     });
 
@@ -227,10 +233,29 @@ function getMapBrp(keyValueList,gemeente,selLg)
       });
     }
   } else {
+            var i_count2 = 0;
+            var targetToPush="";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += ",'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
 
+                } else {
+                    first = false;
+                    targetToPush += "('";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
+                }
+                i_count2++;                
+            }
+            targetToPush +=")";
+            
+
+    wmsPerceel.updateParams({'cql_filter': "gemeente in "+targetToPush});
           
-    wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
-    
     while(i_count<keyValueList.length)
     {
         keyvaluearray=keyValueList[i_count].split("##");

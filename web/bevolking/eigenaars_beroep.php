@@ -2,6 +2,8 @@
 
 <script type="text/javascript" src="../js/jquery-editable-select.js"></script>
 <script type="text/javascript" src="../js/mapBeroep.js"></script>
+<script type="text/javascript" src="../js/mapStartup.js"></script>
+
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
     <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 <div class="control legend">
@@ -29,15 +31,7 @@
             Reset
         </button>
     </div>
-    
-    <label for="dem_gemeente_beroep">Beroep:</label>
-    <div id="dem_gemeente_beroep" class="wrapper">
-        <select id=beroepbox class="geoselect editableBeroepBox">
-        </select>
-    </div>    
-    
-    <div>
-    <label for="dem_gemeente" class="keuzelijstlabel">Gemeente:</label>
+
       <div id="multilayer">
       <div class="button-group">
         <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
@@ -69,137 +63,325 @@
         <ul id=artikelnummerbox class="dropdown-menu">
         </ul>
       </div>
-
-      <div id="multilayer">
-          <div class="button-group">
-              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>
-              <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">lagen<span class="caret"></span></button>
-              <ul id=lagenbox class="dropdown-menu">
-              </ul>
-          </div>
+        <div class="button-group">
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">lagen<span class="caret"></span></button>
+            <ul id=lagenbox class="dropdown-menu">
+            </ul>
+        </div>
       </div>    
   </div>
 </div>
-
+    
 <div id="map" class="map"></div>
-
- <script language="javascript">
-
-var gem ="";
-var art ="";
-var vnm="";
-var nm="";
-var brp="";
+<script language="javascript">
+var  selGem = [];
+var  selNm = [];
+var  selVnm = [];
+var  selArt = [];
+var  selBrp = [];
 var selLg=[];
+var firstOpenGem = true;
+var firstOpenNm = true;
+var firstOpenVnm = true;
+var firstOpenArt = true;
+var firstOpenBrp = true;
 var firstOpenLg = true;
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 
-     $("#dem_zoek_beroep").hide();
-     $("#dem_zoek_artikelnummer").hide();
-     $("#dem_zoek_familenaam").hide();
-     $("#dem_zoek_voornaam").hide();
      $("#dem_toon_kaart").hide();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
      
      demZoekLagen();
+     demZoekGemeenten();
+     getMapStartup();     
      
      var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel">';
      $("#legend-form").html(imag);
      
-     $('#dem_demeente').on('select.editable-select', function (e) {
-        if (2 != e.eventPhase) {
-            resetMap();
-            var $target = $( e.currentTarget );
-            var $inp = $target.find( 'input' );
-            gem = $inp.context.value;
-            if ($(".eigenaarTextBox").val() !== "Kies een term...") {
-                 resetEigenaarsBeroep();
-                 $("#dem_toon_kaart").show();
-                 $("#dem_eig_reset").show();
-            }
-        }
-    });
+$(document).on('click','.gemeenteTextBox',function(event){
+    $('#artikelnummerbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $(".gemeenteTextBox").val('').html();
+    firstOpenGem = false;    
+});
 
-     $('#dem_gemeente_beroep').on('select.editable-select', function (e) {
 
-        if (2 != e.eventPhase) {
-            resetMap();
-            var $target = $( e.currentTarget );
-            var $inp = $target.find( 'input' );
-            brp = $inp.context.value;
+$(document).on('click','#gemeentebox a',function(event){
 
-            if (($('#dem_gemeente_familienaam').val() === "Alle namen") || ($('#dem_gemeente_familienaam').val() === "")) {
-                    demZoekFamilienamenBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_artikelnummer').val() === "Alle artikelnummers") || ($('#dem_gemeente_artikelnummer').val() === "")) {
-                    demZoekArtikelnummersBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_voornaam').val() === "Alle voornamen") || ($('#dem_gemeente_voornaam').val() === "")){
-                    demZoekVoornamenBeroep(gem,nm,vnm,art,brp);
-            }
+    $('#artikelnummerbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#beroepbox').slideUp();
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
 
-        }
+   if (( idx = selGem.indexOf( href.trim()))  > -1 ) {
+      selGem.splice( idx, 1 );
+      setCookie('selGem',selGem);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+   } else {
+      selGem.push(href.trim());
+      setCookie('selGem',selGem);
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
 
-     });
-     $('#dem_gemeente_voornaam').on('select.editable-select', function (e) {
+   $( event.target ).blur();
+    $('.familienaamTextBox').attr("placeholder","Even geduld..");
+    $('.artTextBox').attr("placeholder","Even geduld..");
+    $('.voornaamTextBox').attr("placeholder","Even geduld..");
+    $('.beroepTextBox').attr("placeholder","Even geduld..");
 
-        if (2 != e.eventPhase) {
-            resetMap();
-            var $target = $( e.currentTarget );
-            var $inp = $target.find( 'input' );
-            vnm = $inp.context.value;
+    selNm.splice(0,selNm.length);
+    selArt.splice(0,selArt.length);
+    selVnm.splice(0,selVnm.length);
+    selBrp.splice(0,selBrp.length);
+    setCookie('selArt',selArt);
+    setCookie('selVnm',selVnm);
+    setCookie('selNm',selNm);
+    setCookie('selBrp',selBrp);
 
-            if (($('#dem_gemeente_familienaam').val() === "Alle namen") || ($('#dem_gemeente_familienaam').val() === "")) {
-                    demZoekFamilienamenBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_artikelnummer').val() === "Alle artikelnummers") || ($('#dem_gemeente_artikelnummer').val() === "")) {
-                    demZoekArtikelnummersBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_beroep').val() === "Alle beroepen") || ($('#dem_gemeente_beroep').val() === "")) {
-                    demZoekBeroepen(gem,nm,vnm,art,brp);
-            }
-        }
-     });
+   demZoekArtikelnummersByGemeente();
+   demZoekFamilienamenByGemeente();
+   demZoekVoornamenByGemeente();
+   demZoekBeroepenByGemeente();
+   $("#dem_toon_kaart").show();
+   $("#dem_eig_reset").show();
+   return false;
+});
 
-     $('#dem_gemeente_familienaam').on('select.editable-select', function (e) {
+$(document).on('click','.familienaamTextBox',function(event){
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#beroepbox').slideUp();
+	
+    $(".familienaamTextBox").val('').html();
+    firstOpenNm = false;    
+});
+$(document).on('click','#familienaambox a',function(event){
+    selNm = getCookie('selNm');
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#beroepbox').slideUp();
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
 
-        if (2 != e.eventPhase) {
-            resetMap();
-            var $target = $( e.currentTarget );
-            var $inp = $target.find( 'input' );
-            nm = $inp.context.value;
-            if (($('#dem_gemeente_artikelnummer').val() === "Alle artikelnummers") || ($('#dem_gemeente_artikelnummer').val() === "")) {
-                    demZoekArtikelnummersBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_voornaam').val() === "Alle voornamen") || ($('#dem_gemeente_voornaam').val() === "")){
-                    demZoekVoornamenBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_beroep').val() === "Alle beroepen") || ($('#dem_gemeente_beroep').val() === "")) {
-                    demZoekBeroepen(gem,nm,vnm,art,brp);
-            }        }
-     });
+   if (( idx = selNm.indexOf( href.trim()))  > -1 ) {
+      selNm.splice( idx, 1 );
+      setCookie('selNm',selNm);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+      if (href.trim() == 'Alle namen') {
+            selNm.splice(0,selNm.length);
+            setCookie('selNm',selNm);
+         $( "#familienaambox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+      }
+   } else {
+      if (href.trim() == 'Alle namen') {
+            selNm.splice(0,selNm.length);
+            setCookie('selNm',selNm);
+         $( "#familienaambox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+     }
 
-     $('#dem_gemeente_artikelnummer').on('select.editable-select', function (e) {
-        if (2 != e.eventPhase) {
-            resetMap();
-            var $target = $( e.currentTarget );
-            var $inp = $target.find( 'input' );
-            art = $inp.context.value;
-            if (($('#dem_gemeente_familienaam').val() === "Alle namen") || ($('#dem_gemeente_familienaam').val() === "")) {
-                    demZoekFamilienamenBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_voornaam').val() === "Alle voornamen") || ($('#dem_gemeente_voornaam').val() === "")){
-                    demZoekVoornamenBeroep(gem,nm,vnm,art,brp);
-            }
-            if (($('#dem_gemeente_beroep').val() === "Alle beroepen") || ($('#dem_gemeente_beroep').val() === "")) {
-                    demZoekBeroepen(gem,nm,vnm,art,brp);
-            }
-        }
-     });
+      selNm.push(href.trim());
+      setCookie('selNm',selNm);
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+   demZoekArtikelnummersBeroep();
+   demZoekVoornamenBeroep();
+   demZoekBeroepen();
+   return false;
+});
+
+
+$(document).on('click','.voornaamTextBox',function(event){
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#beroepbox').slideUp();
+
+    $(".voornaamTextBox").val('').html();
+    firstOpenVnm = false;    
+});
+
+$(document).on('click','#voornaambox a',function(event){
+
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#beroepbox').slideUp();
+    
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selVnm.indexOf( href.trim()))  > -1 ) {
+      selVnm.splice( idx, 1 );
+      setCookie('selVnm',selVnm);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+      if (href.trim() == 'Alle voornamen') {
+          selVnm.splice(0,selVnm.length);
+          setCookie('selVnm',selVnm);
+         $( "#voornaambox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+      }
+   } else {
+      if (href.trim() == 'Alle voornamen') {
+           selVnm.splice(0,selVnm.length);
+           setCookie('selVnm',selVnm);
+           $( "#voornaambox a" ).each(function( index ) {
+           $(this).find('input').prop('checked',false);
+         });
+     }
+
+      selVnm.push(href.trim());
+      setCookie('selVnm',selVnm);
+
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+   demZoekArtikelnummersBeroep();
+   demZoekFamilienamenBeroep();
+   demZoekBeroepen();
+   return false;
+});
+
+$(document).on('click','.artTextBox',function(event){
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#beroepbox').slideUp();
+
+    $(".artTextBox").val('').html();
+    firstOpenArt = false;    
+});
+
+$(document).on('click','#artikelnummerbox a',function(event){
+
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();    
+    $('#gemeentebox').slideUp();
+    $('#beroepbox').slideUp();
+    
+
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selArt.indexOf( href.trim()))  > -1 ) {
+      selArt.splice( idx, 1 );
+      setCookie('selArt',selArt);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+      if (href.trim() == 'Alle artikelnummers') {
+          selArt.splice(0,selArt.length);
+          setCookie('selArt',selArt);
+         $( "#artikelnummerbox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+      }
+   } else {
+      if (href.trim() == 'Alle artikelnummers') {
+         selArt.splice(0,selArt.length);
+         setCookie('selArt',selArt);
+         $( "#artikelnummerbox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+     }
+
+      selArt.push(href.trim());
+      setCookie('selArt',selArt);
+
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+    demZoekFamilienamenBeroep();
+    demZoekVoornamenBeroep();
+    demZoekBeroepen();
+   return false;
+});
+
+
+$(document).on('click','.beroepTextBox',function(event){
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+
+    $(".beroepTextBox").val('').html();
+    firstOpenBrp = false;    
+});
+
+$(document).on('click','#beroepbox a',function(event){
+
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selBrp.indexOf( href.trim()))  > -1 ) {
+      selBrp.splice( idx, 1 );
+      setCookie('selBrp',selBrp);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+      if (href.trim() == 'Alle beroepen') {
+          selBrp.splice(0,selBrp.length);
+          setCookie('selBrp',selBrp);
+         $( "#beroepbox a" ).each(function( index ) {
+            $(this).find('input').prop('checked',false);
+         });
+      }
+   } else {
+      if (href.trim() == 'Alle beroepen') {
+           selBrp.splice(0,selBrp.length);
+           setCookie('selBrp',selBrp);
+           $( "#beroepbox a" ).each(function( index ) {
+           $(this).find('input').prop('checked',false);
+         });
+     }
+
+      selBrp.push(href.trim());
+      setCookie('selBrp',selBrp);
+
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+   demZoekArtikelnummersBeroep();
+   demZoekFamilienamenBeroep();
+   demZoekVoornamenBeroep();
+   return false;
+});
+
 $(document).on('click','#lagenbox a',function(event){
 
    var $target = $( event.currentTarget ),
@@ -217,6 +399,67 @@ $(document).on('click','#lagenbox a',function(event){
    $( event.target ).blur();
    return false;
 });
+
+$(document).on('click','.gemeenteTextBox',function(event){
+    $('#gemeentebox').slideToggle();
+    $(".gemeenteTextBox").val('').html();
+    firstOpenGem = false;
+});
+
+$(document).on('click','#gemeente_btn',function(event){
+    if (firstOpenGem == false) {
+        $('#gemeentebox').slideToggle();
+    }
+});
+
+$(document).on('click','.familienaamTextBox',function(event){
+    $('#familienaambox').slideToggle();
+    $(".familienaamTextBox").val('').html();
+    firstOpenNm = false;
+});
+
+$(document).on('click','#naam_btn',function(event){
+    if (firstOpenNm == false) {
+        $('#familienaambox').slideToggle();
+    }
+});
+
+$(document).on('click','.voornaamTextBox',function(event){
+    $('#voornaambox').slideToggle();
+    $(".voornaamTextBox").val('').html();
+    firstOpenVnm = false;
+});
+
+$(document).on('click','#voornaam_btn',function(event){
+    if (firstOpenVnm == false) {
+        $('#voornaambox').slideToggle();
+    }
+});
+
+$(document).on('click','.artTextBox',function(event){
+    $('#artikelnummerbox').slideToggle();
+    $(".artTextBox").val('').html();
+    firstOpenVnm = false;
+});
+
+$(document).on('click','#artikelnummer_btn',function(event){
+    if (firstOpenVnm == false) {
+        $('#artikelnummerbox').slideToggle();
+    }
+});
+
+$(document).on('click','.beroepTextBox',function(event){
+    $('#beroepbox').slideToggle();
+    $(".beroepTextBox").val('').html();
+    firstOpenBrp = false;
+});
+
+$(document).on('click','#beroep_btn',function(event){
+    if (firstOpenBrp == false) {
+        $('#beroepbox').slideToggle();
+    }
+});
+
 $(document).on('click','.lagenTextBox',function(event){
     $('#lagenbox').slideToggle();
     $(".lagenTextBox").val('').html();
@@ -228,19 +471,6 @@ $(document).on('click','#eig_lagen_btn',function(event){
         $('#lagenbox').slideToggle();
     }
 });
- });
-
-
-
-$('#dem_demeente').editableSelect({ effects: 'default' });
-$('#dem_demeente').attr("placeholder","Kies een gemeente...");
-$('#dem_gemeente_beroep').editableSelect({ effects: 'default' });
-$('#dem_gemeente_voornaam').editableSelect({ effects: 'default' });
-$('#dem_gemeente_familienaam').editableSelect({ effects: 'default' });
-$('#dem_gemeente_artikelnummer').editableSelect({ effects: 'default' });
-
-$('#dem_demeente').click(function () {
-    $('#dem_demeente').val('');
 });
 
 function hideLagenbox() {
@@ -251,36 +481,50 @@ function hideLagenbox() {
     }
 }
 function resetMap(){
-     $('#map').empty();
-     $("#dem_eig_legend_chk").hide();
-     $("#eig_legende_spam").hide();
-     $( "#dem_eig_legend_chk").prop('checked', false);
+    $('#map').empty();
+    $("#dem_eig_legend_chk").hide();
+    $("#eig_legende_spam").hide();
+    $( "#dem_eig_legend_chk").prop('checked', false);
     hideLagenbox();
 }
 
 function resetEigenaarsBeroep()
 {
     resetMap();
-    $('#dem_gemeente_beroep').val('');
-    $('#dem_gemeente_voornaam').val('');
-    $('#dem_gemeente_familienaam').val('');
-    $('#dem_gemeente_artikelnummer').val('');
+    $("#dem_toon_kaart").hide();
+    $("#dem_eig_reset").hide();
 
-    $('#dem_gemeente_beroep').attr("placeholder","Even geduld...");
-    $('#dem_gemeente_voornaam').attr("placeholder","Even geduld...");
-    $('#dem_gemeente_familienaam').attr("placeholder","Even geduld...");
-    $('#dem_gemeente_artikelnummer').attr("placeholder","Even geduld..");
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#beroepbox').slideUp();
+    $('#artikelnummerbox').empty();
+    $('#gemeentebox').empty();
+    $('#familienaambox').empty();
+    $('#voornaambox').empty();
+    $('#beroepbox').empty();
+    $('#infobox').empty();
+    
+    selGem.splice(0,selGem.length);
+    selNm.splice(0,selNm.length);
+    selArt.splice(0,selArt.length);
+    selVnm.splice(0,selVnm.length);
+    selBrp.splice(0,selBrp.length);
+    setCookie('selArt',selArt);
+    setCookie('selVnm',selVnm);
+    setCookie('selNm',selNm);
+    setCookie('selBrp',selBrp);
+    setCookie('selGem',selGem);
 
-    demZoekBeroepenByGemeente(gem);
-    demZoekArtikelnummersByGemeente(gem);
-    demZoekFamilienamenByGemeente(gem);
-    demZoekVoornamenByGemeente(gem);
+    $('.naamTextBox').attr("placeholder","Even geduld..");
+    $('.artikelnummerTextBox').attr("placeholder","Even geduld..");
+    $('.voornaamBox').attr("placeholder","Even geduld..");
+    $('.beroepBox').attr("placeholder","Even geduld..");
 
-    brp = "Alle beroepen";
-    art = "Alle artikelnummers";
-    vnm = "Alle voornamen";
-    nm = "Alle namen";
-}
+     demZoekGemeenten();
+     getMapStartup();
+ }
 
 
 
@@ -304,11 +548,10 @@ function eigenaars_statistieken() {
     window.open("./eigenaars_statistieken.php","_self");
 }
 
-function getEigenaarsBeroep(gem,nm,vnm,art,brp,selLg) {
+function getEigenaarsBeroep() {
 
-demGetEigenaarsBeroep(gem,nm,vnm,art,brp,selLg);
-    $('#metadata-form').collapse('hide');
-    $('#legend-form').collapse('hide');
+demGetEigenaarsBeroep();
+    $('#infobox').empty();
     hideLagenbox();
     $("#dem_eig_legend_chk").show();
     $("#eig_legende_spam").show();

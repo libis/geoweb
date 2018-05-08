@@ -36,25 +36,25 @@
       <div id="multilayer">
       <div class="button-group">
         <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
-        <button id="eig_stat_gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=gemeentebox class="dropdown-menu">
         </ul>
        </div>
       <div class="button-group">
         <input class="geotextbox familienaamTextBox" name="familienaambox" placeholder="Zoek naam" onkeyup="demZoekFamilienamen();" maxlength="20"/>
-        <button id="eig_stat_naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=familienaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
         <input class="geotextbox voornaamTextBox" name="voornaambox" placeholder="Zoek voornaam" onkeyup="demZoekVoornamen();" maxlength="20"/>
-        <button id="eig_stat_voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=voornaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
         <input class="geotextbox artTextBox" name="artikelnummerbox" placeholder="Zoek artikelnummer" onkeyup="demZoekArtikelnummers();" maxlength="20"/>
-        <button id="eig_stat_artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
         <ul id=artikelnummerbox class="dropdown-menu">
         </ul>
       </div>
@@ -69,19 +69,12 @@
 </div>
 <div id="map" class="map"></div>
  <script language="javascript">
-var gem ="";
-var art ="";
-var vnm="";
-var nm="";
 var  selGem = [];
 var  selNm = [];
 var  selVnm = [];
 var  selArt = [];
 var  selLg = [];
-var  selGemTmp = new Array();
-var  selNmTmp = new Array();
-var  selVnmTmp = new Array();
-var  selArtTmp = new Array();
+
 var firstOpenGem = true;
 var firstOpenNm = true;
 var firstOpenVnm = true;
@@ -91,9 +84,6 @@ var firstOpenLg = true;
          
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
-     $("#dem_zoek_artikelnummer").hide();
-     $("#dem_zoek_familenaam").hide();
-     $("#dem_zoek_voornaam").hide();
      $("#dem_toon_kaart").hide();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
@@ -106,23 +96,11 @@ var firstOpenLg = true;
      var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
      $("#legend-form").html(imag);
      
- /*    
-function resetEig(){
-    $("#dem_eig_legend_chk").hide();
-    $("#eig_legende_spam").hide();
-    $("#dem_eig_legend_chk").prop('checked', false);
-}
-*/     
-     
      
 $(document).on('click','.gemeenteTextBox',function(event){
     $('#artikelnummerbox').slideUp();
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();
-    if (ln=selGem.length == 0) {
-        selGem = selGemTmp;
-    }
-    selGemTmp.splice(0,selGemTmp.length);
     $(".gemeenteTextBox").val('').html();
     firstOpenGem = false;    
 });
@@ -157,17 +135,13 @@ $(document).on('click','#gemeentebox a',function(event){
     selNm.splice(0,selNm.length);
     selArt.splice(0,selArt.length);
     selVnm.splice(0,selVnm.length);
-    selNmTmp.splice(0,selNm.length);
-    selArtTmp.splice(0,selArt.length);
-    selVnmTmp.splice(0,selVnm.length);
-
     setCookie('selArt',selArt);
     setCookie('selVnm',selVnm);
     setCookie('selNm',selNm);
 
-   demZoekArtikelnummersByGemeente(selGem);
-   demZoekFamilienamenByGemeente(/*selGem*/);
-   demZoekVoornamenByGemeente(selGem);
+   demZoekArtikelnummersByGemeente();
+   demZoekFamilienamenByGemeente();
+   demZoekVoornamenByGemeente();
    $("#dem_toon_kaart").show();
    $("#dem_eig_reset").show();
    return false;
@@ -177,10 +151,7 @@ $(document).on('click','.familienaamTextBox',function(event){
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
     $('#voornaambox').slideUp();
-    if (ln=selNm.length == 0) {
-        selNm = selNmTmp;
-    }
-    selNmTmp.splice(0,selNmTmp.length);
+	
     $(".familienaamTextBox").val('').html();
     firstOpenNm = false;    
 });
@@ -221,8 +192,8 @@ $(document).on('click','#familienaambox a',function(event){
    }
 
    $( event.target ).blur();
-   demZoekArtikelnummers(selGem,selNm,selVnm,selArt);
-   demZoekVoornamen(selGem,selNm,selVnm,selArt);
+   demZoekArtikelnummers();
+   demZoekVoornamen();
    return false;
 });
 
@@ -231,10 +202,7 @@ $(document).on('click','.voornaamTextBox',function(event){
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();
-    if (lv=selVnm.length == 0) {
-        selVnm = selVnmTmp;
-    }
-    selVnmTmp.splice(0,selVnmTmp.length);
+
     $(".voornaamTextBox").val('').html();
     firstOpenVnm = false;    
 });
@@ -277,8 +245,8 @@ $(document).on('click','#voornaambox a',function(event){
    }
 
    $( event.target ).blur();
-   demZoekArtikelnummers(selGem,selNm,selVnm,selArt);
-   demZoekFamilienamen(selGem,selNm,selVnm,selArt);
+   demZoekArtikelnummers();
+   demZoekFamilienamen();
    return false;
 });
 
@@ -286,10 +254,7 @@ $(document).on('click','.artTextBox',function(event){
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();
-    if (la=selArt.length == 0) {
-        selArt = selArtTmp;
-    }
-    selArtTmp.splice(0,selArtTmp.length);
+
     $(".artTextBox").val('').html();
     firstOpenArt = false;    
 });
@@ -334,8 +299,8 @@ $(document).on('click','#artikelnummerbox a',function(event){
    }
 
    $( event.target ).blur();
-    demZoekFamilienamen(selGem,selNm,selVnm,selArt);
-    demZoekVoornamen(selGem,selNm,selVnm,selArt);
+    demZoekFamilienamen();
+    demZoekVoornamen();
    return false;
 });
 
@@ -366,7 +331,7 @@ $(document).on('click','.gemeenteTextBox',function(event){
     firstOpenGem = false;
 });
 
-$(document).on('click','#eig_stat_gemeente_btn',function(event){
+$(document).on('click','#gemeente_btn',function(event){
     if (firstOpenGem == false) {
         $('#gemeentebox').slideToggle();
     }
@@ -378,7 +343,7 @@ $(document).on('click','.familienaamTextBox',function(event){
     firstOpenNm = false;
 });
 
-$(document).on('click','#eig_stat_naam_btn',function(event){
+$(document).on('click','#naam_btn',function(event){
     if (firstOpenNm == false) {
         $('#familienaambox').slideToggle();
     }
@@ -390,7 +355,7 @@ $(document).on('click','.voornaamTextBox',function(event){
     firstOpenVnm = false;
 });
 
-$(document).on('click','#eig_stat_voornaam_btn',function(event){
+$(document).on('click','#voornaam_btn',function(event){
     if (firstOpenVnm == false) {
         $('#voornaambox').slideToggle();
     }
@@ -402,7 +367,7 @@ $(document).on('click','.artTextBox',function(event){
     firstOpenVnm = false;
 });
 
-$(document).on('click','#eig_stat_artikelnummer_btn',function(event){
+$(document).on('click','#artikelnummer_btn',function(event){
     if (firstOpenVnm == false) {
         $('#artikelnummerbox').slideToggle();
     }
@@ -419,19 +384,6 @@ $(document).on('click','#eig_lagen_btn',function(event){
         $('#lagenbox').slideToggle();
     }
 });
-
-});
-
-
-
-$('#dem_demeente').editableSelect({ effects: 'default' });
-$('#dem_demeente').attr("placeholder","Kies een gemeente...");
-$('#dem_gemeente_voornaam').editableSelect({ effects: 'default' });
-$('#dem_gemeente_familienaam').editableSelect({ effects: 'default' });
-$('#dem_gemeente_artikelnummer').editableSelect({ effects: 'default' });
-
-$('#dem_demeente').click(function () {
-    $('#dem_demeente').val('');
 });
 
 function hideLagenbox() {
@@ -464,16 +416,12 @@ resetMap();
     $('#gemeentebox').empty();
     $('#familienaambox').empty();
     $('#voornaambox').empty();
-
+    $('#infobox').empty();
+    
     selGem.splice(0,selGem.length);
     selNm.splice(0,selNm.length);
     selArt.splice(0,selArt.length);
     selVnm.splice(0,selVnm.length);
-    selGemTmp.splice(0,selGem.length);
-    selNmTmp.splice(0,selNm.length);
-    selArtTmp.splice(0,selArt.length);
-    selVnmTmp.splice(0,selVnm.length);
-    
     setCookie('selArt',selArt);
     setCookie('selVnm',selVnm);
     setCookie('selNm',selNm);
@@ -485,10 +433,6 @@ resetMap();
 
      demZoekGemeenten();
      getMapStartup();
-
-     var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
-     $("#legend-form").html(imag);
-   
 }
 
 
@@ -514,11 +458,14 @@ function eigenaars_statistieken() {
  window.open("./eigenaars_statistieken.php","_self");
 }
 
-function getEigenaars(/*gem,nm,vnm,art,selLg*/) {
+function getEigenaars() {
 
 
-    $('#metadata-form').collapse('hide');
-    $('#legend-form').collapse('hide');
+	$('#infobox').empty();
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();	
     hideLagenbox();
     demGetEigenaars();
      $("#dem_eig_legend_chk").show();

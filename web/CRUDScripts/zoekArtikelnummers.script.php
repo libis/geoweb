@@ -11,7 +11,7 @@ $gemeente = $_POST['selGem'];
 $voornaam = $_POST['selVnm'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummers) as $key => $value)
+foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam) as $key => $value)
 {
     if($result!="")
     {

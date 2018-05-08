@@ -31,7 +31,7 @@ function demGetEigenaars(){
                 keyValueList = data.split("%%");
                 getMapEig(keyValueList,selGem,selLg);
                 i_count = 0;
-        })
+        });
     }
 }
 
