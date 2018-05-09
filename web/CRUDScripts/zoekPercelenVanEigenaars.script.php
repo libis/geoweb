@@ -7,8 +7,8 @@ $demMapController = new demMapController();
 
 $gemeente = $_POST['selGem'];
 $naam = $_POST['selNm'];
-$voornaam = $_POST['selVnm'];
 $artikelnr = $_POST['selArt'];
+$voornaam = $_POST['selVnm'];
 $result="";
 
 foreach ($demMapController->getEigenaars($gemeente,$naam,$voornaam,$artikelnr) as $key => $value)

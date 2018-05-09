@@ -1,4 +1,4 @@
-function demGetEigenaarsWoonplaats(gem,nm,vnm,art,wpl,selLg){
+function demGetEigenaarsWoonplaats(){
     
 
     var keyValueList = new Array;

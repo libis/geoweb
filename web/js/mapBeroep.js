@@ -9,20 +9,16 @@ function demGetEigenaarsBeroep(){
     selLg = getCookie('selLg');
    
     var lg,lv,ln,la,lb;
-    if (ln=selNm[0] == "") selNm=['Alle '];
-    if (la=selArt[0] == "") selArt=['Alle '];
-    if (lv=selVnm[0] == "") selVnm=['Alle '];
-    if (lb=selBrp[0] == "") selBrp=['Alle '];
-    if (lg=selGem.length == 0) selGem=['Alle '];    
-
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    
     var keyValueList = new Array;
     
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroep.script.php";
     $('#map').html('');
-    if ((ln == true) && (la == true) && (lv == true) && (lb==true)) {
-        keyValueList[0] = 'gemeente##'+selGem[0];
-        getMapBrp(keyValueList,gem,selLg);
-    } else {
             
         $.post(targetUrl,{selGem,selNm,selVnm,selArt,selBrp}, function(data) {    
             if (ln==true) selNm.splice(0,selNm.length);
@@ -36,7 +32,6 @@ function demGetEigenaarsBeroep(){
                 getMapBrp(keyValueList,selGem,selLg);
                 i_count = 0;
         });
-    }
        
 }
     

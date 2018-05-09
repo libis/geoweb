@@ -8,19 +8,16 @@ function demGetEigenaars(){
     selLg = getCookie('selLg');
    
     var lg,lv,ln,la;
-    if (ln=selNm[0] == "") selNm=['Alle '];
-    if (la=selArt[0] == "") selArt=['Alle '];
-    if (lv=selVnm[0] == "") selVnm=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
    
     var keyValueList = new Array;
 
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaars.script.php";
     $('#map').html('');
-    if ((ln == true) && (la == true) && (lv == true)) {
-        keyValueList[0] = 'gemeente##'+selGem[0];
-        getMapEig(keyValueList,selGem[0],selLg);
-    } else {
+
         $.post(targetUrl,{selGem,selNm,selVnm,selArt}, function(data) {    
             if (ln==true) selNm.splice(0,selNm.length);
             if (la==true) selArt.splice(0,selArt.length);
@@ -32,7 +29,6 @@ function demGetEigenaars(){
                 getMapEig(keyValueList,selGem,selLg);
                 i_count = 0;
         });
-    }
 }
 
 

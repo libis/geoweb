@@ -1,4 +1,4 @@
-function demGetEigenaarsBeroepsgroep(gem,nm,vnm,art,bgp,selLg){
+function demGetEigenaarsBeroepsgroep(){
     
 
     var keyValueList = new Array;

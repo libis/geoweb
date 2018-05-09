@@ -293,7 +293,7 @@ if (mylegendberoepsgroepwindow !== null){
  mylegendberoepsgroepwindow = null;
 }
 
-demGetEigenaarsBeroepsgroep(gem,nm,vnm,art,bgp);
+demGetEigenaarsBeroepsgroep();
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
 }

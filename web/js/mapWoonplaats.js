@@ -1,38 +1,40 @@
-function demGetEigenaarsWoonplaats(gem,nm,vnm,art,wpl,selLg){
+function demGetEigenaarsWoonplaats(){
+
     
-
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selWpl = getCookie('selWpl');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selWpl.length == 0) selWpl=['Alle '];
+    
     var keyValueList = new Array;
-
-    if (nm == "") nm = 'Alle';
-    if (vnm == "") vnm = 'Alle';
-    if (art == "") art = 'Alle';
-    if (wpl == "") art = 'Alle';
     
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsWoonplaats.script.php";
     $('#map').html('');
-    if ((vnm.includes('Alle')) &&
-            (nm.includes('Alle')) &&
-            (wpl.includes('Alle')) &&
-            (art.includes('Alle'))) {
-        
-        keyValueList[0] = 'gemeente##'+gem;
-        getMapWpl(keyValueList,gem,selLg);
-    } else {
             
-    argumenten = '?gemeente='+gem+'&voornaam='+vnm+'&naam='+nm+'&artikelnr='+art+'&woonplaats='+wpl;
-   $.post(targetUrl+argumenten, function(data) {
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selWpl}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selWpl.splice(0,selWpl.length);
         data = data.trim();
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            getMapWpl(keyValueList,gem,selLg);
-            i_count = 0;
-        }
-    });
-    }
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapWpl(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
        
 }
-    
+   
     
 
 
@@ -236,9 +238,27 @@ function getMapWpl(keyValueList,gemeente,selLg)
     }
   } else {
 
+            var i_count2 = 0;
+            var targetToPush="";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += ",'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
 
-    wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
-
+                } else {
+                    first = false;
+                    targetToPush += "('";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
+                }
+                i_count2++;                
+            }
+            targetToPush +=")";
+            
+    wmsPerceel.updateParams({'cql_filter': "gemeente in "+targetToPush});
     while(i_count<keyValueList.length)
     {
         keyvaluearray=keyValueList[i_count].split("##");

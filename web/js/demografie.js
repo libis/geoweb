@@ -1186,7 +1186,6 @@ function demZoekWoonplaatsenByGemeente(selGem)
             i_count =0;
             var poutput = [];
             var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle woonplaatsen</a></li>';
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -1220,7 +1219,6 @@ function demZoekBeroepsgroepenByGemeente(selGem)
             i_count =0;
             var poutput = [];
             var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle beroepsgroepen</a></li>';
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
@@ -2402,7 +2400,8 @@ function demZoekLagenZoekString(selLg)
         for(i_count2=0;i_count2<layer.Layer.length;i_count2++){
             var naam = layer.Layer[i_count2].Name ;
             if (naam.substr(0,naam.indexOf(':')) === 'aezel') {
-                naam = naam.substr(naam.indexOf(':')+1);
+                naam = naam.substr(naam.indexOf(':')+1).toLowerCase();
+                
                 if ((naam.indexOf(laag)) > 0) {
                     if ((jQuery.inArray( naam, selLg)) == -1) {
                         targetToPush += '<li><a href="#" class="small" data-value="';
@@ -2463,7 +2462,7 @@ function demZoekGemeenten()
 }
 
 
-function demZoekGemeentenZoekString(/*selGem*/)
+function demZoekGemeentenZoekString()
 {
 
    selGem = getCookie('selGem');

@@ -391,14 +391,17 @@ $(document).on('click','#lagenbox a',function(event){
 
    if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
       selLg.splice( idx, 1 );
+      setCookie('selLg',selLg);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
    } else {
       selLg.push(href.trim());
+      setCookie('selLg',selLg);
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
    }
    $( event.target ).blur();
    return false;
 });
+
 
 $(document).on('click','.gemeenteTextBox',function(event){
     $('#gemeentebox').slideToggle();
@@ -407,6 +410,12 @@ $(document).on('click','.gemeenteTextBox',function(event){
 });
 
 $(document).on('click','#gemeente_btn',function(event){
+    $('#lagenbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();    
+    $('#beroepbox').slideUp();    
+    
     if (firstOpenGem == false) {
         $('#gemeentebox').slideToggle();
     }
@@ -419,6 +428,11 @@ $(document).on('click','.familienaamTextBox',function(event){
 });
 
 $(document).on('click','#naam_btn',function(event){
+    $('#gemeentebox').slideUp();
+    $('#lagenbox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();    
+    $('#beroepbox').slideUp();    
     if (firstOpenNm == false) {
         $('#familienaambox').slideToggle();
     }
@@ -431,6 +445,12 @@ $(document).on('click','.voornaamTextBox',function(event){
 });
 
 $(document).on('click','#voornaam_btn',function(event){
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#lagenbox').slideUp();
+    $('#artikelnummerbox').slideUp();    
+    $('#beroepbox').slideUp();    
+    
     if (firstOpenVnm == false) {
         $('#voornaambox').slideToggle();
     }
@@ -443,6 +463,12 @@ $(document).on('click','.artTextBox',function(event){
 });
 
 $(document).on('click','#artikelnummer_btn',function(event){
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#lagenbox').slideUp();    
+    $('#beroepbox').slideUp();    
+    
     if (firstOpenVnm == false) {
         $('#artikelnummerbox').slideToggle();
     }
@@ -455,6 +481,11 @@ $(document).on('click','.beroepTextBox',function(event){
 });
 
 $(document).on('click','#beroep_btn',function(event){
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();    
+    $('#lagenbox').slideUp();    
     if (firstOpenBrp == false) {
         $('#beroepbox').slideToggle();
     }
@@ -467,6 +498,11 @@ $(document).on('click','.lagenTextBox',function(event){
 });
 
 $(document).on('click','#eig_lagen_btn',function(event){
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();    
+    $('#beroepbox').slideUp();    
     if (firstOpenLg == false) {
         $('#lagenbox').slideToggle();
     }
@@ -550,8 +586,14 @@ function eigenaars_statistieken() {
 
 function getEigenaarsBeroep() {
 
-demGetEigenaarsBeroep();
+    demGetEigenaarsBeroep();
     $('#infobox').empty();
+    $('#artikelnummerbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();	
+    $('#beroepbox').slideUp();	
+    
     hideLagenbox();
     $("#dem_eig_legend_chk").show();
     $("#eig_legende_spam").show();
