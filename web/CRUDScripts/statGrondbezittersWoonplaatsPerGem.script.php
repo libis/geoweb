@@ -4,7 +4,6 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demStatisticsController.php');
 $statController = new demStatisticsController();
 
-
 $gemeente = $_POST['selGem'];
 $naam = $_POST['selNm'];
 $artikelnr = $_POST['selArt'];
@@ -14,15 +13,14 @@ $beroepsgroepen = $_POST['selBgp'];
 
 $result="";
 
-foreach ($statController->getGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen) as $key => $value)
+foreach ($statController->getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen) as $key => $value)
 {
     if($result!="")
     {
         $result .= "%%";
     }
-    $result .= $key."##".$value[1]."##".$value[2]."##".$value[3];
+    $result .= $key."##".$value[1]."##".$value[2];
 }
 echo $result;
 
 ?>
-

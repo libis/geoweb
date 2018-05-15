@@ -719,14 +719,12 @@ class lijstenController {
         return $result;
     }
     
-       public function getFamilienamenStat($filter,$gemeente,$artikelnummer,$beroepen,$beroepsgroepen,$woonplaatsen)
+       public function getFamilienamenStat($filter,$gemeente,$artikelnummer,$beroep,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
         
-        
-        
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$familienaam."%')" ;
+        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
             foreach ($gemeente as $value) {
@@ -771,9 +769,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($beroepsgroepen) > 0) {
+        if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
@@ -1226,7 +1224,7 @@ class lijstenController {
 
 
     
-    public function getArtikelnummersStat($filter,$gemeente,$familienaam,$beroep,$beroepsgroepen,$woonplaatsen)
+    public function getArtikelnummersStat($filter,$gemeente,$familienaam,$beroep,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
@@ -1469,7 +1467,7 @@ class lijstenController {
         return $result;
     }       
     
-    public function getBeroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepsgroepen,$woonplaatsen)
+    public function getBeroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
@@ -1533,9 +1531,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($beroepsgroepen) > 0) {
+        if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
@@ -1701,7 +1699,7 @@ class lijstenController {
         pg_free_result($s);
         return $result;
     }
-    public function getStatBeroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
+    public function getStatBeroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -1768,9 +1766,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 
@@ -1866,7 +1864,7 @@ class lijstenController {
         return $result;
     }
     
-    public function getWoonplaatsenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepen,$beroepsgroepen)
+    public function getWoonplaatsenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -1928,9 +1926,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }  
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 
@@ -1953,7 +1951,7 @@ class lijstenController {
     }
     
     
-    public function getStatWoonplaatsen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
+    public function getStatWoonplaatsen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -2019,9 +2017,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }  
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 
@@ -2043,7 +2041,7 @@ class lijstenController {
         return $result;
     }
 
-    public function getBeroepsgroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepen,$woonplaatsen)
+    public function getBeroepsgroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
@@ -2133,7 +2131,7 @@ class lijstenController {
         return $result;
     } 
     
-    public function getStatBeroepsgroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
+    public function getStatBeroepsgroepen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -2200,9 +2198,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 
@@ -2224,7 +2222,7 @@ class lijstenController {
         return $result;
     }
     
-    public function getStatFamilienamen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
+    public function getStatFamilienamen($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -2291,9 +2289,9 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 
@@ -2315,7 +2313,7 @@ class lijstenController {
         return $result;
     }
     
-public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroepen)
+public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonplaatsen,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
@@ -2382,9 +2380,9 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
             }
             if ($first == false){ $query .= ")"; }
         }          
-         if (count($beroepsgroepen) > 0) {
+         if (count($beroepsgroep) > 0) {
             $first = true;
-            foreach ($beroepsgroepen as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 

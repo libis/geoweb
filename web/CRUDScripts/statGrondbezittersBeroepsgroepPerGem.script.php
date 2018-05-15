@@ -14,15 +14,14 @@ $beroepsgroepen = $_POST['selBgp'];
 
 $result="";
 
-foreach ($statController->getGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen) as $key => $value)
+foreach ($statController->getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen) as $key => $value)
 {
     if($result!="")
     {
         $result .= "%%";
     }
-    $result .= $key."##".$value[1]."##".$value[2]."##".$value[3];
+    $result .= $key."##".$value[1]."##".$value[2];
 }
 echo $result;
 
 ?>
-

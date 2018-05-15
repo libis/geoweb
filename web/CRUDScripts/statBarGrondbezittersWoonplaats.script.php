@@ -5,9 +5,9 @@ include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demStatisticsController.php')
 $statController = new demStatisticsController();
 
 
-$gemeente = $_GET['gemeente'];
-$naam = $_GET['naam'];
-$artikelnr = $_GET['artikelnr'];
+$gemeente = $_POST['selGem'];
+$naam = $_POST['selNm'];
+$artikelnr = $_POST['selArt'];
 $woonplaatsen = $_POST['selWpl'];
 $beroepen = $_POST['selBrp'];
 $beroepsgroepen = $_POST['selBgp'];

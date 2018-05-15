@@ -1239,159 +1239,6 @@ function demZoekBeroepsgroepenByGemeente()
     });
 }
 
-function demZoekBeroepenByGemeenteStat(selGem)
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepenByGemeente.script.php";
-    if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
-       if (lg==true) selGem.splice(0,selGem.length);   
-       data = data.trim();
-        var poutput = [];// voorbereiding
-        var selectedValue ="Alle beroepen";
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count =0;
-        
-            var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle beroepen</a></li>';
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count+1 ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#beroepbox').html('');
-        $('#beroepbox').html(poutput.join(''));
-        $('.beroepTextBox').attr("placeholder","Zoek beroep");
-        });
-        
-}
-
-function demZoekArtikelnummersByGemeenteStat(selGem)
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersByGemeente.script.php";
-     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
-       if (lg==true) selGem.splice(0,selGem.length);   
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        var selectedValue ="Alle artikelnummers";
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count =0;
-        
-            var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle artikelnummers</a></li>';
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count+1 ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#artikelnummerbox').html('');
-        $('#artikelnummerbox').html(poutput.join(''));
-        $('.artTextBox').attr("placeholder","Zoek artikelnummer");
-        });
-        
-}
-
-function demZoekFamilienamenByGemeenteStat(selGem)
-{
-    selGem = getCookie('selGem');  
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenByGemeente.script.php";
-    if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
-       if (lg==true) selGem.splice(0,selGem.length);   
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        var selectedValue ="Alle namen";
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count =0;
-        
-            var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle namen</a></li>';
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count+1 ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#familienaambox').html('');
-        $('#familienaambox').html(poutput.join(''));
-        $('.familienaamTextBox').attr("placeholder","Zoek naam");
-        });
-        
-}
-/*
-function demZoekBeroepsgroepenByGemeenteStat(gem)
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenByGemeente.script.php";
-    argumenten = '?gemeente='+gem;
-   $.post(targetUrl+argumenten, function(data) {
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        var selectedValue ="Alle beroepsgroepen";
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count =0;
-        
-            var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle beroepsgroepen</a></li>';
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count+1 ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#beroepsgroepbox').html('');
-        $('#beroepsgroepbox').html(poutput.join(''));
-        $('.beroepsgroepTextBox').attr("placeholder","Zoek beroepsgroep");
-        });
-        
-}
-*/
-
 function demZoekFamilienamenStat()
 {
     selGem = getCookie('selGem');
@@ -1743,55 +1590,24 @@ function demZoekWoonplaatsenStat()
         
 }
 
-/*
-function demZoekWoonplaatsenByGemeenteStat(selGem)
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenByGemeente.script.php";
-    if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
-       if (lg==true) selGem.splice(0,selGem.length);   
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        var selectedValue ="Alle woonplaatsen";
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count =0;
-        
-            var targetToPush = '';  
-            targetToPush +='<li><a href="#" class="small" data-value="0" tabIndex="-1"><input type="checkbox" checked="true"/>&nbsp;Alle woonplaatsen</a></li>';
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count+1 ;//id
 
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#woonplaatsbox').html('');
-        $('#woonplaatsbox').html(poutput.join(''));
-        $('.woonplaatsTextBox').attr("placeholder","Zoek woonplaats");
-        });
-        
-}
 
-function demZoekStatGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
+function demZoekStatGrondbezitters()
 {
     
     var output=[];
-
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezitters.script.php";
-    argumenten = '?gemeente='+gem;//+'&naam='+nm+'&artikelnr='+art;
     var options = {
             'legend':'left',
             'is3D':true,
-            'width':700
+            'width':700,
+            'title':'Oppervlakte per eigenaar'
         };
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Eigenaar');
@@ -1802,7 +1618,66 @@ function demZoekStatGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
+        if (la==true) selArt.splice(0,selArt.length);
+        if (ln==true) selNm.splice(0,selNm.length);
+        if (lb==true) selBrp.splice(0,selBrp.length);
+        if (lg==true) selBgp.splice(0,selBgp.length);
+        if (lw==true) selWpl.splice(0,selWpl.length);    
+        data = data.trim();
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            keyvaluearray=keyValueList[i_count].split("##");
+            output = []; 
+            opp_count = 0;
+            while(i_count<keyValueList.length)
+            {
+
+                keyvaluearray=keyValueList[i_count].split("##");
+                output[i_count] = [(keyvaluearray[2]),Math.abs(parseInt(keyvaluearray[1]))];
+                opp_count += Math.abs(parseInt(keyvaluearray[1]));
+                i_count++;
+            }
+//            output[i_count] = [('Anderen'),(parseInt(keyvaluearray[3]) - opp_count)];       
+        }  
+        stat.addRows(output); // Instantiate and draw the chart.
+        var chart = new google.visualization.PieChart(document.getElementById('myPieChart'));
+        chart.draw(stat, options);
+    });
+}
+
+
+
+function demZoekStatGrondbezittersPerGem()
+{
+    
+    var output=[];
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersPerGem.script.php";
+    var options = {
+            'legend':'left',
+            'is3D':true,
+            'width':700,
+            'title':'Oppervlakte eigenaar per gemeente',
+
+        };
+    var stat = new google.visualization.DataTable();
+    stat.addColumn('string', 'Gemeente');
+    stat.addColumn('number', 'Percentage');
+    var lb,lw,lg,la,ln;
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    if (lg=selBgp.length == 0) selBgp=['Alle '];
+    if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
         if (la==true) selArt.splice(0,selArt.length);
         if (ln==true) selNm.splice(0,selNm.length);
         if (lb==true) selBrp.splice(0,selBrp.length);
@@ -1821,31 +1696,35 @@ function demZoekStatGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
 
                 keyvaluearray=keyValueList[i_count].split("##");
                 output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
-                opp_count += parseInt(keyvaluearray[1]);
                 i_count++;
+             
             }
-            output[i_count] = [('Anderen'),(parseInt(keyvaluearray[3]) - opp_count)];       
         }  
         stat.addRows(output); // Instantiate and draw the chart.
-        var chart = new google.visualization.PieChart(document.getElementById('myPieChart'));
+        var chart = new google.visualization.PieChart(document.getElementById('myPieGemChart'));
         chart.draw(stat, options);
     });
-    }
+}
 
-function demZoekStatGrondbezittersGem(gem,selNm,selArt,selBrp,selWpl,selBgp,)
+function demZoekStatGrondbezittersBeroep()
 {
     
     var output=[];
-
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezitters.script.php";
-    argumenten = '?gemeente='+gem;//+'&naam='+nm+'&artikelnr='+art;
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');  
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroep.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
-            'width':700
+            'width':700,
+            'title':'Oppervlakte per beroep'
         };
     var stat = new google.visualization.DataTable();
-    stat.addColumn('string', 'Eigenaar');
+    stat.addColumn('string', 'Beroep');
     stat.addColumn('number', 'Percentage');
     var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
@@ -1853,59 +1732,12 @@ function demZoekStatGrondbezittersGem(gem,selNm,selArt,selBrp,selWpl,selBgp,)
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
-        if (la==true) selArt.splice(0,selArt.length);
-        if (ln==true) selNm.splice(0,selNm.length);
+    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
-        if (lw==true) selWpl.splice(0,selWpl.length);    
-        data = data.trim();
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            keyvaluearray=keyValueList[i_count].split("##");
-            output = []; 
-            while(i_count<keyValueList.length)
-            {
-
-                keyvaluearray=keyValueList[i_count].split("##");
-                output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1]/parseInt(keyvaluearray[3]))];
-               
-                i_count++;
-            }
-        }  
-        stat.addRows(output); // Instantiate and draw the chart.
-        var chart = new google.visualization.PieChart(document.getElementById('myPieChart'));
-        chart.draw(stat, options);
-    });
-    }
-
-
-
-function demZoekStatGrondbezittersBeroep(gem,nm,art,selBrp,selWpl,selBgp)
-{
-    
-    var output=[];
-
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroep.script.php";
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
-    var options = {
-            'legend':'left',
-            'is3D':true,
-            'width':700
-        };
-    var stat = new google.visualization.DataTable();
-    stat.addColumn('string', 'Beroep');
-    stat.addColumn('number', 'Percentage');
-    var lb,lw,lg;
-    if (lb=selBrp.length == 0) selBrp=['Alle '];
-    if (lg=selBgp.length == 0) selBgp=['Alle '];
-    if (lw=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {
-        if (lb==true) selBrp.splice(0,selBrp.length);
-        if (lg==true) selBgp.splice(0,selBgp.length);
-        if (lw==true) selWpl.splice(0,selWpl.length);    
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);   
         data = data.trim();
         if(data.length>0)
         {
@@ -1927,14 +1759,71 @@ function demZoekStatGrondbezittersBeroep(gem,nm,art,selBrp,selWpl,selBgp)
         chart.draw(stat, options);
     });
     }
-
-function demZoekStatGrondbezittersBeroepsgroep(gem,nm,art,selBrp,selWpl,selBgp)
+function demZoekStatGrondbezittersBeroepPerGem()
 {
     
     var output=[];
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');  
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepPerGem.script.php";
+    var options = {
+            'legend':'left',
+            'is3D':true,
+            'width':700,
+            'title':'Oppervlakte beroep per gemeente'
+        };
+    var stat = new google.visualization.DataTable();
+    stat.addColumn('string', 'beroep per gemeente');
+    stat.addColumn('number', 'Percentage');
+    var lb,lw,lg,la,ln;
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    if (lg=selBgp.length == 0) selBgp=['Alle '];
+    if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+        if (lb==true) selBrp.splice(0,selBrp.length);
+        if (lg==true) selBgp.splice(0,selBgp.length);
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);   
+        data = data.trim();
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            keyvaluearray=keyValueList[i_count].split("##");
+            output = []; 
+            while(i_count<keyValueList.length)
+            {
+
+                keyvaluearray=keyValueList[i_count].split("##");
+                output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
+               
+                i_count++;
+            }
+        }  
+        stat.addRows(output); // Instantiate and draw the chart.
+        var chart = new google.visualization.PieChart(document.getElementById('myPieGemChart'));
+        chart.draw(stat, options);
+    });
+    }
+
+function demZoekStatGrondbezittersBeroepsgroep()
+{
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');     
+    var output=[];
 
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroep.script.php";
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1943,14 +1832,18 @@ function demZoekStatGrondbezittersBeroepsgroep(gem,nm,art,selBrp,selWpl,selBgp)
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroepsgroep');
     stat.addColumn('number', 'Percentage');
-    var lb,lw,lg;
+    var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
-        if (lw==true) selWpl.splice(0,selWpl.length);    
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);    
         data = data.trim();
         if(data.length>0)
         {
@@ -1973,13 +1866,71 @@ function demZoekStatGrondbezittersBeroepsgroep(gem,nm,art,selBrp,selWpl,selBgp)
     });
     }
 
-function demZoekStatGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
+function demZoekStatGrondbezittersBeroepsgroepPerGem()
 {
-    
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');     
+    var output=[];
+
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroepPerGem.script.php";
+    var options = {
+            'legend':'left',
+            'is3D':true,
+            'width':700,
+            'title':'Opp per gemeente'
+        };
+    var stat = new google.visualization.DataTable();
+    stat.addColumn('string', 'gemeente');
+    stat.addColumn('number', 'Percentage');
+    var lb,lw,lg,la,ln;
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    if (lg=selBgp.length == 0) selBgp=['Alle '];
+    if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+        if (lb==true) selBrp.splice(0,selBrp.length);
+        if (lg==true) selBgp.splice(0,selBgp.length);
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);    
+        data = data.trim();
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            keyvaluearray=keyValueList[i_count].split("##");
+            output = []; 
+            while(i_count<keyValueList.length)
+            {
+
+                keyvaluearray=keyValueList[i_count].split("##");
+                output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
+               
+                i_count++;
+            }
+        }  
+        stat.addRows(output); // Instantiate and draw the chart.
+        var chart = new google.visualization.PieChart(document.getElementById('myPieGemChart'));
+        chart.draw(stat, options);
+    });
+    }
+
+function demZoekStatGrondbezittersWoonplaats()
+{
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
     var output=[];
 
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaats.script.php";
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1988,14 +1939,18 @@ function demZoekStatGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Woonplaats');
     stat.addColumn('number', 'Percentage');
-    var lb,lw,lg;
+    var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
-        if (lw==true) selWpl.splice(0,selWpl.length);    
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);      
         data = data.trim();
         if(data.length>0)
         {
@@ -2018,13 +1973,71 @@ function demZoekStatGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
     });
     }
 
-function demZoekStatBarGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
+function demZoekStatGrondbezittersWoonplaatsPerGem()
+{
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
+    var output=[];
+
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaatsPerGem.script.php";
+    var options = {
+            'legend':'left',
+            'is3D':true,
+            'width':700,
+            'title':'Opp per gemeente'
+        };
+    var stat = new google.visualization.DataTable();
+    stat.addColumn('string', 'Gemeente');
+    stat.addColumn('number', 'Percentage');
+    var lb,lw,lg,la,ln;
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    if (lg=selBgp.length == 0) selBgp=['Alle '];
+    if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    $.post(targetUrl,{selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
+        if (lb==true) selBrp.splice(0,selBrp.length);
+        if (lg==true) selBgp.splice(0,selBgp.length);
+        if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);      
+        data = data.trim();
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            keyvaluearray=keyValueList[i_count].split("##");
+            output = []; 
+            while(i_count<keyValueList.length)
+            {
+
+                keyvaluearray=keyValueList[i_count].split("##");
+                output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
+               
+                i_count++;
+            }
+        }  
+        stat.addRows(output); // Instantiate and draw the chart.
+        var chart = new google.visualization.PieChart(document.getElementById('myPieGemChart'));
+        chart.draw(stat, options);
+    });
+    }
+    
+function demZoekStatBarGrondbezitters()
 {
     
     var output=[];
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezitters.script.php";
-
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
     var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
@@ -2034,7 +2047,7 @@ function demZoekStatBarGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Eigenaar');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2043,19 +2056,24 @@ function demZoekStatBarGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
         data = data.trim();
         if(data.length>0)
         {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            keyvaluearray=keyValueList[i_count].split("##");
-            opp_count = 0;
-            while(i_count<keyValueList.length)
-            {
-
-                keyvaluearray=keyValueList[i_count].split("##");
-                output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1]/parseInt(keyvaluearray[3]))];
-                opp_count += parseInt(keyvaluearray[1]);
-                i_count++;
-            }
-            output[i_count] = [('Anderen'),(parseInt(keyvaluearray[3]) - opp_count)];       
+                        
+                    keyValueList = data.split("%%");
+                    i_count = 0;
+                    keyvaluearray=keyValueList[i_count].split("##");
+                    opp_count = 0;
+                    while(i_count<keyValueList.length)
+                    {
+                        keyvaluearray=keyValueList[i_count].split("##");
+                        output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
+/*
+                        keyvaluearray=keyValueList[i_count].split("##");
+                        output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1]/parseInt(keyvaluearray[3]))];
+                        opp_count += parseInt(keyvaluearray[1]);
+*/                
+                        i_count++;
+                
+                    }
+//                    output[i_count] = [('Anderen'),(parseInt(keyvaluearray[3]) - opp_count)];       
         }  
      
       var options = {
@@ -2076,24 +2094,32 @@ function demZoekStatBarGrondbezitters(gem,selNm,selArt,selBrp,selWpl,selBgp)
     });
 }
 
-function demZoekStatBarGrondbezittersBeroep(gem,nm,art,selBrp,selWpl,selBgp)
+function demZoekStatBarGrondbezittersBeroep()
 {
     
     var output=[];
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroep.script.php";
-
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
-    var lb,lw,lg;
+    var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroep');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {  
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length);   
         data = data.trim();
         if(data.length>0)
         {
@@ -2128,24 +2154,32 @@ function demZoekStatBarGrondbezittersBeroep(gem,nm,art,selBrp,selWpl,selBgp)
     });
 }
 
-function demZoekStatBarGrondbezittersBeroepsgroep(gem,nm,art,selBrp,selWpl,selBgp)
+function demZoekStatBarGrondbezittersBeroepsgroep()
 {
     
     var output=[];
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selBgp = getCookie('selBgp');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');     
+    selWpl = getCookie('selWpl');        
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroepsgroep.script.php";
-
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
-    var lb,lw,lg;
+    var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroepsgroep');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {  
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length); 
         data = data.trim();
         if(data.length>0)
         {
@@ -2180,24 +2214,26 @@ function demZoekStatBarGrondbezittersBeroepsgroep(gem,nm,art,selBrp,selWpl,selBg
     });
 }
 
-function demZoekStatBarGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
+function demZoekStatBarGrondbezittersWoonplaats()
 {
     
     var output=[];
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersWoonplaats.script.php";
-
-    argumenten = '?gemeente='+gem+'&naam='+nm+'&artikelnr='+art;
-    var lb,lw,lg;
+    var lb,lw,lg,la,ln;
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Woonplaats');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl+argumenten,{selBrp,selWpl,selBgp}, function(data) {  
+    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
+        if (la==true) selArt.splice(0,selArt.length);  
+        if (ln==true) selNm.splice(0,selNm.length); 
         data = data.trim();
         if(data.length>0)
         {
@@ -2206,10 +2242,8 @@ function demZoekStatBarGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
             keyvaluearray=keyValueList[i_count].split("##");
             while(i_count<keyValueList.length)
             {
-
                 keyvaluearray=keyValueList[i_count].split("##");
                 output[i_count] = [(keyvaluearray[2]),parseInt(keyvaluearray[1])];
-               
                 i_count++;
             }
         }  
@@ -2231,7 +2265,7 @@ function demZoekStatBarGrondbezittersWoonplaats(gem,nm,art,selBrp,selWpl,selBgp)
         chart.draw(stat, google.charts.Bar.convertOptions(options));
     });
 }
-
+/*
 function demZoekGrondgebruikByGemeente(selGem)
 {
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGrondgebruikByGemeente.script.php";

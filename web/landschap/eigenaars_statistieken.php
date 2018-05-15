@@ -93,8 +93,8 @@
          $('#beroepbox').slideUp();
          $('#beroepsgroepbox').slideUp();
          $('#woonplaatsbox').slideUp();
-         demZoekStatGrondbezitters(gem,nm,art,selBrp,selWpl,selBgp);
-         demZoekStatBarGrondbezitters(gem,nm,art,selBrp,selWpl,selBgp);
+         demZoekStatGrondbezitters();
+         demZoekStatBarGrondbezitters();
          
          // Instantiate and draw the chart.
       }
@@ -188,11 +188,11 @@ function resetStatistieken()
     $('.beroepsgroepTextBox').attr("placeholder","Even geduld..");
     
 
-    demZoekArtikelnummersByGemeente(gem);
-    demZoekFamilienamenByGemeente(gem);
-    demZoekBeroepenByGemeenteStat(gem);
-    demZoekBeroepsgroepenByGemeenteStat(gem);
-    demZoekWoonplaatsenByGemeenteStat(gem);    
+    demZoekArtikelnummersByGemeente();
+    demZoekFamilienamenByGemeente();
+    demZoekBeroepenByGemeente();
+    demZoekBeroepsgroepenByGemeente();
+    demZoekWoonplaatsenByGemeente();    
     
     selBrp.splice(0,selBrp.length);
     selWpl.splice(0,selWpl.length);

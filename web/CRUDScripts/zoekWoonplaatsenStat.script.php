@@ -10,7 +10,7 @@ $familienaam = $_POST['selNm'];
 $artikelnummer = $_POST['selArt'];
 $beroepen = $_POST['selBrp'];
 $beroepsgroepen = $_POST['selBgp'];
-$gemeente = $_GET['selGem'];
+$gemeente = $_POST['selGem'];
 $result="";
 
 foreach ($lijstenController->getWoonplaatsenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepen,$beroepsgroepen) as $key => $value)

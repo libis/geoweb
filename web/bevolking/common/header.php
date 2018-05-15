@@ -37,9 +37,8 @@ $sid = session_id();
         <script type="text/javascript" src="../js/jquery.blockUI.js"></script>
         <script type="text/javascript" src="../js/demografie.js"></script>
         <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
-        <!--<script src="https://openlayers.org/en/v4.3.3/build/ol.js"></script>-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.3.3/ol-debug.js"></script>
-<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
 
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

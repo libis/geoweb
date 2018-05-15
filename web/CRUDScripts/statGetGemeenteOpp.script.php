@@ -5,7 +5,7 @@ include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demStatisticsController.php')
 $statController = new demStatisticsController();
 
 
-$gemeente = $_GET['gemeente'];
+$gemeente = $_POST['selGem'];
 
 $result="";
 
