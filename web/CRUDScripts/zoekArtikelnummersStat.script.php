@@ -6,7 +6,7 @@ $lijstenController = new lijstenController();
 
 
 $gemeente = $_POST['selGem'];
-$filter = $_GET['artikelnummer'];
+$filter = $_GET['artnr'];
 $familienaam = $_POST['selNm'];
 $woonplaatsen = $_POST['selWpl'];
 $beroepen = $_POST['selBrp'];

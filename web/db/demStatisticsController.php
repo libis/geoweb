@@ -734,6 +734,118 @@ class demstatisticsController {
         return $result;       
    }      
 
+function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+    
+        $result = array();
+        $index = 0;       
+
+        $query = "select sum(sqm),beroepsgroep || ' - ' ||gemeente from ( 
+        select oat.gemeente,oat.beroepsgroep,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat 
+        inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "where beroepsgroep is not null ";
+        
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.gemeente =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        } 
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.naam =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        if (count($artikelnr) > 0) {
+            $first = true;
+            foreach ($artikelnr as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.artnr =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          if (count($woonplaatsen) > 0) {
+            $first = true;
+            foreach ($woonplaatsen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.woonplaats =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($beroepen) > 0) {
+            $first = true;
+            foreach ($beroepen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.beroep =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($beroepsgroepen) > 0) {
+            $first = true;
+            foreach ($beroepsgroepen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        
+        $query .= "group by oat.gemeente,oat.beroepsgroep,minperceel.geom 
+        order by gemeente
+        ) as opp 
+	group by beroepsgroep,gemeente
+        order by sum(sqm),beroepsgroep,gemeente";   
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            
+            
+            $tssres[1]= $row[0];
+            $tssres[2]= $row[1];
+            $result[$index++]= $tssres;
+        }
+        pg_free_result($s);
+        return $result;       
+   }       
+   
  function getGrondbezitWoonplaats($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
@@ -845,5 +957,117 @@ class demstatisticsController {
         pg_free_result($s);
         return $result;       
    }         
+
+function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+    
+        $result = array();
+        $index = 0;       
+       
+        $query = "select sum(sqm),woonplaats || ' - ' || gemeente from ( ";
+        $query .= "select  oat.gemeente,oat.woonplaats,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
+        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "where woonplaats is not null ";
+        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+            $first = true;
+            foreach ($gemeente as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.gemeente =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        } 
+        if (count($naam) > 0) {
+            $first = true;
+            foreach ($naam as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.naam =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+        if (count($artikelnr) > 0) {
+            $first = true;
+            foreach ($artikelnr as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.artnr =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          if (count($woonplaatsen) > 0) {
+            $first = true;
+            foreach ($woonplaatsen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.woonplaats =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($beroepen) > 0) {
+            $first = true;
+            foreach ($beroepen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.beroep =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        if (count($beroepsgroepen) > 0) {
+            $first = true;
+            foreach ($beroepsgroepen as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }
+        
+        
+        $query .= "group by oat.gemeente,oat.woonplaats,minperceel.geom 
+        order by gemeente
+        ) as opp 
+	group by woonplaats,gemeente
+        order by sum(sqm),woonplaats,gemeente";  
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            
+            
+            $tssres[1]= $row[0];
+            $tssres[2]= $row[1];
+            $result[$index++]= $tssres;
+        }
+        pg_free_result($s);
+        return $result;       
+   }       
 }
 ?>

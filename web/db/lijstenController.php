@@ -102,7 +102,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
@@ -133,22 +133,6 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($voornaam) > 0) {
- 
-            $first = true;
-            foreach ($voornaam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (voornamen = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or voornamen = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }    
         if (count($naam) > 0) {
             $first = true;
             foreach ($naam as $value) {
@@ -179,7 +163,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-        $query .= " order by naam";
+        $query .= " order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -194,7 +178,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
@@ -225,22 +209,6 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($voornaam) > 0) {
- 
-            $first = true;
-            foreach ($voornaam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
-
-                if ($first == true){
-                    $query .= " and (voornamen = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or voornamen = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }    
         if (count($naam) > 0) {
             $first = true;
             foreach ($naam as $value) {
@@ -271,7 +239,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-        $query .= " order by naam";
+        $query .= " order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -285,7 +253,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(voornaam) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($gemeente != NULL) || (count($gemeente)) > 0) {
             $first = true;
@@ -316,22 +284,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }
-         if (count($voornaam) > 0) {
- 
-            $first = true;
-            foreach ($voornaam as $value) {
-            if (strncasecmp($value,"alle ",5) != 0) {
 
-                if ($first == true){
-                    $query .= " and (voornamen = '".$value."'"; 
-                    $first = false;
-                } else {
-                    $query .= " or voornamen = '".$value."'";
-                }
-            }
-            }
-            if ($first == false){ $query .= ")"; }
-        }    
         if (count($naam) > 0) {
             $first = true;
             foreach ($naam as $value) {
@@ -362,7 +315,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }          
-        $query .= " order by naam";
+        $query .= " order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {

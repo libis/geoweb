@@ -11,7 +11,7 @@ $artikelnummer = $_POST['selArt'];
 $beroep = $_POST['selBrp'];
 $result="";
 
-foreach ($lijstenController->getVoornamenBeroepFilter($filter,$gemeente,$familienaam,$artikelnummer,$beroep) as $key => $value)
+foreach ($lijstenController->getVoornamenBeroepFilter($filter,$gemeente,$naam,$artikelnummer,$beroep) as $key => $value)
 {
     if($result!="")
     {

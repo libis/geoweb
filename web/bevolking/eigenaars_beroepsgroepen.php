@@ -35,37 +35,37 @@
       <div id="multilayer">
       <div class="button-group">
         <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
-        <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Gemeenten<span class="caret"></span></button>
         <ul id=gemeentebox class="dropdown-menu">
         </ul>
        </div>
       <div class="button-group">
           <input class="geotextbox beroepsgroepTextBox" name="beroepsgroepbox" placeholder="Zoek beroep" onkeyup="demZoekBeroepsgroepen();" maxlength="20"/>
-        <button id="beroepsgroep_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="beroepsgroep_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Beroepsgroep<span class="caret"></span></button>
         <ul id=beroepsgroepbox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
         <input class="geotextbox familienaamTextBox" name="familienaambox" placeholder="Zoek naam" onkeyup="demZoekFamilienamenBeroep();" maxlength="20"/>
-        <button id="naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="naam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Namen<span class="caret"></span></button>
         <ul id=familienaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
         <input class="geotextbox voornaamTextBox" name="voornaambox" placeholder="Zoek voornaam" onkeyup="demZoekVoornamenBeroep();" maxlength="20"/>
-        <button id="voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="voornaam_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Voornamen<span class="caret"></span></button>
         <ul id=voornaambox class="dropdown-menu">
         </ul>
       </div>
       <div class="button-group">
         <input class="geotextbox artTextBox" name="artikelnummerbox" placeholder="Zoek artikelnummer" onkeyup="demZoekArtikelnummersBeroep();" maxlength="20"/>
-        <button id="artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <button id="artikelnummer_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Artikelnrs<span class="caret"></span></button>
         <ul id=artikelnummerbox class="dropdown-menu">
         </ul>
       </div>
         <div class="button-group">
             <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>
-            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">lagen<span class="caret"></span></button>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
             <ul id=lagenbox class="dropdown-menu">
             </ul>
         </div>
@@ -97,6 +97,11 @@ var firstOpenLg = true;
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
      
+    $('.familienaamTextBox').attr("placeholder","");
+    $('.artTextBox').attr("placeholder","");
+    $('.voornaamTextBox').attr("placeholder","");
+    $('.beroepsgroepTextBox').attr("placeholder","");
+    
      demZoekLagen();
      demZoekGemeenten();
      getMapStartup();     
@@ -555,11 +560,10 @@ function resetEigenaarsBeroepsgroep()
     setCookie('selBgp',selBgp);
     setCookie('selGem',selGem);
 
-    $('.naamTextBox').attr("placeholder","Even geduld..");
-    $('.artikelnummerTextBox').attr("placeholder","Even geduld..");
-    $('.voornaamBox').attr("placeholder","Even geduld..");
-    $('.beroepBox').attr("placeholder","Even geduld..");
-
+    $('.familienaamTextBox').attr("placeholder","");
+    $('.artTextBox').attr("placeholder","");
+    $('.voornaamTextBox').attr("placeholder","");
+    $('.beroepsgroepTextBox').attr("placeholder","");
      demZoekGemeenten();
      getMapStartup();
 }

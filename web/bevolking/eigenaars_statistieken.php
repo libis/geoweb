@@ -101,8 +101,6 @@ include 'common/header.php'; ?>
   <script type="text/javascript">
       google.charts.load('current', {packages: ['corechart']});
 //      google.charts.load('current', {packages:['bar']});
-
-      //  google.charts.setOnLoadCallback(drawChart);
       
     function setHeightChart() {
         var menuHeight = $('.container-fluid.control-stats').height();
@@ -223,7 +221,7 @@ function resetStatistieken()
     setCookie('selGem',selGem);
 
     $('.familienaamTextBox').attr("placeholder","");
-    $('.artikelnummerTextBox').attr("placeholder","");
+    $('.artTextBox').attr("placeholder","");
     $('.beroepTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
     $('.beroepsgroepTextBox').attr("placeholder","");
@@ -235,6 +233,7 @@ function resetStatistieken()
 
 function resetStat(){
     $('#myPieChart').empty();
+    $('#myPieGemChart').empty();
     $('#myBarChart').empty();
     $("#dem_eig_legend_chk").hide();
     $("#eig_legende_spam").hide();
@@ -301,7 +300,7 @@ $(document).on('click','.familienaamTextBox',function(event){
     firstOpenNm = false;
 });
 
-$(document).on('click','#artikelnummers_btn',function(event){
+$(document).on('click','#artikelnummer_btn',function(event){
     $('#familienaambox').slideUp();
     $('#gemeentebox').slideUp();
     $('#beroepbox').slideUp();    

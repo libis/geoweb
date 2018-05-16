@@ -154,7 +154,7 @@ function demZoekVoornamenBeroep()
    selBrp = getCookie('selBrp');
    var voornaam = $(".voornaamTextBox").val();
    argumenten = '?voornaam='+voornaam;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroepsgroep.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroep.script.php";
     
     var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];
@@ -1827,7 +1827,8 @@ function demZoekStatGrondbezittersBeroepsgroep()
     var options = {
             'legend':'left',
             'is3D':true,
-            'width':700
+            'width':700,
+            'title':'Oppervlakte per beroepsgroep'
         };
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroepsgroep');
@@ -1881,7 +1882,7 @@ function demZoekStatGrondbezittersBeroepsgroepPerGem()
             'legend':'left',
             'is3D':true,
             'width':700,
-            'title':'Opp per gemeente'
+            'title':'Oppervlaket beroepsgroep per gemeente'
         };
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'gemeente');
@@ -1934,7 +1935,8 @@ function demZoekStatGrondbezittersWoonplaats()
     var options = {
             'legend':'left',
             'is3D':true,
-            'width':700
+            'width':700,
+            'title':'Oppervlakte per woonplaats van eigenaars'
         };
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Woonplaats');
@@ -1988,7 +1990,7 @@ function demZoekStatGrondbezittersWoonplaatsPerGem()
             'legend':'left',
             'is3D':true,
             'width':700,
-            'title':'Opp per gemeente'
+            'title':'Opp woonplaats eigenaars per gemeente'
         };
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Gemeente');
