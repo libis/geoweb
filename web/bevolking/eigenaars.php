@@ -102,16 +102,6 @@ var firstOpenLg = true;
      $("#legend-form").html(imag);
      
      
-$(document).on('click','.gemeenteTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voornaambox').slideUp();
-    $('#lagenbox').slideUp();
-    $(".gemeenteTextBox").val('').html();
-    firstOpenGem = false;    
-});
-
-
 $(document).on('click','#gemeentebox a',function(event){
 
     $('#artikelnummerbox').slideUp();
@@ -155,15 +145,6 @@ $(document).on('click','#gemeentebox a',function(event){
    return false;
 });
 
-$(document).on('click','.familienaamTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#voornaambox').slideUp();
-    $('#lagenbox').slideUp();
-	
-    $(".familienaamTextBox").val('').html();
-    firstOpenNm = false;    
-});
 $(document).on('click','#familienaambox a',function(event){
     selNm = getCookie('selNm');
     $('#artikelnummerbox').slideUp();
@@ -206,17 +187,6 @@ $(document).on('click','#familienaambox a',function(event){
    demZoekArtikelnummers();
    demZoekVoornamen();
    return false;
-});
-
-
-$(document).on('click','.voornaamTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#lagenbox').slideUp();
-
-    $(".voornaamTextBox").val('').html();
-    firstOpenVnm = false;    
 });
 
 $(document).on('click','#voornaambox a',function(event){
@@ -262,15 +232,6 @@ $(document).on('click','#voornaambox a',function(event){
    demZoekArtikelnummers();
    demZoekFamilienamen();
    return false;
-});
-
-$(document).on('click','.artTextBox',function(event){
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voornaambox').slideUp();
-    $('#lagenbox').slideUp();
-
-    $(".artTextBox").val('').html();
 });
 
 $(document).on('click','#artikelnummerbox a',function(event){
@@ -353,7 +314,12 @@ $(document).on('click','#lagenbox a',function(event){
 
 $(document).on('click','.gemeenteTextBox',function(event){
     $('#gemeentebox').slideToggle();
-    $(".gemeenteTextBox").val('').html();
+    $('#lagenbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();
+
+        $(".gemeenteTextBox").val('').html();
     firstOpenGem = false;
 });
 
@@ -369,6 +335,10 @@ $(document).on('click','#gemeente_btn',function(event){
 
 $(document).on('click','.familienaamTextBox',function(event){
     $('#familienaambox').slideToggle();
+    $('#gemeentebox').slideUp();
+    $('#lagenbox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp();
     $(".familienaamTextBox").val('').html();
     firstOpenNm = false;
 });
@@ -385,6 +355,10 @@ $(document).on('click','#naam_btn',function(event){
 
 $(document).on('click','.voornaamTextBox',function(event){
     $('#voornaambox').slideToggle();
+    $('#gemeentebox').slideUp();
+    $('#lagenbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#artikelnummerbox').slideUp();
     $(".voornaamTextBox").val('').html();
     firstOpenVnm = false;
 });
@@ -401,8 +375,12 @@ $(document).on('click','#voornaam_btn',function(event){
 
 $(document).on('click','.artTextBox',function(event){
     $('#artikelnummerbox').slideToggle();
+    $('#gemeentebox').slideUp();
+    $('#lagenbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();    
     $(".artTextBox").val('').html();
-    firstOpenVnm = false;
+    firstOpenArt = false;
 });
 
 $(document).on('click','#artikelnummer_btn',function(event){
@@ -410,13 +388,17 @@ $(document).on('click','#artikelnummer_btn',function(event){
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();
     $('#lagenbox').slideUp();    
-    if (firstOpenVnm == false) {
+    if (firstOpenArt == false) {
         $('#artikelnummerbox').slideToggle();
     }
 });
 
 $(document).on('click','.lagenTextBox',function(event){
     $('#lagenbox').slideToggle();
+    $('#gemeentebox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();
+    $('#artikelnummerbox').slideUp(); 
     $(".lagenTextBox").val('').html();
     firstOpenLg = false;
 });

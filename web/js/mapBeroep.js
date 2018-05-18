@@ -265,7 +265,7 @@ function getMapBrp(keyValueList,gemeente,selLg)
         featurePrefix: 'aezel',
         featureTypes: ['vw_minperceel'],
         outputFormat: 'application/json',
-        maxFeatures : 50,
+        maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
 
       });

@@ -943,7 +943,7 @@ function demZoekBeroepen()
    selBrp = getCookie('selBrp');    
    var beroep = $(".beroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekberoepen.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepen.script.php";
     argumenten='?beroep='+beroep;
     var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];
@@ -1079,7 +1079,7 @@ function demZoekBeroepsgroepen()
    selBgp = getCookie('selBgp');    
    var beroepsgroep = $(".beroepsgroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekberoepsgroepen.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepen.script.php";
     argumenten='?beroepsgroep='+beroepsgroep;
     var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];
@@ -1461,7 +1461,7 @@ function demZoekBeroepsgroepenStat()
    selArt = getCookie('selArt');    
    var beroepsgroep = $(".beroepsgroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekberoepsgroepenStat.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenStat.script.php";
     argumenten='?beroepsgroep='+beroepsgroep;
     var lg,lv,ln,la,lb;
     if (ln=selNm.length == 0) selNm=['Alle '];

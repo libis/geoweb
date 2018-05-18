@@ -107,15 +107,6 @@ var firstOpenLg = true;
      
      var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel">';
      $("#legend-form").html(imag);
-     
-$(document).on('click','.gemeenteTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voornaambox').slideUp();
-    $(".gemeenteTextBox").val('').html();
-    firstOpenGem = false;    
-});
-
 
 $(document).on('click','#gemeentebox a',function(event){
 
@@ -163,15 +154,6 @@ $(document).on('click','#gemeentebox a',function(event){
    return false;
 });
 
-$(document).on('click','.familienaamTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#voornaambox').slideUp();
-    $('#woonplaatsbox').slideUp();
-	
-    $(".familienaamTextBox").val('').html();
-    firstOpenNm = false;    
-});
 $(document).on('click','#familienaambox a',function(event){
     selNm = getCookie('selNm');
     $('#artikelnummerbox').slideUp();
@@ -214,17 +196,6 @@ $(document).on('click','#familienaambox a',function(event){
    demZoekVoornamenWoonplaats();
    demZoekWoonplaatsen();
    return false;
-});
-
-
-$(document).on('click','.voornaamTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#woonplaatsbox').slideUp();
-
-    $(".voornaamTextBox").val('').html();
-    firstOpenVnm = false;    
 });
 
 $(document).on('click','#voornaambox a',function(event){
@@ -273,16 +244,6 @@ $(document).on('click','#voornaambox a',function(event){
    return false;
 });
 
-$(document).on('click','.artTextBox',function(event){
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voornaambox').slideUp();
-    $('#woonplaatsbox').slideUp();
-
-    $(".artTextBox").val('').html();
-    firstOpenArt = false;    
-});
-
 $(document).on('click','#artikelnummerbox a',function(event){
 
     $('#familienaambox').slideUp();
@@ -328,17 +289,6 @@ $(document).on('click','#artikelnummerbox a',function(event){
     demZoekVoornamenWoonplaats();
     demZoekWoonplaatsen();
    return false;
-});
-
-
-$(document).on('click','.woonplaatsTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voornaambox').slideUp();
-
-    $(".woonplaatsTextBox").val('').html();
-    firstOpenWpl = false;    
 });
 
 $(document).on('click','#woonplaatsbox a',function(event){
@@ -410,6 +360,11 @@ $(document).on('click','#lagenbox a',function(event){
 
 $(document).on('click','.gemeenteTextBox',function(event){
     $('#gemeentebox').slideToggle();
+    $('#lagenbox').slideUp();
+    $('#artikelnummerbox').slideUp();
+    $('#woonplaatsbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();       
     $(".gemeenteTextBox").val('').html();
     firstOpenGem = false;
 });
@@ -428,6 +383,11 @@ $(document).on('click','#gemeente_btn',function(event){
 
 $(document).on('click','.familienaamTextBox',function(event){
     $('#familienaambox').slideToggle();
+    $('#lagenbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#artikelnummerbox').slideUp();
+    $('#woonplaatsbox').slideUp();
+    $('#voornaambox').slideUp();     
     $(".familienaamTextBox").val('').html();
     firstOpenNm = false;
 });
@@ -445,6 +405,11 @@ $(document).on('click','#naam_btn',function(event){
 
 $(document).on('click','.voornaamTextBox',function(event){
     $('#voornaambox').slideToggle();
+    $('#lagenbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#artikelnummerbox').slideUp();
+    $('#woonplaatsbox').slideUp();
+    $('#familienaambox').slideUp();
     $(".voornaamTextBox").val('').html();
     firstOpenVnm = false;
 });
@@ -463,8 +428,13 @@ $(document).on('click','#voornaam_btn',function(event){
 
 $(document).on('click','.artTextBox',function(event){
     $('#artikelnummerbox').slideToggle();
+    $('#lagenbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#woonplaatsbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();     
     $(".artTextBox").val('').html();
-    firstOpenVnm = false;
+    firstOpenArt = false;
 });
 
 $(document).on('click','#artikelnummer_btn',function(event){
@@ -481,6 +451,11 @@ $(document).on('click','#artikelnummer_btn',function(event){
 
 $(document).on('click','.woonplaatsTextBox',function(event){
     $('#woonplaatsbox').slideToggle();
+    $('#lagenbox').slideUp();
+    $('#gemeentebox').slideUp();
+    $('#artikelnummerbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();     
     $(".woonplaatsTextBox").val('').html();
     firstOpenWpl = false;
 });
@@ -498,6 +473,11 @@ $(document).on('click','#woonplaats_btn',function(event){
 
 $(document).on('click','.lagenTextBox',function(event){
     $('#lagenbox').slideToggle();
+    $('#gemeentebox').slideUp();
+    $('#artikelnummerbox').slideUp();
+    $('#woonplaatsbox').slideUp();
+    $('#familienaambox').slideUp();
+    $('#voornaambox').slideUp();     
     $(".lagenTextBox").val('').html();
     firstOpenLg = false;
 });

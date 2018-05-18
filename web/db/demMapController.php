@@ -107,7 +107,7 @@ class demMapController {
         return $result;       
    }
    
-   function getBeroepEigenaars($gemeente,$naam,$voornaam,$artikelnr,$beroep){
+   function getBeroepEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$beroep){
      
         $result = array();
         $index = 0;       
@@ -198,7 +198,7 @@ class demMapController {
         pg_free_result($s);
         return $result;       
    }
-   function getBeroepsgroepEigenaars($gemeente,$naam,$voornaam,$artikelnr,$beroepsgroep){
+   function getBeroepsgroepEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$beroepsgroep){
       
         $result = array();
         $index = 0;       
@@ -291,7 +291,7 @@ class demMapController {
    }
    
    
-   function getWoonplaatsEigenaars($gemeente,$naam,$voornaam,$artikelnr,$woonplaats){
+   function getWoonplaatsEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$woonplaats){
         $result = array();
         $index = 0;       
        

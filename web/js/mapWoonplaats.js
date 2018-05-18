@@ -273,7 +273,7 @@ function getMapWpl(keyValueList,gemeente,selLg)
         featurePrefix: 'aezel',
         featureTypes: ['vw_minperceel0'],
         outputFormat: 'application/json',
-        maxFeatures : 50,
+        maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
 //          ol.format.filter.like('objkoppel', 'NL/LI/ASR00/A/A-011*'),
 

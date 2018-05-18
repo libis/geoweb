@@ -279,7 +279,7 @@ $(document).on('click','#gemeente_btn',function(event){
 });
 
 $(document).on('click','.gemeenteTextBox',function(event){
-    $('#gemeentebox').slideDown();
+    $('#gemeentebox').slideToggle();
     $(".gemeenteTextBox").val('').html();
     firstOpenGem = false;
 });
@@ -295,7 +295,8 @@ $(document).on('click','#naam_btn',function(event){
     }
 });
 $(document).on('click','.familienaamTextBox',function(event){
-    $('#familienaambox').slideDown();
+    $('#familienaambox').slideToggle();
+    $('#artikelnummerbox').slideUp();
     $(".familienaamTextBox").val('').html();
     firstOpenNm = false;
 });
@@ -311,7 +312,8 @@ $(document).on('click','#artikelnummer_btn',function(event){
     }
 });
 $(document).on('click','.artTextBox',function(event){
-    $('#artikelnummerbox').slideDown();
+    $('#artikelnummerbox').slideToggle();
+    $('#familienaambox').slideUp();
     $(".artTextBox").val('').html();
     firstOpenArt = false;
 });
@@ -327,7 +329,9 @@ $(document).on('click','#woonplaats_btn',function(event){
     }
 });
 $(document).on('click','.woonplaatsTextBox',function(event){
-    $('#woonplaatsbox').slideDown();
+    $('#woonplaatsbox').slideToggle();
+    $('#beroepbox').slideUp();    
+    $('#beroepsgroepbox').slideUp();    
     $(".woonplaatsTextBox").val('').html();
     firstOpenWpl = false;
 });
@@ -343,7 +347,9 @@ $(document).on('click','#beroep_btn',function(event){
     }
 });
 $(document).on('click','.beroepTextBox',function(event){
-    $('#beroepbox').slideDown();
+    $('#beroepbox').slideToggle();
+    $('#beroepsgroepbox').slideUp();    
+    $('#woonplaatsbox').slideUp();  
     $(".beroepTextBox").val('').html();
     firstOpenBrp = false;
 });
@@ -358,10 +364,14 @@ $(document).on('click','#beroepsgroep_btn',function(event){
         $('#beroepsgroepbox').slideToggle();
     }
 });
+
 $(document).on('click','.beroepsgroepTextBox',function(event){
-    $('#beroepsgroepbox').slideDown();
+    $('#beroepsgroepbox').slideToggle();
+    $('#beroepbox').slideUp();
+    $('#woonplaatsbox').slideUp();
+
     $(".beroepsgroepTextBox").val('').html();
-    firstOpenBgp = false;
+    firstOpenBgp = false;    
 });
 
 $(document).on('click','#gemeentebox a',function(event){
@@ -462,18 +472,6 @@ $(document).on('click','#woonplaatsbox a',function(event){
    return false;
 });
 
-
-$(document).on('click','.beroepTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#beroepsgroepbox').slideUp();
-    $('#woonplaatsbox').slideUp();
-
-    $(".beroepTextBox").val('').html();
-    firstOpenBrp = false;    
-});
-
 $(document).on('click','#beroepbox a',function(event){
 
     $('#artikelnummerbox').slideUp();
@@ -520,17 +518,6 @@ $(document).on('click','#beroepbox a',function(event){
    demZoekBeroepsgroepenStat();
    demZoekWoonplaatsenStat();
    return false;
-});
-
-$(document).on('click','.beroepsgroepTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#beroepbox').slideUp();
-    $('#woonplaatsbox').slideUp();
-
-    $(".beroepsgroepTextBox").val('').html();
-    firstOpenBgp = false;    
 });
 
 $(document).on('click','#beroepsgroepbox a',function(event){
@@ -581,17 +568,6 @@ $(document).on('click','#beroepsgroepbox a',function(event){
    return false;
 });
 
-
-$(document).on('click','.familienaamTextBox',function(event){
-    $('#artikelnummerbox').slideUp();
-    $('#gemeentebox').slideUp();
-    $('#woonplaatsbox').slideUp();
-    $('#beroepbox').slideUp();
-    $('#beroepsgroepbox').slideUp();
-	
-    $(".familienaamTextBox").val('').html();
-    firstOpenNm = false;    
-});
 $(document).on('click','#familienaambox a',function(event){
     selNm = getCookie('selNm');
     $('#artikelnummerbox').slideUp();
@@ -636,17 +612,6 @@ $(document).on('click','#familienaambox a',function(event){
    demZoekBeroepenStat();
    demZoekBeroepsgroepenStat();
    return false;
-});
-
-$(document).on('click','.artTextBox',function(event){
-    $('#gemeentebox').slideUp();
-    $('#familienaambox').slideUp();
-    $('#voorfamilienaambox').slideUp();
-    $('#beroepbox').slideUp();
-    $('#beroepsgroepbox').slideUp();
-
-    $(".artTextBox").val('').html();
-    firstOpenArt = false;    
 });
 
 $(document).on('click','#artikelnummerbox a',function(event){
