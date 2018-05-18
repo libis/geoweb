@@ -12,7 +12,6 @@ $artikelnr = $_POST['selArt'];
 $beroepsgroep = $_POST['selBgp'];
 $result="";
 
-
 foreach ($demMapController->getBeroepsgroepEigenaars($gemeente,$naam,$voornaam,$artikelnr,$beroepsgroep) as $key => $value)
 {
     if($result!="")
@@ -22,5 +21,4 @@ foreach ($demMapController->getBeroepsgroepEigenaars($gemeente,$naam,$voornaam,$
     $result .= $key."##".$value;
 }
 echo $result;
-
 ?>

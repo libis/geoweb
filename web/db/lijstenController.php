@@ -594,7 +594,7 @@ class lijstenController {
         }        
          if (($beroepsgroep != NULL) || (count($beroepsgroep)) > 0) {
             $first = true;
-            foreach ($beroep as $value) {
+            foreach ($beroepsgroep as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep = '".$value."'"; 

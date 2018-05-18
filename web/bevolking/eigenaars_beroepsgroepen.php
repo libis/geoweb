@@ -193,8 +193,8 @@ $(document).on('click','#familienaambox a',function(event){
    }
 
    $( event.target ).blur();
-   demZoekArtikelnummersBeroep();
-   demZoekVoornamenBeroep();
+   demZoekArtikelnummersBeroepsgroep();
+   demZoekVoornamenBeroepsgroep();
    demZoekBeroepsgroepen();
    return false;
 });
@@ -239,8 +239,8 @@ $(document).on('click','#voornaambox a',function(event){
    }
 
    $( event.target ).blur();
-   demZoekArtikelnummersBeroep();
-   demZoekFamilienamenBeroep();
+   demZoekArtikelnummersBeroepsgroep();
+   demZoekFamilienamenBeroepsgroep();
    demZoekBeroepsgroepen();
    return false;
 });
@@ -286,8 +286,8 @@ $(document).on('click','#artikelnummerbox a',function(event){
    }
 
    $( event.target ).blur();
-    demZoekFamilienamenBeroep();
-    demZoekVoornamenBeroep();
+    demZoekFamilienamenBeroepsgroep();
+    demZoekVoornamenBeroepsgroep();
     demZoekBeroepsgroepen();
    return false;
 });
@@ -332,9 +332,9 @@ $(document).on('click','#beroepsgroepbox a',function(event){
    }
 
    $( event.target ).blur();
-   demZoekArtikelnummersBeroep();
-   demZoekFamilienamenBeroep();
-   demZoekVoornamenBeroep();
+   demZoekArtikelnummersBeroepsgroep();
+   demZoekFamilienamenBeroepsgroep();
+   demZoekVoornamenBeroepsgroep();
    return false;
 });
 

@@ -562,7 +562,7 @@ function demZoekFamilienamenBeroepsgroep()
     selVnm = getCookie('selVnm');
     selArt = getCookie('selArt');
     selBgp = getCookie('selBgp');
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenBeroep.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenBeroepsgroep.script.php";
     var naam = $(".familienaamTextBox").val();
     argumenten = '?naam='+naam;
     var lg,lv,ln,la,lb;
