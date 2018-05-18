@@ -194,6 +194,7 @@ function getMapBrp(keyValueList,gemeente,selLg)
 //show feature
 
     var farray = [];   
+    var farrayGem = [];   
     var i_count=0;  
     var featureRequest;
     
@@ -266,22 +267,37 @@ function getMapBrp(keyValueList,gemeente,selLg)
         featureTypes: ['vw_minperceel'],
         outputFormat: 'application/json',
         maxFeatures : 250,
-        filter:                 ol.format.filter.or.apply(null, farray)
+        filter: ol.format.filter.or.apply(null, farray)
 
       });
   }
-  
         // generate a GetFeature request voor hele gemeente 
-        featureGemRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel',
-        featurePrefix: 'aezel',
-        featureTypes: ['vw_minperceel'],
-        outputFormat: 'application/json',
-        //maxFeatures : 1,
-        filter: ol.format.filter.equalTo('gemeente', gemeente)
-    });
-
+      
+        if (selGem.length > 1) {
+            i_count=0;
+            while(i_count<selGem.length)
+            {
+                farrayGem[i_count] = ol.format.filter.equalTo('gemeente', selGem[i_count]);
+                i_count++;
+            }
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel',
+            featurePrefix: 'aezel',
+            featureTypes: ['vw_minperceel'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.or.apply(null, farrayGem)
+            });
+        } else {
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel',
+            featurePrefix: 'aezel',
+            featureTypes: ['vw_minperceel'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.equalTo('gemeente', selGem[0])
+            });
+        }
       // then post the request and add the received features to a layer
       fetch(mapviewerIP+'/geoserver/wfs', {
         method: 'POST',
