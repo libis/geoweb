@@ -46,7 +46,7 @@ $sid = session_id();
 
     </head>
 
-<body class="Titel">
+<body class="Titel" oncontextmenu="return false;">
   <header>
     <nav class="navbar navbar-toggleable-md navbar-default ">
         <div class="container">

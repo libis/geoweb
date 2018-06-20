@@ -11,4 +11,7 @@ var mapviewerIP = "http://libis-p-aezel-3.lnx.icts.kuleuven.be:8080";
 var mylegendberoepwindow = null;
 // Tot hier global vars
 
-var lagenprefix = 'aezel';
+var lagenprefix = 'geonode';
+var themalagenprefix = 'geonode'
+
+var tijdsvakken = 100;

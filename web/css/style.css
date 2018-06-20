@@ -2913,6 +2913,9 @@ input[type="button"].btn-block {
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0rem;
+  height:200px;
+    overflow:scroll;
+    overflow-x:hidden;    
 }
 
 .dropdown-divider {
@@ -8012,6 +8015,44 @@ table.fixed td {
 .slick-dots li.slick-active button:before {
   opacity: .75;
   color: black;
+}
+
+.select_tijd{
+  width: 55%;
+  float:left;
+}
+
+.reset_tijd{
+    padding-left : 10px; float:left;
+}
+
+.dem_player{
+     padding: 1rem 0rem 1rem 0rem;
+    
+}
+
+.button {
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+  width: 0;
+  height: 20px;
+  border-color: transparent transparent transparent #202020;
+  transition: 100ms all ease;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 10px 0 10px 18px;
+}
+.button.paused {
+  border-style: double;
+  border-width: 0px 0 0px 18px;
+  
+.button.stop {
+  border-style: solid;
+  border-width: 0px 0 0px 18px;
+}
+.button:hover {
+  border-color: transparent transparent transparent #404040;
 }
 
 /*# sourceMappingURL=style.css.map */

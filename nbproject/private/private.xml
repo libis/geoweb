@@ -3,34 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_beroepsgroepen.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGetGemeenteOpp.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/demografie.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezittersBeroep.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezitters.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersWoonplaats.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekBeroepsgroepenStat.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersBeroepPerGem.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/common/header.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapBeroepsgroep.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersPerGem.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersBeroepsgroepPerGem.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezittersBeroepsgroep.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/db/lijstenController.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersBeroepsgroep.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/db/demMapController.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersWoonplaatsPerGem.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapBeroep.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_woonplaats.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_beroep.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapEigenaars.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_statistieken.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezitters.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapWoonplaats.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezittersWoonplaats.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersBeroep.script.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars.php</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/db/demStatisticsController.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/css/style.css</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapTijdslijn.js</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/tijdslijn.js</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/tijdslijn.php</file>
         </group>
     </open-files>
 </project-private>

@@ -39,7 +39,7 @@ function getMapEig(keyValueList,gemeente,selLg)
     var layerArr = [];
     var imgwms;
     for (var i=0;i<selLg.length;i++)  {
-        var laag = "aezel:"+selLg[i];
+        var laag = lagenprefix+":"+selLg[i];
         imgwms = new ol.source.ImageWMS({
           url: mapviewerIP+'/geoserver/ows',
           params: {'LAYERS':laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},

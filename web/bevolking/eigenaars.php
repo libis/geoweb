@@ -412,6 +412,10 @@ $(document).on('click','#eig_lagen_btn',function(event){
         $('#lagenbox').slideToggle();
     }
 });
+
+$('#map').contextmenu(function() {
+  alert( "Handler for .contextmenu() called." );
+});
 });
 
 function hideLagenbox() {
