@@ -6,11 +6,23 @@
 <script type="text/javascript" src="../js/tijdslijn.js"></script>
 <script type="text/javascript" src="../js/mapTijdslijn.js"></script>
 <script type="text/javascript" src="../js/jquery.timeliny.js"></script>
-
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/jquery.timeliny.css" rel="stylesheet">
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="control legend">
+        <div id="dem_eig_lege_chk" class="control-top legend-top">
+           <button data-toggle="collapse" data-target="#legend-form"><span>Legende</span></button>
+           <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
+        </div>
+        <div id="legend-form" class="collapse">
+        </div>
+        <div id="metadata-form" class="collapse">
+          <div id="infobox" style="display:none" ></div>
+        </div>
+</div>
+
 
 <div class="control">
   <div class="control-top">
@@ -25,29 +37,12 @@
             </button>
           </div>
           <div id = "dem_player" class="dem_player">
-            <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">
-fast_rewind
-</i>                                        
-          </button>                   
-<!--              
-            <button id ="dem_film" class='button'>
-            </button>
--->
-<button id ="dem_film_stop" onclick="stopSlideshow();" <i class="material-icons">stop</i>                                        
-          </button>              
-<button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i>                                        
-          </button>              
-            </button>
-            <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">
-play_arrow
-</i>                                        
-          </button>              
-            <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">
-fast_forward
-</i>                                        
-          </button>             
+            <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>                   
+            <button id ="dem_film_stop" onclick="stopSlideshow();" <i class="material-icons">stop</i></button>              
+            <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>              
+            <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>              
+            <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>             
           </div>
-          <div id ="play" class="play" onclick="tijdFilm();"></div>          
       </div>
       <div>
         <div>
@@ -93,32 +88,19 @@ var  selLg = [];
 var firstOpenLg = true;
 var tijdlijn = false;
 
+     google.charts.load('current', {packages: ['corechart']});
+     google.charts.load('current', {packages:['bar']});
+
      $(document).ready(function(){
-        
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
-  var btn = $("#dem_film");
-  btn.click(function() {
-    if (btn.hasClass("paused")){
-       pauseSlideshow();
-    }  else {
-       playSlideshow(); 
-    }
-    btn.toggleClass("paused");
-    return false;
-  });
-  
      demZoekTijdslijnLagen();
      getMapStartup();
      $('#dem_tijdslijn').hide();
      $('#dem_toon_kaart').hide();
-     
-     var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
-     $("#legend-form").html(imag);
-     
-     
+     $('#dem_player').hide();
 
-$(document).on('click','.lagenTextbox',function(event){
+    $(document).on('click','.lagenTextbox',function(event){
     $(".lagenTextbox").val('').html();
     firstOpenLg = false;    
 });
@@ -142,6 +124,7 @@ $(document).on('click','#lagenbox a',function(event){
       setCookie('selLg',selLg);
       $('#dem_tijdslijn').show();
       $('#dem_toon_kaart').show();
+      $('#dem_player').show();
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
    }
    
@@ -181,8 +164,6 @@ function resetTijdslijn()
     resetMap();
     getMapStartup();
 }
-
-
 
 function decodeHtml(html) {
  var txt = document.createElement("textarea");

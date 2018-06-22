@@ -28,14 +28,14 @@ class demTijdslijnController {
         if (count($layer) > 0) 
         {    
             $theme = $layer[0];
-            $query = "select min(to_char(to_date(\"Vanaf\",'YYYY-MM-DD'),'YYYY')) from public.".$theme."";
+            $query = "select min(to_char(to_date(\"begindatum\",'YYYY-MM-DD'),'YYYY')) from public.".$theme."";
             $s = pg_query($this->conn, $query);
             while($row = pg_fetch_row($s))
             {
                 $result[$index++]= $row[0];
             }
             pg_free_result($s);
-            $query = "select max(to_char(to_date(\"Tot_met\",'YYYY-MM-DD'),'YYYY')) from public.".$theme."";
+            $query = "select max(to_char(to_date(\"einddatum\",'YYYY-MM-DD'),'YYYY')) from public.".$theme."";
             $s = pg_query($this->conn, $query);
             while($row = pg_fetch_row($s))
             {

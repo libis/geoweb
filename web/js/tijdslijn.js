@@ -21,14 +21,18 @@ function demZoekTijdslijnLagen() {
             var naam = layer.Layer[i].Name ;
             if (naam.substr(0,naam.indexOf(':')) === lagenprefix) {
                 naam = naam.substr(naam.indexOf(':')+1);
-                if (naam === 'sittard_amstenrade') {
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i;//id
+                if  (
+//                    (naam === 'sittard_amstenrade') || 
+                    (naam === 'scheiding_limburg')
+                    )
+                {
+                    targetToPush += '<li><a href="#" class="small" data-value="';
+                    targetToPush += i;//id
 
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += naam ;//Item
-                targetToPush += '</a></li>';      
-            }
+                    targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                    targetToPush += naam ;//Item
+                    targetToPush += '</a></li>';      
+                }
             }
         }
         poutput.push(targetToPush);
@@ -143,6 +147,7 @@ function demBerekenTijdsinterval()
 
                 interval =  (max - min) / tijdsvakken;
                 interval = parseInt(interval);
+                if (interval==0) interval =1;
 
                 modulus = min%interval;
                 min = min - modulus;
@@ -383,7 +388,7 @@ async function tijdFilm() {
      
     for (i = start; i <= stop; i = i+interval) { 
         $('#dem_tijdslijn').timeliny('goToYear', i);
-        await sleep(500);
+        await sleep(2000);
     }        
 }
     
@@ -413,7 +418,7 @@ function playSlideshow(){
         currentSlide =  parseInt($('#tijdslijn_vanaf').val());
         stop = parseInt($('#tijdslijn_TotMet').val());
     }
-	slideInterval = setInterval(nextSlide,500);
+	slideInterval = setInterval(nextSlide,2000);
 }
 
 function stopSlideshow() {

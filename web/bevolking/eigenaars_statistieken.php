@@ -109,7 +109,6 @@ include 'common/header.php'; ?>
         var barHeight = bodyHeight-headerHeight-menuHeight-10;
         $("#myPieChart").height(barHeight);
         $("#myPieGemChart").height(barHeight);
-        $("#myBarChart").height(barHeight);
     }
       function drawChart() {
          setHeightChart(); 
@@ -234,7 +233,6 @@ function resetStatistieken()
 function resetStat(){
     $('#myPieChart').empty();
     $('#myPieGemChart').empty();
-    $('#myBarChart').empty();
     $("#dem_eig_legend_chk").hide();
     $("#eig_legende_spam").hide();
     $("#dem_eig_legend_chk").prop('checked', false);
