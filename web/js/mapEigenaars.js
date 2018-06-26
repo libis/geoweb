@@ -181,9 +181,6 @@ function getMapEig(keyValueList,gemeente,selLg)
         }
     });
 
-
-
-
 //scale
 
       scaleLineControl.setUnits('metric');

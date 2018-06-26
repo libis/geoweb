@@ -45,13 +45,15 @@ function demVerwijderTijdslijn() {
      $('#dem_tijdslijn').hide();
 }
 
-var initTijdslijst = false;
-var min=0;
-var max = 0;
-var minCurr=0;
-var maxCurr = 0;
-var interval = 0;
+initTijdslijst = false;
+min=0;
+max = 0;
+minCurr=0;
+maxCurr = 0;
+interval = 0;
 var selLg = [];
+kleurLegend = [];
+
 
 function demToonTijdslijn()
 {
@@ -104,14 +106,14 @@ function demToonTijdslijn()
           },
           afterLoad: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear);              
+               demGetLayerInTime(selLg,currYear,kleurLegend);              
           },
           onLeave: function(currYear, nextYear) {
               $('#map').empty();
           },
           afterChange: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear)
+               demGetLayerInTime(selLg,currYear,kleurLegend)
           },
           afterResize: function() {
           }
@@ -119,7 +121,53 @@ function demToonTijdslijn()
     }
 
 }
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
 
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+function demBerekenKleurenVoorLegende() 
+{
+    selLg = getCookie('selLg');    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLegendItems.script.php";
+    $.post(targetUrl,{selLg}, function(data) {
+            keyValueList = data.split("%%");
+            i_count =0;
+
+var seq = palette('mpn65', keyValueList.length);
+
+            while(i_count<keyValueList.length)
+            {
+                
+                keyvaluearray=keyValueList[i_count].split("##");
+/*                
+                r = parseInt(255*Math.random());
+                g = parseInt(255*Math.random());
+                b = parseInt(255*Math.random());
+*/
+                r = hexToRgb(seq[i_count]).r;
+                g = hexToRgb(seq[i_count]).g;
+                b = hexToRgb(seq[i_count]).b;
+                var rgb = [r,g,b]; 
+                kleurLegend.push(keyvaluearray[1]);
+                kleurLegend[keyvaluearray[1]] = [];
+                kleurLegend[keyvaluearray[1]].push(rgb); 
+                i_count++;
+            }
+            demToonTijdslijn();
+            
+   });
+}
 function demBerekenTijdsinterval()
 {
     selLg = getCookie('selLg');
@@ -160,6 +208,7 @@ function demBerekenTijdsinterval()
             var endYearToPush = ''; 
             i_count = min;
             currYear = min + (10 * interval);
+            
             startYearToPush = '<option selected="selected" value="'+min+'">'+min+'</option>'
 
             while  (i_count < max+1)
@@ -171,17 +220,24 @@ function demBerekenTijdsinterval()
                 }
             }
             endYearToPush += '<option selected="selected" value="'+max+'">'+max+'</option>'
-            
         }
+        
         $('#tijdslijn_vanaf').html('');
         $('#tijdslijn_TotMet').html('');
+        
         poutputStart.push(startYearToPush);
         poutputEnd.push(endYearToPush);
         
         $('#tijdslijn_vanaf').html(poutputStart.join(''));
         $('#tijdslijn_TotMet').html(poutputEnd.join(''));
+        $('#tijdslijn_vanaf').hide();
+        $('#tijdslijn_TotMet').hide();
         
-        demToonTijdslijn();
+        
+        $('#dp_vanaf').datepicker("setDate","01/01/"+minCurr);
+        $('#dp_tot').datepicker("setDate","01/01/"+maxCurr);        
+       
+        demBerekenKleurenVoorLegende();
     });
 }
 
@@ -418,7 +474,7 @@ function playSlideshow(){
         currentSlide =  parseInt($('#tijdslijn_vanaf').val());
         stop = parseInt($('#tijdslijn_TotMet').val());
     }
-	slideInterval = setInterval(nextSlide,2000);
+	slideInterval = setInterval(nextSlide,1500);
 }
 
 function stopSlideshow() {

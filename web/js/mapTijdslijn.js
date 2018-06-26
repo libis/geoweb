@@ -1,4 +1,4 @@
-function demGetLayerInTime(selLg,vanaf)
+function demGetLayerInTime(selLg,vanaf,kleurLegend)
 {
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();
@@ -49,15 +49,68 @@ function demGetLayerInTime(selLg,vanaf)
         view: view
       });
 
+// get feature info
 
+    map.on('singleclick', function(evt) {
+
+        var feat = map.getFeaturesAtPixel(evt.pixel);
+        
+        for (var i=0;i< feat.length;i++) {
+            var laag = feat[i].getId();
+            if (laag.includes(selLg[0])) {
+                var eigenschappen = feat[i].getProperties();
+                var poutput = [];// voorbereiding
+                var targetToPush = '<table class="fixed">';
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'heerser:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.Heerser;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'naam:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.NAAM;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'begindatum:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.begindatum;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'einddatum:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.einddatum;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '</table>';                        
+                poutput.push(targetToPush);
+                $('#infobox').html('');
+                $('#infobox').html(poutput.join(''));                
+                $('#infobox').show();
+                $('#metadata-form').collapse('show');
+            }
+        }
+    });
 //show feature
 
     var farray = [];
     var featureRequest;
-    
+    var totMet = vanaf+"-01-01";
+    var vanaf = vanaf+"-01-01";
 //    farray[0]=ol.format.filter.lessThanOrEqualTo('Vanaf',vanaf);
 //    farray[1]=ol.format.filter.greaterThanOrEqualTo('Tot_met',vanaf);
-    farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',vanaf);
+    farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',totMet);
     farray[1]=ol.format.filter.greaterThanOrEqualTo('einddatum',vanaf);
 
 
@@ -68,7 +121,7 @@ function demGetLayerInTime(selLg,vanaf)
         featurePrefix: 'geonode',
         featureTypes: [themalaag],
         outputFormat: 'application/json',
-        maxFeatures : 250,
+//        maxFeatures : 1000,
         filter:  ol.format.filter.and.apply(null, farray)
       });
 
@@ -90,14 +143,6 @@ function demGetLayerInTime(selLg,vanaf)
         
         while (index < features.length){
             prop = features[index].getProperties();
-            /*
-            if (!gebiedsdeel.includes(prop.Heerschapp)) {
-            gebiedsdeel.push(prop.Heerschapp)
-            gebiedFeature.push(prop.Heerschapp);
-            gebiedFeature[prop.Heerschapp] = [];
-            }
-            gebiedFeature[prop.Heerschapp].push( features[index]);
-            */
             if (!gebiedsdeel.includes(prop.Heerser)) {
             gebiedsdeel.push(prop.Heerser);
             gebiedFeature.push(prop.Heerser);
@@ -108,32 +153,30 @@ function demGetLayerInTime(selLg,vanaf)
         }
         index = 0;
         var gebFeatures;
-        var r=255,g=0,b=0;
-            var vectorSource;
-            var vector_layer;
-            var extent,curr_extent;
-    var stat = new google.visualization.DataTable();
-    var output=[];
-    stat.addColumn('string', 'Heerser');
-    stat.addColumn('number', 'Gemeenten(aantal)');
+        var vectorSource;
+        var vector_layer;
+        var extent,curr_extent;
+        var output=[];
+
     
         output.push(["Element", "Density", { role: "style" }]);
         while (index < gebiedsdeel.length){
             var gebied = gebiedsdeel[index];
             gebFeatures = gebiedFeature[gebied]; 
             index++;
-            r = r-(index*30);
-            g = g+(index*30);
-            b = b+(index*30);
+            var r = kleurLegend[gebied][0][0];
+            var g = kleurLegend[gebied][0][1];
+            var b = kleurLegend[gebied][0][2];
             var rgb = 'rgb('+r+','+g+','+b+')';
+          
             output.push([gebied,gebFeatures.length,rgb]);
             vectorSource = new ol.source.Vector();
             vector_layer = new ol.layer.Vector({
               source: vectorSource,
               style: new ol.style.Style({
                 stroke: new ol.style.Stroke({
-                  color: 'rgba(255,80,50,1)',
-                  width: 4
+                  color: 'rgba(115,115,115,1)',
+                  width: 2
                 }),
                 fill: new ol.style.Fill({
                   color: 'rgba('+r+','+g+','+b+',1)',
@@ -175,11 +218,11 @@ function demGetLayerInTime(selLg,vanaf)
                        2]);
 
       var options = {
-           chartArea: {width: '30%'},
-        width: 400,
-        height: 200,
-        bar: {groupWidth: "95%"},
-        legend: { position: "left" },
+           chartArea: {width: '25%'},
+        width: 300,
+        height: 25*output.length,
+        bar: {groupWidth: "80%"},
+        legend: { position: "none" },
       };
       var chart = new google.visualization.BarChart(document.getElementById("legend-form"));
       chart.draw(view, options);

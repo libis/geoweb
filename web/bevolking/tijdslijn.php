@@ -6,9 +6,14 @@
 <script type="text/javascript" src="../js/tijdslijn.js"></script>
 <script type="text/javascript" src="../js/mapTijdslijn.js"></script>
 <script type="text/javascript" src="../js/jquery.timeliny.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/palette.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/jquery.timeliny.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="control legend">
@@ -47,23 +52,26 @@
       <div>
         <div>
             <div class="select_tijd">
+<input type="text" id="dp_vanaf" name="dp_vanaf"> 
                 <select style="width: 100%;"  id="tijdslijn_vanaf" naam="tijdslijn_vanaf" onChange="tijdslijnVanaf(this.selectedIndex);"size="1">
                 </select>
             </div>
+      
             <div class="reset_tijd">
                 <button id ="dem_reset_vanaf" onclick="resetVanaf();">
-                     Vanaf Reset 
+                     Reset 
                 </button>            
             </div>
         </div>              
         <div>
             <div class="select_tijd">
+<input type="text" id="dp_tot" name = "dp_tot">   
                 <select style="width: 100%;"  id="tijdslijn_TotMet" naam="tijdslijn_TotMet" onChange="tijdslijnTot(this.selectedIndex);"size="1">
                 </select>
             </div>
             <div class="reset_tijd">
                 <button id ="dem_reset_vanaf" onclick="resetTotMet();">
-                    Tot/Met Reset
+                    Reset
                 </button>            
             </div>
         </div>
@@ -103,7 +111,28 @@ var tijdlijn = false;
     $(document).on('click','.lagenTextbox',function(event){
     $(".lagenTextbox").val('').html();
     firstOpenLg = false;    
-});
+    });
+
+ $(function() {   
+       $( "#dp_vanaf" ).datepicker({   
+      defaultDate: "+1w",  
+      changeMonth: true,   
+      numberOfMonths: 1,  
+      onClose: function( selectedDate ) {  
+        $( "#dp_vanaf" ).datepicker( "option", "minDate", selectedDate );  
+      }  
+    });  
+    $( "#dp_tot" ).datepicker({
+      defaultDate: "+1w",
+      changeMonth: true,
+      numberOfMonths: 1,
+      onClose: function( selectedDate ) {
+        $( "#dp_tot" ).datepicker( "option", "maxDate", selectedDate );
+      }
+    });  
+  });  
+  
+
 
 
 $(document).on('click','#lagenbox a',function(event){
@@ -145,6 +174,7 @@ $(document).on('click','#eig_lagen_btn',function(event){
         $('#lagenbox').slideToggle();
     }
 });
+
 });
 
 function hideLagenbox() {

@@ -45,7 +45,25 @@ class demTijdslijnController {
         }
         return $result;
     }   
-   
+    
+    
+function getLegendItems($layer)
+{
+    $result = array();
+    $index = 0;
+    if (count($layer) > 0) 
+    {    
+        $theme = $layer[0];
+        $query = "select distinct \"Heerser\" from public.".$theme."";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }            
+    }
+    return $result;
+}   
+    
    
    
 }
