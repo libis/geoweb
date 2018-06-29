@@ -11,8 +11,8 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/jquery.timeliny.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.structure.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -34,22 +34,33 @@
      <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
   </div>
   <div id="control-form" class="collapse in" >
-      <h2>Kadastrale Eigenaar </h2>
-      <div>
-          <div>
+    <h2>Kadastrale Eigenaar </h2>
+    <div>
+        <div>
             <button id ="dem_toon_kaart" onclick="tijdsloop();">
                 Toon tijdlijn
             </button>
-          </div>
-          <div id = "dem_player" class="dem_player">
-            <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>                   
-            <button id ="dem_film_stop" onclick="stopSlideshow();" <i class="material-icons">stop</i></button>              
-            <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>              
-            <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>              
-            <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>             
-          </div>
-      </div>
-      <div>
+            <button id ="dem_eig_reset" onclick="resetTijdslijn();">
+              Reset
+            </button>              
+        </div>
+        <div id="multilayer">
+            <div class="button-group">
+                <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="histZoekGemeentenZoekString();" maxlength="20"/>
+                <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Gemeenten<span class="caret"></span></button>
+                <ul id=gemeentebox class="dropdown-menu">
+                </ul>
+            </div>          
+            <div id = "dem_player" class="dem_player">
+                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>                   
+                <button id ="dem_film_stop" onclick="stopSlideshow();" <i class="material-icons">stop</i></button>              
+                <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>              
+                <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>              
+                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>             
+            </div>
+        </div>
+    </div>
+    <div>
         <div>
             <div class="select_tijd">
 <input type="text" id="dp_vanaf" name="dp_vanaf"> 
@@ -78,7 +89,7 @@
       </div>
       <div id="multilayer">
           <div class="button-group">
-              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString();" maxlength="25"/>
+              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="histZoekLagenZoekString();" maxlength="25"/>
               <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
               <ul id=lagenbox class="dropdown-menu">
               </ul>
@@ -103,37 +114,87 @@ var tijdlijn = false;
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
      demZoekTijdslijnLagen();
+ 
+
      getMapStartup();
      $('#dem_tijdslijn').hide();
      $('#dem_toon_kaart').hide();
      $('#dem_player').hide();
+        $('#tijdslijn_vanaf').hide();
+        $('#tijdslijn_TotMet').hide();     
 
     $(document).on('click','.lagenTextbox',function(event){
     $(".lagenTextbox").val('').html();
     firstOpenLg = false;    
     });
 
+
+$(document).on('click','#gemeentebox a',function(event){
+
+    $('#lagenbox').slideUp();
+    
+   var $target = $( event.currentTarget ),
+       val = $target.attr( 'data-value' ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selGem.indexOf( href.trim()))  > -1 ) {
+      selGem.splice( idx, 1 );
+      setCookie('selGem',selGem);
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+   } else {
+      selGem.push(href.trim());
+      setCookie('selGem',selGem);
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+
+   $( event.target ).blur();
+   return false;
+});
+
+$(document).on('click','.gemeenteTextBox',function(event){
+    $('#gemeentebox').slideToggle();
+    $('#lagenbox').slideUp();
+        $(".gemeenteTextBox").val('').html();
+    firstOpenGem = false;
+});
+
  $(function() {   
-       $( "#dp_vanaf" ).datepicker({   
-      defaultDate: "+1w",  
-      changeMonth: true,   
-      numberOfMonths: 1,  
-      onClose: function( selectedDate ) {  
-        $( "#dp_vanaf" ).datepicker( "option", "minDate", selectedDate );  
-      }  
-    });  
-    $( "#dp_tot" ).datepicker({
-      defaultDate: "+1w",
+       van = $( "#dp_vanaf" ).datepicker({   
+      defaultDate: "+1w", 
+      dateFormat: "yy-mm-dd",
       changeMonth: true,
+      changeYear: true,
+      numberOfMonths: 1,  
+      showOtherMonths: true,
+      selectOtherMonths: true
+    }).on( "change", function() {
+        tijdslijnVanaf( this.value );
+      });
+    tot = $( "#dp_tot" ).datepicker({
+      defaultDate: "+1w",
+      dateFormat: "yy-mm-dd",
+      changeMonth: true,
+      changeYear: true,
       numberOfMonths: 1,
-      onClose: function( selectedDate ) {
-        $( "#dp_tot" ).datepicker( "option", "maxDate", selectedDate );
+      showOtherMonths: true,
+      selectOtherMonths: true
+    }).on( "change", function() {
+                        tijdslijnTot( this.value );
+    });
+    function getDate( element ) {
+      var date;
+      var dateFormat = "yy-mm-dd";
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+        
+      } catch( error ) {
+        date = null;
       }
-    });  
-  });  
-  
-
-
+      return date;
+    }
+});  
 
 $(document).on('click','#lagenbox a',function(event){
 
@@ -158,6 +219,7 @@ $(document).on('click','#lagenbox a',function(event){
    }
    
    $( event.target ).blur();
+    histZoekGemeenten();   
    demBerekenTijdsinterval();
    return false;
 });

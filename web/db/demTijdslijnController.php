@@ -64,7 +64,43 @@ function getLegendItems($layer)
     return $result;
 }   
     
-   
-   
+public function getGemeentenHist($layer)
+{
+        $result = array();
+        $index = 0;
+
+    if (count($layer) > 0) 
+    {
+        $theme = $layer[0];
+        $query="select distinct \"NAAM\" from public.".$theme." order by \"NAAM\"";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+    }
+    pg_free_result($s);
+    return $result;
+}    
+ 
+
+public function getGemeentenHistFilter($filter,$lg)
+{
+        $result = array();
+        $index = 0;
+
+    if (count($layer) > 0) 
+    {
+        $theme = $layer[0];
+        $query="select distinct naam from public.".$theme." where lower(\"NAAM\") like lower('%".$filter."%') order by \"NAAM\"";
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        return $result;
+    }
+}
 }
 ?>

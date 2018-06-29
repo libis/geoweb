@@ -1,9 +1,11 @@
-function demGetLayerInTime(selLg,vanaf,kleurLegend)
+function demGetLayerInTime(selLg,vanaf,tot)
 {
+    
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
     var themalaag =selLg[0];
+    
 /*    
     var imgwms;
     imgwms = new ol.source.ImageWMS({
@@ -106,11 +108,10 @@ function demGetLayerInTime(selLg,vanaf,kleurLegend)
 
     var farray = [];
     var featureRequest;
-    var totMet = vanaf+"-01-01";
-    var vanaf = vanaf+"-01-01";
-//    farray[0]=ol.format.filter.lessThanOrEqualTo('Vanaf',vanaf);
-//    farray[1]=ol.format.filter.greaterThanOrEqualTo('Tot_met',vanaf);
-    farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',totMet);
+if (vanaf.split("-").length == 1) {
+    vanaf = vanaf+"-01-01";
+    }
+    farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',vanaf);
     farray[1]=ol.format.filter.greaterThanOrEqualTo('einddatum',vanaf);
 
 
@@ -202,7 +203,7 @@ function demGetLayerInTime(selLg,vanaf,kleurLegend)
             if (extent[3] > curr_extent[3]) curr_extent[3] = extent[3];
         }    
         //opvangen tijdsbalk
-        curr_extent[1]-= 8000;
+        curr_extent[1]-= 10000;
 //        var factor = (curr_extent[3] - curr_extent[1])/(curr_extent[3] - curr_extent[1]+8000);
 //        curr_extent[0] *= factor;
         map.getView().fit(curr_extent);
@@ -219,7 +220,7 @@ function demGetLayerInTime(selLg,vanaf,kleurLegend)
 
       var options = {
            chartArea: {width: '25%'},
-        width: 300,
+        width: 450,
         height: 25*output.length,
         bar: {groupWidth: "80%"},
         legend: { position: "none" },

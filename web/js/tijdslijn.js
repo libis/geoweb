@@ -1,3 +1,97 @@
+function histZoekGemeenten()
+{
+   selLg = getCookie('selLg');
+   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeentenHist.script.php";
+   $.post(targetUrl,{selLg}, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+        
+            var targetToPush = '';  
+            
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                i_count++;
+            }
+            poutput.push(targetToPush);
+            
+            
+        }
+        
+        $('#gemeentebox').html('');
+        $('#gemeentebox').html(poutput.join(''));
+        $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
+        
+        });
+        
+}
+
+
+function histZoekGemeentenZoekString()
+{
+    selLg = getCookie('selLg');
+   selGem = getCookie('selGem');
+   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
+   var filter = $(".gemeenteTextBox").val();
+   argumenten = '?gemeente='+filter;
+   $.post(targetUrl+argumenten,{selLg},function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding        // I want a list of names to use in my queries
+        var targetToPush = '';  
+        i_count = 0;
+        i_count2 = 0;
+
+            
+        while(i_count2<selGem.length)
+        {            
+            targetToPush += '<li><a href="#" class="small" data-value="';
+            targetToPush += i_count;//id
+
+            targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+            targetToPush += selGem[i_count2] ;//Item
+            targetToPush += '</a></li>';                  
+
+            i_count++;                
+            i_count2++;                
+        }
+        
+        
+       if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+        
+            for(i_count2=0;i_count2<keyValueList.length;i_count2++)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                i_count++;
+            }
+            poutput.push(targetToPush);
+            
+        }        
+        $('#gemeentebox').html('');
+        $('#gemeentebox').html(poutput.join(''));
+        });
+}
+
+
 
 
 function demZoekTijdslijnLagen() {
@@ -50,6 +144,8 @@ min=0;
 max = 0;
 minCurr=0;
 maxCurr = 0;
+minCurrDayDate=0;
+maxCurrDayDate = 0;
 interval = 0;
 var selLg = [];
 kleurLegend = [];
@@ -106,14 +202,14 @@ function demToonTijdslijn()
           },
           afterLoad: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear,kleurLegend);              
+               demGetLayerInTime(selLg,currYear,currYear+1,kleurLegend);              
           },
           onLeave: function(currYear, nextYear) {
               $('#map').empty();
           },
           afterChange: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear,kleurLegend)
+               demGetLayerInTime(selLg,currYear,currYear+1,kleurLegend)
           },
           afterResize: function() {
           }
@@ -234,19 +330,25 @@ function demBerekenTijdsinterval()
         $('#tijdslijn_TotMet').hide();
         
         
-        $('#dp_vanaf').datepicker("setDate","01/01/"+minCurr);
-        $('#dp_tot').datepicker("setDate","01/01/"+maxCurr);        
+        $('#dp_vanaf').datepicker("setDate",minCurr+"-01-01");
+        $('#dp_vanaf').datepicker("option", "maxDate", maxCurr+"-12-30" );
+
+        
+        $('#dp_tot').datepicker("setDate",maxCurr+"-12-31");        
+        $('#dp_tot').datepicker("option", "minDate", minCurr+"-01-02");
        
         demBerekenKleurenVoorLegende();
     });
 }
 
-function herberekenTot()
+
+function herberekenTot(tijd)
 {
 
-    var selectVal = $('#tijdslijn_vanaf').val();
+    //var selectVal = $('#tijdslijn_vanaf').val();
     
-    minCurr = parseInt(selectVal);
+    minCurrDayDate = tijd;
+    minCurr = parseInt(tijd.split("-")[0]);
 
     var poutputEnd = [];// voorbereiding
     var endYearToPush = ''; 
@@ -267,14 +369,17 @@ function herberekenTot()
     poutputEnd.push(endYearToPush);
 
     $('#tijdslijn_TotMet').html(poutputEnd.join(''));
+    $('#dp_tot').datepicker("setDate",maxCurr+"-12-31");
+    $('#dp_vanaf').datepicker("option", "maxDate", maxCurr+"-12-30" );
+    
 }
 
 
-function herberekenVanaf()
+function herberekenVanaf(tijd)
 {
-    var selectVal = $('#tijdslijn_TotMet').val();
-
-    maxCurr = parseInt(selectVal);
+    //var selectVal = $('#tijdslijn_TotMet').val();
+    maxCurrDayDate = tijd;
+    maxCurr = parseInt(tijd.split("-")[0]);
     var poutputStart = [];// voorbereiding
     var startYearToPush = ''; 
     var i_count = minCurr;
@@ -290,6 +395,9 @@ function herberekenVanaf()
     poutputStart.push(startYearToPush);
 
     $('#tijdslijn_vanaf').html(poutputStart.join(''));
+    $('#dp_vanaf').datepicker("setDate",minCurr+"-01-01");
+    $('#dp_tot').datepicker("option", "minDate", minCurr+"-01-02");
+    
 }
 
 function resetVanaf()
@@ -297,7 +405,9 @@ function resetVanaf()
     var poutputStart = [];// voorbereiding
     var startYearToPush = ''; 
     var i_count = minCurr;
-    
+
+    $('#dp_vanaf').datepicker("setDate",min+"-01-01");
+    $('#dp_tot').datepicker("option", "minDate", min+"-01-02");
     $('#dem_tijdslijn').timeliny('destroy');
     var div = document.createElement("div");
     div.id="dem_tijdslijn";
@@ -313,7 +423,8 @@ function resetVanaf()
     $('#tijdslijn_vanaf').html('');
     poutputStart.push(startYearToPush);
     $('#tijdslijn_vanaf').html(poutputStart.join(''));
-
+    minCurrDayDate = min+"-01-01";
+    minCurr = min;
     naDestroy();
 
 }
@@ -323,6 +434,10 @@ function resetTotMet()
     var poutputStart = [];// voorbereiding
     var endYearToPush = ''; 
     var i_count = minCurr;
+    
+    $('#dp_tot').datepicker("setDate",max+"-01-01");    
+    $('#dp_vanaf').datepicker("option", "maxDate", max+"-12-30" );
+    
     $('#dem_tijdslijn').timeliny('destroy');
     var div = document.createElement("div");
     div.id="dem_tijdslijn";
@@ -338,48 +453,46 @@ function resetTotMet()
     $('#tijdslijn_TotMet').html('');
     poutputStart.push(endYearToPush);
     $('#tijdslijn_TotMet').html(poutputStart.join(''));
-
+    maxCurrDayDate = max+"-01-01";
+    maxCurr = max;
     naDestroy();
-
 }
 
 
 function tijdslijnVanaf(tijd)
 {
-    var selectVal = $('#tijdslijn_vanaf').val();
     $('#dem_tijdslijn').timeliny('destroy');
     var div = document.createElement("div");
     div.id="dem_tijdslijn";
     document.getElementById("tijdslijn_control").appendChild(div);        
-    herberekenTot();
+    herberekenTot(tijd);
     currentSlide =  parseInt(0);
     slideInterval = parseInt(0);
     naDestroy();
-    //$('#dem_tijdslijn').timeliny('goToYear', selectVal);
 }
 
 function tijdslijnTot(tijd)
 {
-    var selectVal = $('#tijdslijn_TotMet').val();
     $('#dem_tijdslijn').timeliny('destroy');
     var div = document.createElement("div");
     div.id="dem_tijdslijn";
     document.getElementById("tijdslijn_control").appendChild(div);        
-    herberekenVanaf();
+    herberekenVanaf(tijd);
     currentSlide =  parseInt(0);
     stop = parseInt(0);
     slideInterval = parseInt(0);    
     naDestroy();
-    //$('#dem_tijdslijn').timeliny('goToYear', selectVal);
 }
 
 function naDestroy(){
     var targetToPush="";
     var poutput=[];
+/*    
     var min = parseInt($('#tijdslijn_vanaf').val());
     var max = parseInt($('#tijdslijn_TotMet').val());
-    var i_count = min;
-        while  (i_count < max+1)
+*/    
+    var i_count = minCurr;
+        while  (i_count < maxCurr+1)
         {
             if (i_count == minCurr) {
                 targetToPush += '<div data-year="'+i_count+'" class="active"></div>';
@@ -388,7 +501,6 @@ function naDestroy(){
             }
             i_count = i_count+parseInt(interval);
         }
-            
         poutput.push(targetToPush);
 
         $('#dem_tijdslijn').html(poutput.join(''));
@@ -413,14 +525,14 @@ function naDestroy(){
           },
           afterLoad: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear);              
+               demGetLayerInTime(selLg,minCurrDayDate,maxCurrDayDate);              
           },
           onLeave: function(currYear, nextYear) {
               $('#map').empty();
           },
           afterChange: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear)
+               demGetLayerInTime(selLg,currYear,currYear+1)
           },
           afterResize: function() {
           }
@@ -471,28 +583,32 @@ function pauseSlideshow(){
 function playSlideshow(){
     playing = true;
     if (currentSlide == "") {
-        currentSlide =  parseInt($('#tijdslijn_vanaf').val());
-        stop = parseInt($('#tijdslijn_TotMet').val());
+//  currentSlide =  parseInt($('#tijdslijn_vanaf').val());
+//  stop = parseInt($('#tijdslijn_TotMet').val());
+        currentSlide =  minCurr;
     }
-	slideInterval = setInterval(nextSlide,1500);
+    stop = maxCurr;
+    slideInterval = setInterval(nextSlide,1500);
 }
 
 function stopSlideshow() {
-        playing = false;
-	clearInterval(slideInterval);
-        currentSlide = parseInt($('#tijdslijn_vanaf').val());
+    playing = false;
+    clearInterval(slideInterval);
+    currentSlide = parseInt($('#tijdslijn_vanaf').val());
 }
 
 function frSlideshow() {
-        playing = false;
-	clearInterval(slideInterval);
-        currentSlide = parseInt($('#tijdslijn_vanaf').val());
-        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    playing = false;
+    clearInterval(slideInterval);
+//        currentSlide = parseInt($('#tijdslijn_vanaf').val());
+    currentSlide =  minCurr;
+    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
 
 function ffSlideshow() {
-        playing = false;
-	clearInterval(slideInterval);
-        currentSlide = parseInt($('#tijdslijn_TotMet').val());
-        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    playing = false;
+    clearInterval(slideInterval);
+//  currentSlide = parseInt($('#tijdslijn_TotMet').val());
+    currentSlide =  maxCurr;
+    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
