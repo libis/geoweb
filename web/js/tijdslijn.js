@@ -3,56 +3,49 @@ function histZoekGemeenten()
    selLg = getCookie('selLg');
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeentenHist.script.php";
    $.post(targetUrl,{selLg}, function(data) {
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
+    data = data.trim();
+    var poutput = [];// voorbereiding
+    if(data.length>0)
+    {
+        keyValueList = data.split("%%");
+        i_count = 0;
+
+        var targetToPush = '';  
+
+        while(i_count<keyValueList.length)
         {
-            keyValueList = data.split("%%");
-            i_count = 0;
-        
-            var targetToPush = '';  
-            
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
+            keyvaluearray=keyValueList[i_count].split("##");
 
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
+            targetToPush += '<li><a href="#" class="small" data-value="';
+            targetToPush += i_count;//id
 
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1]  ;//Item
-                targetToPush += '</a></li>';      
-                i_count++;
-            }
-            poutput.push(targetToPush);
-            
-            
+            targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+            targetToPush += keyvaluearray[1]  ;//Item
+            targetToPush += '</a></li>';      
+            i_count++;
         }
-        
-        $('#gemeentebox').html('');
-        $('#gemeentebox').html(poutput.join(''));
-        $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
-        
-        });
-        
+        poutput.push(targetToPush);
+    }
+    $('#gemeentebox').html('');
+    $('#gemeentebox').html(poutput.join(''));
+    $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
+    });
 }
 
 
 function histZoekGemeentenZoekString()
 {
     selLg = getCookie('selLg');
-   selGem = getCookie('selGem');
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
-   var filter = $(".gemeenteTextBox").val();
-   argumenten = '?gemeente='+filter;
-   $.post(targetUrl+argumenten,{selLg},function(data) {
+    selGem = getCookie('selGem');
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
+    var filter = $(".gemeenteTextBox").val();
+    argumenten = '?gemeente='+filter;
+    $.post(targetUrl+argumenten,{selLg},function(data) {
         data = data.trim();
         var poutput = [];// voorbereiding        // I want a list of names to use in my queries
         var targetToPush = '';  
         i_count = 0;
         i_count2 = 0;
-
-            
         while(i_count2<selGem.length)
         {            
             targetToPush += '<li><a href="#" class="small" data-value="';
@@ -65,8 +58,6 @@ function histZoekGemeentenZoekString()
             i_count++;                
             i_count2++;                
         }
-        
-        
        if(data.length>0)
         {
             keyValueList = data.split("%%");
@@ -88,7 +79,7 @@ function histZoekGemeentenZoekString()
         }        
         $('#gemeentebox').html('');
         $('#gemeentebox').html(poutput.join(''));
-        });
+    });
 }
 
 
@@ -157,14 +148,13 @@ function demToonTijdslijn()
     var targetToPush = '';     
     var poutput = [];// voorbereiding
 
-        if (initTijdslijst) {
-            $('#dem_tijdslijn').show();
-        } else {
+    if (initTijdslijst) {
+        $('#dem_tijdslijn').show();
+    } else {
     
-    var min = parseInt($('#tijdslijn_vanaf').val());
-    var max = parseInt($('#tijdslijn_TotMet').val());
-    var i_count = min;
-//    var currYear = min + (5 * parseInt(interval));
+        var min = parseInt($('#tijdslijn_vanaf').val());
+        var max = parseInt($('#tijdslijn_TotMet').val());
+        var i_count = min;
         while  (i_count < max+1)
         {
             if (i_count == minCurr) {
@@ -178,8 +168,6 @@ function demToonTijdslijn()
         poutput.push(targetToPush);
         $('#dem_tijdslijn').empty();
         $('#dem_tijdslijn').html(poutput.join(''));
-        
-
         $('#dem_tijdslijn').timeliny({
           // or 'desc'
           order: 'asc',
@@ -202,14 +190,14 @@ function demToonTijdslijn()
           },
           afterLoad: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear,currYear+1,kleurLegend);              
+               demGetLayerInTime(selLg,selGem,currYear,currYear+1);              
           },
           onLeave: function(currYear, nextYear) {
               $('#map').empty();
           },
           afterChange: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear,currYear+1,kleurLegend)
+               demGetLayerInTime(selLg,selGem,currYear,currYear+1)
           },
           afterResize: function() {
           }
@@ -240,17 +228,12 @@ function demBerekenKleurenVoorLegende()
             keyValueList = data.split("%%");
             i_count =0;
 
-var seq = palette('mpn65', keyValueList.length);
+            var seq = palette('mpn65', keyValueList.length);
 
             while(i_count<keyValueList.length)
             {
                 
                 keyvaluearray=keyValueList[i_count].split("##");
-/*                
-                r = parseInt(255*Math.random());
-                g = parseInt(255*Math.random());
-                b = parseInt(255*Math.random());
-*/
                 r = hexToRgb(seq[i_count]).r;
                 g = hexToRgb(seq[i_count]).g;
                 b = hexToRgb(seq[i_count]).b;
@@ -336,6 +319,8 @@ function demBerekenTijdsinterval()
         
         $('#dp_tot').datepicker("setDate",maxCurr+"-12-31");        
         $('#dp_tot').datepicker("option", "minDate", minCurr+"-01-02");
+        maxCurrDayDate = maxCurr+"-12-31";
+        minCurrDayDate = minCurr+"-01-01";
        
         demBerekenKleurenVoorLegende();
     });
@@ -400,6 +385,13 @@ function herberekenVanaf(tijd)
     
 }
 
+function rebuildTijdslijnDiv()
+{
+    $('#dem_tijdslijn').timeliny('destroy');
+    var div = document.createElement("div");
+    div.id="dem_tijdslijn";
+    document.getElementById("tijdslijn_control").appendChild(div);     
+}
 function resetVanaf()
 {
     var poutputStart = [];// voorbereiding
@@ -408,10 +400,7 @@ function resetVanaf()
 
     $('#dp_vanaf').datepicker("setDate",min+"-01-01");
     $('#dp_tot').datepicker("option", "minDate", min+"-01-02");
-    $('#dem_tijdslijn').timeliny('destroy');
-    var div = document.createElement("div");
-    div.id="dem_tijdslijn";
-    document.getElementById("tijdslijn_control").appendChild(div);     
+    rebuildTijdslijnDiv();
     
     startYearToPush = '<option selected="selected" value="'+min+'">'+min+'</option>'
     while  (i_count < maxCurr-interval)
@@ -438,10 +427,7 @@ function resetTotMet()
     $('#dp_tot').datepicker("setDate",max+"-01-01");    
     $('#dp_vanaf').datepicker("option", "maxDate", max+"-12-30" );
     
-    $('#dem_tijdslijn').timeliny('destroy');
-    var div = document.createElement("div");
-    div.id="dem_tijdslijn";
-    document.getElementById("tijdslijn_control").appendChild(div);     
+    rebuildTijdslijnDiv();   
     
     while  (i_count < max)
     {
@@ -525,14 +511,14 @@ function naDestroy(){
           },
           afterLoad: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,minCurrDayDate,maxCurrDayDate);              
+               demGetLayerInTime(selLg,selGem,minCurrDayDate,maxCurrDayDate);              
           },
           onLeave: function(currYear, nextYear) {
               $('#map').empty();
           },
           afterChange: function(currYear) {
                $('#map').empty();
-               demGetLayerInTime(selLg,currYear,currYear+1)
+               demGetLayerInTime(selLg,selGem,currYear,currYear+1)
           },
           afterResize: function() {
           }
@@ -594,7 +580,7 @@ function playSlideshow(){
 function stopSlideshow() {
     playing = false;
     clearInterval(slideInterval);
-    currentSlide = parseInt($('#tijdslijn_vanaf').val());
+    currentSlide =  minCurr;
 }
 
 function frSlideshow() {

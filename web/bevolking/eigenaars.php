@@ -189,8 +189,8 @@ $(document).on('click','#familienaambox a',function(event){
    return false;
 });
 
-$(document).on('click','#voornaambox a',function(event){
-
+$(document).on('click','#voornaambox a',function(event)
+{
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();

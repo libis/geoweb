@@ -221,9 +221,6 @@ function getMapEig(keyValueList,gemeente,selLg)
         outputFormat: 'application/json',
         maxFeatures : 1,
         filter: ol.format.filter.equalTo('objkoppel', keyvaluearray[1])
-        
-       
-        
       });
     }
   } else {

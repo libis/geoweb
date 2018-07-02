@@ -102,10 +102,13 @@
 </div>
 <div id="map" class="map"></div>
 
- <script language="javascript">
-var  selLg = [];
-var firstOpenLg = true;
-var tijdlijn = false;
+<script language="javascript">
+    var selLg = [];
+    var selGem = [];
+    var firstOpenLg = true;
+    var tijdlijn = false;
+    var firstOpenGem = true;
+
 
      google.charts.load('current', {packages: ['corechart']});
      google.charts.load('current', {packages:['bar']});
@@ -114,11 +117,11 @@ var tijdlijn = false;
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
      demZoekTijdslijnLagen();
- 
 
      getMapStartup();
      $('#dem_tijdslijn').hide();
      $('#dem_toon_kaart').hide();
+     $('#dem_eig_reset').hide();
      $('#dem_player').hide();
         $('#tijdslijn_vanaf').hide();
         $('#tijdslijn_TotMet').hide();     
@@ -150,6 +153,8 @@ $(document).on('click','#gemeentebox a',function(event){
    }
 
    $( event.target ).blur();
+   $('#map').empty();
+   demGetLayerInTime(selLg,selGem,minCurrDayDate,maxCurrDayDate);   
    return false;
 });
 
@@ -158,6 +163,13 @@ $(document).on('click','.gemeenteTextBox',function(event){
     $('#lagenbox').slideUp();
         $(".gemeenteTextBox").val('').html();
     firstOpenGem = false;
+});
+
+$(document).on('click','#gemeente_btn',function(event){
+    $('#lagenbox').slideUp();
+    if (firstOpenGem == false) {
+        $('#gemeentebox').slideToggle();
+    }
 });
 
  $(function() {   
@@ -181,7 +193,7 @@ $(document).on('click','.gemeenteTextBox',function(event){
       showOtherMonths: true,
       selectOtherMonths: true
     }).on( "change", function() {
-                        tijdslijnTot( this.value );
+        tijdslijnTot( this.value );
     });
     function getDate( element ) {
       var date;
@@ -214,12 +226,14 @@ $(document).on('click','#lagenbox a',function(event){
       setCookie('selLg',selLg);
       $('#dem_tijdslijn').show();
       $('#dem_toon_kaart').show();
+      $('#dem_eig_reset').show();
+
       $('#dem_player').show();
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
    }
    
    $( event.target ).blur();
-    histZoekGemeenten();   
+   histZoekGemeenten();   
    demBerekenTijdsinterval();
    return false;
 });
@@ -253,8 +267,18 @@ function resetMap(){
 
 function resetTijdslijn()
 {
+    stopSlideshow();
     resetMap();
-    getMapStartup();
+    resetVanaf();
+    resetTotMet();
+    
+    selGem.splice(0,selGem.length);
+    histZoekGemeenten();   
+    rebuildTijdslijnDiv();
+    initTijdslijst = false;    
+    demBerekenTijdsinterval();
+    
+    
 }
 
 function decodeHtml(html) {

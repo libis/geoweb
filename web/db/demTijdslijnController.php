@@ -84,7 +84,7 @@ public function getGemeentenHist($layer)
 }    
  
 
-public function getGemeentenHistFilter($filter,$lg)
+public function getGemeentenHistFilter($filter,$layer)
 {
         $result = array();
         $index = 0;
@@ -92,7 +92,7 @@ public function getGemeentenHistFilter($filter,$lg)
     if (count($layer) > 0) 
     {
         $theme = $layer[0];
-        $query="select distinct naam from public.".$theme." where lower(\"NAAM\") like lower('%".$filter."%') order by \"NAAM\"";
+        $query="select distinct \"NAAM\" from public.".$theme." where lower(\"NAAM\") like lower('%".$filter."%') order by \"NAAM\"";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {

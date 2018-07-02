@@ -1,4 +1,4 @@
-function demGetLayerInTime(selLg,vanaf,tot)
+function demGetLayerInTime(selLg,selGem,vanaf,tot)
 {
     
     var mywindow = null;
@@ -6,22 +6,22 @@ function demGetLayerInTime(selLg,vanaf,tot)
     var layerArr = [];
     var themalaag =selLg[0];
     
-/*    
-    var imgwms;
-    imgwms = new ol.source.ImageWMS({
-        url: mapviewerIP+'/geoserver/ows',
-      params: {'LAYERS': 'aezel:a_2011_Gemeentegrenzen_NL_LI0','VERSION':'1.1.1','serverType':'geoserver','BBOX':'626172.135625,6574807.4240625,665307.89410156,6613943.1825391'},
-        serverType: 'geoserver'
-      });
-    layerArr.push(imgwms);
-*/
-
+    
     for (var i=0;i<selLg.length;i++)  {
         var laag = themalagenprefix+":"+selLg[i];
     }
+/*
+    var imgwms;
+    imgwms = new ol.source.ImageWMS({
+        url: mapviewerIP+'/geoserver/ows',
+      params: {'LAYERS': laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'626172.135625,6574807.4240625,665307.89410156,6613943.1825391'},
+        serverType: 'geoserver'
+      });
+    layerArr.push(imgwms);
+*/  
     
     var layers = [
-//      new ol.layer.Tile({source: new ol.source.OSM()}),
+      new ol.layer.Tile({source: new ol.source.OSM()}),
    ];
     
     for (var i=0;i<layerArr.length;i++)  {
@@ -107,13 +107,32 @@ function demGetLayerInTime(selLg,vanaf,tot)
 //show feature
 
     var farray = [];
+    var farrayGem = [];
     var featureRequest;
-if (vanaf.split("-").length == 1) {
-    vanaf = vanaf+"-01-01";
+    var f = ol.format.filter;
+    var filters;
+    
+    if (vanaf.split("-").length == 1) {
+        vanaf = vanaf+"-01-01";
     }
+        
     farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',vanaf);
     farray[1]=ol.format.filter.greaterThanOrEqualTo('einddatum',vanaf);
 
+    filters = ol.format.filter.and.apply(null,farray);
+
+    if (selGem.length > 0) {
+        i_count=0;
+        farrayGem[0] = ol.format.filter.equalTo('NAAM', "tweede gemeente");
+        while(i_count<selGem.length)
+        {
+            farrayGem[i_count+1] = ol.format.filter.equalTo('NAAM', selGem[i_count]);
+            i_count++;
+        } 
+        filters = 
+                ol.format.filter.and(ol.format.filter.or.apply(null,farrayGem),ol.format.filter.and.apply(null,farray));
+
+    }
 
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
@@ -123,7 +142,7 @@ if (vanaf.split("-").length == 1) {
         featureTypes: [themalaag],
         outputFormat: 'application/json',
 //        maxFeatures : 1000,
-        filter:  ol.format.filter.and.apply(null, farray)
+        filter:  filters
       });
 
       // then post the request and add the received features to a layer
@@ -139,8 +158,6 @@ if (vanaf.split("-").length == 1) {
         var prop;
         var gebiedsdeel = [];
         var gebiedFeature = [,];
-        var gebiedFeatureLegend = [];
-        
         
         while (index < features.length){
             prop = features[index].getProperties();
@@ -182,15 +199,12 @@ if (vanaf.split("-").length == 1) {
                 fill: new ol.style.Fill({
                   color: 'rgba('+r+','+g+','+b+',1)',
                 })
-/*                
-                 ,
-                text:  new ol.style.Text({
-                   text: gebied,
-                   font:'12px serif'
+//                 ,
+//                text:  new ol.style.Text({
+//                   text: gebied,
+//                   font:'12px serif'
                 })
-*/                
               })
-            });
             vectorSource.addFeatures(gebFeatures);
             map.addLayer(vector_layer);
             if (index == 1) {
@@ -201,13 +215,11 @@ if (vanaf.split("-").length == 1) {
             if (extent[1] < curr_extent[1]) curr_extent[1] = extent[1];
             if (extent[2] > curr_extent[2]) curr_extent[2] = extent[2];
             if (extent[3] > curr_extent[3]) curr_extent[3] = extent[3];
-        }    
-        //opvangen tijdsbalk
-        curr_extent[1]-= 10000;
-//        var factor = (curr_extent[3] - curr_extent[1])/(curr_extent[3] - curr_extent[1]+8000);
-//        curr_extent[0] *= factor;
-        map.getView().fit(curr_extent);
-
+            }            
+            //opvangen tijdsbalk
+            curr_extent[1]-= 30000;
+            map.getView().fit(curr_extent);
+    
       var data = google.visualization.arrayToDataTable(output);
       var view = new google.visualization.DataView(data);
       view.setColumns([0, 
@@ -220,7 +232,7 @@ if (vanaf.split("-").length == 1) {
 
       var options = {
            chartArea: {width: '25%'},
-        width: 450,
+        width: 400,
         height: 25*output.length,
         bar: {groupWidth: "80%"},
         legend: { position: "none" },

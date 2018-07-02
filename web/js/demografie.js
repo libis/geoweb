@@ -2459,16 +2459,11 @@ function demZoekGemeenten()
                 i_count++;
             }
             poutput.push(targetToPush);
-            
-            
         }
-        
         $('#gemeentebox').html('');
         $('#gemeentebox').html(poutput.join(''));
         $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
-        
-        });
-        
+    });
 }
 
 

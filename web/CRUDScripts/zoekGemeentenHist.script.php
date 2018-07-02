@@ -9,7 +9,7 @@ $lg = $_POST['selLg'];
 $filter = $_GET['gemeente'];
 $result="";
 
-foreach ($lijstenController->getGemeentenHistFilter($filter,$lg) as $key => $value)
+foreach ($demTijdslijnController->getGemeentenHistFilter($filter,$lg) as $key => $value)
 {
     if($result!="")
     {
