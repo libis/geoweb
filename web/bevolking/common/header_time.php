@@ -18,7 +18,7 @@ $sid = session_id();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>LGGI - Geografisch kaartenbestand</title>
+        <title>Aezel - Historisch</title>
 
         <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="../css/layout.css" media="screen" />
