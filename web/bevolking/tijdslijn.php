@@ -1,4 +1,4 @@
-<?php include 'common/header.php'; ?>
+<?php include 'common/header_time.php'; ?>
 
 <script type="text/javascript" src="../js/jquery-editable-select.js"></script>
 <script type="text/javascript" src="../js/mapEigenaars.js"></script>
@@ -43,43 +43,43 @@
             </button>
             <button id ="dem_eig_reset" onclick="resetTijdslijn();">
               Reset
-            </button>              
+            </button>
         </div>
         <div id="multilayer">
             <div id = "dem_player" class="dem_player">
-                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>                   
-                <button id ="dem_film_sp" onclick="spSlideshow();" <i class="material-icons">skip_previous</i></button>                   
-                <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>              
-                <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>              
-                <button id ="dem_film_sn"  onclick="snSlideshow();"<i class="material-icons">skip_next</i></button>             
-                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>             
+                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>
+                <button id ="dem_film_sp" onclick="spSlideshow();" <i class="material-icons">skip_previous</i></button>
+                <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>
+                <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>
+                <button id ="dem_film_sn"  onclick="snSlideshow();"<i class="material-icons">skip_next</i></button>
+                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>
             </div>
         </div>
     </div>
     <div>
         <div>
             <div class="select_tijd">
-<input type="text" id="dp_vanaf" name="dp_vanaf"> 
+<input type="text" id="dp_vanaf" name="dp_vanaf">
                 <select style="width: 100%;"  id="tijdslijn_vanaf" naam="tijdslijn_vanaf" onChange="tijdslijnVanaf(this.selectedIndex);"size="1">
                 </select>
             </div>
-      
+
             <div class="reset_tijd">
                 <button id ="hist_reset_vanaf" onclick="resetVanaf();">
-                     Reset 
-                </button>            
+                     Reset
+                </button>
             </div>
-        </div>              
+        </div>
         <div>
             <div class="select_tijd">
-<input type="text" id="dp_tot" name = "dp_tot">   
+<input type="text" id="dp_tot" name = "dp_tot">
                 <select style="width: 100%;"  id="tijdslijn_TotMet" naam="tijdslijn_TotMet" onChange="tijdslijnTot(this.selectedIndex);"size="1">
                 </select>
             </div>
             <div class="reset_tijd">
                 <button id ="hist_reset_totMet" onclick="resetTotMet();">
                     Reset
-                </button>            
+                </button>
             </div>
         </div>
       </div>
@@ -95,9 +95,9 @@
                 <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Gemeenten<span class="caret"></span></button>
                 <ul id=gemeentebox class="dropdown-menu">
                 </ul>
-            </div>          
+            </div>
       </div>
-    
+
   </div>
 </div>
 <div id ="tijdslijn_control">
@@ -126,17 +126,17 @@
     $('#dem_eig_reset').hide();
     $('#dem_player').hide();
     $('#tijdslijn_vanaf').hide();
-    $('#tijdslijn_TotMet').hide();     
+    $('#tijdslijn_TotMet').hide();
     $('#dp_vanaf').hide();
-    $('#dp_tot').hide();     
-    $('#hist_reset_vanaf').hide();     
-    $('#hist_reset_totMet').hide();     
+    $('#dp_tot').hide();
+    $('#hist_reset_vanaf').hide();
+    $('#hist_reset_totMet').hide();
     $('.gemeenteTextBox').hide();
     $('#gemeente_btn').hide();
     $('#dem_film_pause').hide();
-    
-    
-    
+
+
+
  $(document).on('click','.lagenTextbox',function(event){
     $(".lagenTextbox").val('').html();
     });
@@ -145,7 +145,7 @@
 $(document).on('click','#gemeentebox a',function(event){
 
     $('#lagenbox').slideUp();
-    
+
    var $target = $( event.currentTarget ),
        val = $target.attr( 'data-value' ),
        href = $target.text(),
@@ -164,11 +164,11 @@ $(document).on('click','#gemeentebox a',function(event){
 
    $( event.target ).blur();
    if (selGem.length == 0) {
-       $('.gemeenteTextBox').attr("placeholder","Alle gemeenten"); 
+       $('.gemeenteTextBox').attr("placeholder","Alle gemeenten");
    } else {
-       $('.gemeenteTextBox').attr("placeholder",""); 
+       $('.gemeenteTextBox').attr("placeholder","");
    }
-   histGetLayerInTime(selGem,minCurrDayDate,maxCurrDayDate);   
+   histGetLayerInTime(selGem,minCurrDayDate,maxCurrDayDate);
    return false;
 });
 
@@ -186,13 +186,13 @@ $(document).on('click','#gemeente_btn',function(event){
     }
 });
 
-$(function() {   
-    van = $( "#dp_vanaf" ).datepicker({   
-        defaultDate: "+1w", 
+$(function() {
+    van = $( "#dp_vanaf" ).datepicker({
+        defaultDate: "+1w",
         dateFormat: "yy-mm-dd",
         changeMonth: true,
         changeYear: true,
-        numberOfMonths: 1,  
+        numberOfMonths: 1,
         showOtherMonths: true,
         selectOtherMonths: true
     }).on( "change", function() {
@@ -219,7 +219,7 @@ $(function() {
         }
         return date;
     }
-});  
+});
 
 $(document).on('click','#lagenbox a',function(event){
 
@@ -228,7 +228,7 @@ $(document).on('click','#lagenbox a',function(event){
        $inp = $target.find( 'input' ),
        idx;
 
-       
+
     if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
        selLg.splice( idx, 1 );
        setCookie('selLg',selLg);
@@ -244,18 +244,18 @@ $(document).on('click','#lagenbox a',function(event){
        setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
     }
     if (selLg.length > 0) {
-   
+
     $('.gemeenteTextBox').show();
     $('#gemeente_btn').show();
     $('#dp_vanaf').show();
-    $('#dp_tot').show();       
-   
+    $('#dp_tot').show();
+
     $( event.target ).blur();
-    $('#hist_reset_vanaf').show();     
-    $('#hist_reset_totMet').show();       
-    $('.lagenTextBox').attr("placeholder",selLg[0]);        
+    $('#hist_reset_vanaf').show();
+    $('#hist_reset_totMet').show();
+    $('.lagenTextBox').attr("placeholder",selLg[0]);
     $('#lagenbox').slideUp();
-    histZoekGemeenten();   
+    histZoekGemeenten();
     histInitMap(selLg);
     demBerekenTijdsinterval();
     } else {
@@ -291,40 +291,40 @@ function hideLagenbox() {
 function resetTijdslijn()
 {
     stopSlideshow();
-//    $('#hist_reset_vanaf').hide();     
-//    $('#hist_reset_totMet').hide();       
+//    $('#hist_reset_vanaf').hide();
+//    $('#hist_reset_totMet').hide();
     $('#dem_film_pause').hide();
     resetVanaf();
     resetTotMet();
-    
+
     selGem.splice(0,selGem.length);
-    histZoekGemeenten();   
+    histZoekGemeenten();
     rebuildTijdslijnDiv();
-    initTijdslijst = false;    
+    initTijdslijst = false;
     demBerekenTijdsinterval();
-    
+
 }
 
 
 function histFullReset() {
-    
+
     $('#dem_tijdslijn').hide();
     $('#dem_toon_kaart').hide();
     $('#dem_eig_reset').hide();
     $('#dem_player').hide();
     $('#tijdslijn_vanaf').hide();
-    $('#tijdslijn_TotMet').hide();     
+    $('#tijdslijn_TotMet').hide();
     $('#dp_vanaf').hide();
-    $('#dp_tot').hide();     
-    $('#hist_reset_vanaf').hide();     
-    $('#hist_reset_totMet').hide();     
+    $('#dp_tot').hide();
+    $('#hist_reset_vanaf').hide();
+    $('#hist_reset_totMet').hide();
     $('.gemeenteTextBox').hide();
     $('#gemeente_btn').hide();
     $('#dem_film_pause').hide();
-    
+
     demZoekTijdslijnLagen();
     rebuildTijdslijnDiv();
-    initTijdslijst = false;    
+    initTijdslijst = false;
     $('#map').empty();
 
 }

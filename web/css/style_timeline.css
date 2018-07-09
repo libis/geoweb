@@ -1,0 +1,254 @@
+a {
+  color: #ee7316;
+  text-decoration: none;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #eaa134;
+}
+
+.btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary:disabled:focus, .btn-primary:disabled.focus {
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+
+
+.btn-primary.disabled:hover, .btn-primary:disabled:hover {
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.btn-outline-primary {
+  color: #ee7316;
+  background-image: none;
+  background-color: transparent;
+  border-color: #ee7316;
+}
+
+.btn-outline-primary:hover {
+  color: #fff;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+  color: #fff;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.btn-outline-primary:active, .btn-outline-primary.active,
+.open > .btn-outline-primary.dropdown-toggle {
+  color: #fff;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.btn-outline-primary:active:hover, .btn-outline-primary:active:focus, .btn-outline-primary:active.focus, .btn-outline-primary.active:hover, .btn-outline-primary.active:focus, .btn-outline-primary.active.focus,
+.open > .btn-outline-primary.dropdown-toggle:hover,
+.open > .btn-outline-primary.dropdown-toggle:focus,
+.open > .btn-outline-primary.dropdown-toggle.focus {
+  color: #fff;
+  background-color: #234b78;
+  border-color: #1a3758;
+}
+
+.btn-outline-primary.disabled:focus, .btn-outline-primary.disabled.focus, .btn-outline-primary:disabled:focus, .btn-outline-primary:disabled.focus {
+  border-color: #7fa9d9;
+}
+
+.btn-outline-primary.disabled:hover, .btn-outline-primary:disabled:hover {
+  border-color: #7fa9d9;
+}
+
+.dropdown-item.active, .dropdown-item.active:focus, .dropdown-item.active:hover {
+  color: #fff;
+  text-decoration: none;
+  background-color: #ee7316;
+  outline: 0;
+}
+
+.nav-pills .nav-link.active, .nav-pills .nav-link.active:focus, .nav-pills .nav-link.active:hover,
+.nav-pills .nav-item.open .nav-link,
+.nav-pills .nav-item.open .nav-link:focus,
+.nav-pills .nav-item.open .nav-link:hover {
+  color: #fff;
+  cursor: default;
+  background-color: #ee7316;
+}
+
+.card-primary {
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.card-outline-primary {
+  background-color: transparent;
+  border-color: #ee7316;
+}
+
+.page-item.active .page-link, .page-item.active .page-link:focus, .page-item.active .page-link:hover {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.page-link {
+  position: relative;
+  float: left;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  color: #ee7316;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.tag-primary {
+  background-color: #ee7316;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+  z-index: 2;
+  color: #fff;
+  text-decoration: none;
+  background-color: #ee7316;
+  border-color: #ee7316;
+}
+
+.bg-primary {
+  color: #fff !important;
+  background-color: #ee7316 !important;
+}
+
+.text-primary {
+  color: #ee7316 !important;
+}
+
+hr {
+  border-top: 1px solid #ee7316;
+  margin: 40px 0;
+}
+
+.navbar-default {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  background: #ee7316;
+  padding-top: 0;
+}
+
+.navbar-default .navbar-nav .dropdown-menu {
+  border: none;
+  background: #ee7316;
+  box-shadow: none;
+  font-size: 0.9em;
+  padding: 10px;
+  line-height: 20px;
+  margin-top: -15px;
+}
+
+.navbar-default .navbar-toggler {
+  background: #ee7316;
+  color: #fff;
+  height: 60px;
+  font-size: 1.2rem;
+}
+
+.control .control-top button {
+  background: none;
+  background: #ee7316;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.control .control-top button:hover {
+    background: #eaa134;  
+}
+
+.zoekknop, #dem_toon_kaart, #dem_toon_stat_beroep, #dem_toon_stat_beroepsgroep, #dem_toon_stat_woonplaats {
+  width: auto;
+  background: #ee7316;
+  font-family: "Lato", sans-serif;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid #3169a7;
+  border-right: 2px solid #3169a7;
+}
+
+#dem_eig_reset {
+  width: auto;
+  background: #ee7316;
+  font-family: "Lato", sans-serif;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid #3169a7;
+  border-right: 2px solid #3169a7;
+}
+
+.container .simple-nav {
+  font-size: 1.3em;
+  margin: 2em 0;
+  padding: 0.3em 1em;
+  list-style: none;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-style: italic;
+  border-left: 3px solid #ee7316;
+}
+
+.register #submit, .login #submit, .update-account #submit {
+  background: #ee7316;
+  font-family: "Lato", sans-serif;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid #AB2222;
+  border-right: 2px solid #AB2222;
+}
+
+footer .dropdown-menu li > a {
+  padding-right: 0;
+  padding-left: 5px;
+  color: #ee7316;
+  font-size: 1.2em;
+}
+
+.zoekknop, #dem_toon_kaart {
+  width: auto;
+  margin-left: 35px;
+  background: #ee7316;
+  font-family: "Lato", sans-serif;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 2px solid #3169a7;
+  border-right: 2px solid #3169a7;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-family: 'slick';
+  font-size: 20px;
+  line-height: 1;
+  opacity: .75;
+  color: #ee7316;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
