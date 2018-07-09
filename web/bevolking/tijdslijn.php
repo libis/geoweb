@@ -275,6 +275,7 @@ $(document).on('click','#eig_lagen_btn',function(event){
     if (firstOpenLg == false) {
         $('#lagenbox').slideToggle();
     }
+    firstOpenLg = false;
 });
 
 });
