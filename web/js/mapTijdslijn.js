@@ -1,12 +1,31 @@
-function demGetLayerInTime(selLg,selGem,vanaf,tot)
-{
-    
-    var mywindow = null;
+ vectorLayers = [];
+ vectorLayersP = [];
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function demo() {
+  console.log('Taking a break...');
+  await sleep(2000);
+  console.log('Two second later');
+}
+
+//demo();
+
+function histRemoveLayersMap() {
+
+        for(var i=0;i<vectorLayers.length;i++){
+            map.removeLayer(vectorLayers[i]);
+        }
+        vectorLayers = [];
+}
+
+function histInitMap(selLg){
+
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
-    var themalaag =selLg[0];
-    
-    
+    themalaag = selLg[0];
     for (var i=0;i<selLg.length;i++)  {
         var laag = themalagenprefix+":"+selLg[i];
     }
@@ -21,7 +40,7 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
 */  
     
     var layers = [
-      new ol.layer.Tile({source: new ol.source.OSM()}),
+//      new ol.layer.Tile({source: new ol.source.OSM()}),
    ];
     
     for (var i=0;i<layerArr.length;i++)  {
@@ -38,7 +57,8 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
           center: [655309.93, 6621586.89],
           zoom: 9
         });
-      var map = new ol.Map({
+
+      map = new ol.Map({
         controls: ol.control.defaults({
         attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
           collapsible: false
@@ -50,13 +70,17 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
         target: 'map',
         view: view
       });
+    
+}
 
-// get feature info
+function histGetLayerInTime(selGem,vanaf,tot)
+{
+    
 
     map.on('singleclick', function(evt) {
 
         var feat = map.getFeaturesAtPixel(evt.pixel);
-        
+       
         for (var i=0;i< feat.length;i++) {
             var laag = feat[i].getId();
             if (laag.includes(selLg[0])) {
@@ -104,6 +128,7 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
             }
         }
     });
+    
 //show feature
 
     var farray = [];
@@ -145,15 +170,20 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
         filter:  filters
       });
 
+
       // then post the request and add the received features to a layer
       fetch(mapviewerIP+'/geoserver/wfs', {
         method: 'POST',
         body: new XMLSerializer().serializeToString(featureRequest)
       }).then(function(response) {
-        return response.json();
+         
+       return response.json();
+       
       }).then(function(json) {
+          
         var features = new ol.format.GeoJSON().readFeatures(json);
-        
+
+       
         var index = 0;
         var prop;
         var gebiedsdeel = [];
@@ -176,8 +206,9 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
         var extent,curr_extent;
         var output=[];
 
-    
         output.push(["Element", "Density", { role: "style" }]);
+        histRemoveLayersMap();
+
         while (index < gebiedsdeel.length){
             var gebied = gebiedsdeel[index];
             gebFeatures = gebiedFeature[gebied]; 
@@ -187,7 +218,7 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
             var b = kleurLegend[gebied][0][2];
             var rgb = 'rgb('+r+','+g+','+b+')';
           
-            output.push([gebied,gebFeatures.length,rgb]);
+            output.push([gebied,100/*gebFeatures.length*/,rgb]);
             vectorSource = new ol.source.Vector();
             vector_layer = new ol.layer.Vector({
               source: vectorSource,
@@ -207,6 +238,7 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
               })
             vectorSource.addFeatures(gebFeatures);
             map.addLayer(vector_layer);
+            vectorLayers.push(vector_layer);
             if (index == 1) {
                 curr_extent = vectorSource.getExtent();
             }
@@ -216,26 +248,33 @@ function demGetLayerInTime(selLg,selGem,vanaf,tot)
             if (extent[2] > curr_extent[2]) curr_extent[2] = extent[2];
             if (extent[3] > curr_extent[3]) curr_extent[3] = extent[3];
             }            
+
             //opvangen tijdsbalk
             curr_extent[1]-= 30000;
             map.getView().fit(curr_extent);
-    
+ 
+
+                
       var data = google.visualization.arrayToDataTable(output);
       var view = new google.visualization.DataView(data);
       view.setColumns([0, 
                         1,
+/*                        
                        { calc: "stringify",
                          sourceColumn: 1,
                          type: "string",
                          role: "annotation" },
+*/                         
                        2]);
 
       var options = {
-           chartArea: {width: '25%'},
+           chartArea:{left:'60%',top:0,width:'50%',height:'100%'},
         width: 400,
         height: 25*output.length,
+        format:'none',
         bar: {groupWidth: "80%"},
-        legend: { position: "none" },
+        legend: { position: "left" },
+         hAxis: { gridlines: { count: 0 } }
       };
       var chart = new google.visualization.BarChart(document.getElementById("legend-form"));
       chart.draw(view, options);

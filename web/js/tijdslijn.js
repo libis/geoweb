@@ -1,3 +1,4 @@
+tmpYear = 0;
 function histZoekGemeenten()
 {
    selLg = getCookie('selLg');
@@ -19,7 +20,7 @@ function histZoekGemeenten()
             targetToPush += '<li><a href="#" class="small" data-value="';
             targetToPush += i_count;//id
 
-            targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+            targetToPush += '" tabIndex="-1"><input type="checkbox" />&nbsp;';
             targetToPush += keyvaluearray[1]  ;//Item
             targetToPush += '</a></li>';      
             i_count++;
@@ -28,7 +29,7 @@ function histZoekGemeenten()
     }
     $('#gemeentebox').html('');
     $('#gemeentebox').html(poutput.join(''));
-    $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
+    $('.gemeenteTextBox').attr("placeholder","Alle gemeenten");        
     });
 }
 
@@ -107,7 +108,7 @@ function demZoekTijdslijnLagen() {
             if (naam.substr(0,naam.indexOf(':')) === lagenprefix) {
                 naam = naam.substr(naam.indexOf(':')+1);
                 if  (
-//                    (naam === 'sittard_amstenrade') || 
+                    (naam === 'sittard_amstenrade') || 
                     (naam === 'scheiding_limburg')
                     )
                 {
@@ -187,19 +188,27 @@ function demToonTijdslijn()
           },
           onDestroy: function() {
               //naDestroy();
+              i=0;
           },
           afterLoad: function(currYear) {
-               $('#map').empty();
-               demGetLayerInTime(selLg,selGem,currYear,currYear+1);              
-          },
+                histGetLayerInTime(selGem,currYear,currYear+1);  
+          },          
           onLeave: function(currYear, nextYear) {
-              $('#map').empty();
+              i=0;
           },
           afterChange: function(currYear) {
-               $('#map').empty();
-               demGetLayerInTime(selLg,selGem,currYear,currYear+1)
+            if (tmpYear == 0) {
+                tmpYear = currYear;
+                histGetLayerInTime(selGem,currYear,currYear+1);                 
+            } else {
+                if (tmpYear != currYear) {
+                    histGetLayerInTime(selGem,currYear,currYear+1);                 
+                    tmpYear = currYear;
+                }
+            }
           },
           afterResize: function() {
+              i=0;
           }
         });
     }
@@ -282,6 +291,7 @@ function demBerekenTijdsinterval()
                 max = max-modulus +interval;
                 maxCurr = max;
                 minCurr = min;
+                tmpYear = min;
             
             var startYearToPush = ''; 
             var endYearToPush = ''; 
@@ -510,15 +520,20 @@ function naDestroy(){
           onDestroy: function() {
           },
           afterLoad: function(currYear) {
-               $('#map').empty();
-               demGetLayerInTime(selLg,selGem,minCurrDayDate,maxCurrDayDate);              
+                histGetLayerInTime(selGem,minCurrDayDate,maxCurrDayDate);         
           },
           onLeave: function(currYear, nextYear) {
-              $('#map').empty();
           },
           afterChange: function(currYear) {
-               $('#map').empty();
-               demGetLayerInTime(selLg,selGem,currYear,currYear+1)
+             if (tmpYear == 0) {
+                tmpYear = currYear;
+                histGetLayerInTime(selGem,currYear,currYear+1);                 
+            } else {
+                if (tmpYear != currYear) {
+                    histGetLayerInTime(selGem,currYear,currYear+1);                 
+                    tmpYear = currYear;
+                }
+            }
           },
           afterResize: function() {
           }
@@ -555,26 +570,32 @@ var stop = parseInt(0);
 var slideInterval = parseInt(0);
 
 function nextSlide(){
-	currentSlide = (currentSlide+interval)%stop;
+    currentSlide = (currentSlide+interval);
+    if (currentSlide <= maxCurr) {
         $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    }
 }
 
 var playing = false;
 
 function pauseSlideshow(){
-    	playing = false;
-	clearInterval(slideInterval);
+
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
+    
+    playing = false;
+    clearInterval(slideInterval);
 }
 
 function playSlideshow(){
+    
+    $('#dem_film_pause').show();
+    $('#dem_film_play').hide();
+
     playing = true;
-    if (currentSlide == "") {
-//  currentSlide =  parseInt($('#tijdslijn_vanaf').val());
-//  stop = parseInt($('#tijdslijn_TotMet').val());
-        currentSlide =  minCurr;
-    }
+    currentSlide =(parseInt(tmpYear));
     stop = maxCurr;
-    slideInterval = setInterval(nextSlide,1500);
+    slideInterval = setInterval(nextSlide,3000);
 }
 
 function stopSlideshow() {
@@ -585,6 +606,8 @@ function stopSlideshow() {
 
 function frSlideshow() {
     playing = false;
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
     clearInterval(slideInterval);
 //        currentSlide = parseInt($('#tijdslijn_vanaf').val());
     currentSlide =  minCurr;
@@ -593,8 +616,28 @@ function frSlideshow() {
 
 function ffSlideshow() {
     playing = false;
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
     clearInterval(slideInterval);
 //  currentSlide = parseInt($('#tijdslijn_TotMet').val());
     currentSlide =  maxCurr;
     $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+}
+
+function spSlideshow() {
+    playing = true;
+    clearInterval(slideInterval);
+//        currentSlide = parseInt($('#tijdslijn_vanaf').val());
+    currentSlide = (parseInt(tmpYear)-1);
+    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    playing = false;
+}
+
+function snSlideshow() {
+    playing = true;
+    clearInterval(slideInterval);
+//  currentSlide = parseInt($('#tijdslijn_TotMet').val());
+    currentSlide = (parseInt(tmpYear)+1);
+    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    playing = false;
 }
