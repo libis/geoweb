@@ -73,7 +73,7 @@ function histInitMap(selLg){
     
 }
 
-function histGetLayerInTime(selGem,vanaf,tot)
+function histGetLayerInTime(selGem,vanaf,speler)
 {
     
 
@@ -142,7 +142,7 @@ function histGetLayerInTime(selGem,vanaf,tot)
     }
         
     farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',vanaf);
-    farray[1]=ol.format.filter.greaterThanOrEqualTo('einddatum',vanaf);
+    farray[1]=ol.format.filter.greaterThan('einddatum',vanaf);
 
     filters = ol.format.filter.and.apply(null,farray);
 
@@ -278,5 +278,10 @@ function histGetLayerInTime(selGem,vanaf,tot)
       };
       var chart = new google.visualization.BarChart(document.getElementById("legend-form"));
       chart.draw(view, options);
+      
+      if (speler) { 
+          player = true;
+          $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+      }
     });
 };

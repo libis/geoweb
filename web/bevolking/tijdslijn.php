@@ -46,12 +46,12 @@
         </div>
         <div id="multilayer">
             <div id = "dem_player" class="dem_player">
-                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">fast_rewind</i></button>
-                <button id ="dem_film_sp" onclick="spSlideshow();" <i class="material-icons">skip_previous</i></button>
+                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">skip_previous</i></button>
+                <button id ="dem_film_sp" onclick="spSlideshow();" <i class="material-icons">fast_rewind</i></button>
                 <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>
                 <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>
-                <button id ="dem_film_sn"  onclick="snSlideshow();"<i class="material-icons">skip_next</i></button>
-                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">fast_forward</i></button>
+                <button id ="dem_film_sn"  onclick="snSlideshow();"<i class="material-icons">fast_forward</i></button>
+                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">skip_next</i></button>
             </div>
         </div>
     </div>
