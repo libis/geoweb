@@ -1,7 +1,17 @@
 tmpYear = 0;
+initTijdslijst = false;
+min=0;
+max = 0;
+minCurr=0;
+maxCurr = 0;
+minCurrDayDate=0;
+maxCurrDayDate = 0;
+interval = 0;
+kleurLegend = [];
+
+
 function histZoekGemeenten()
 {
-   selLg = getCookie('selLg');
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeentenHist.script.php";
    $.post(targetUrl,{selLg}, function(data) {
     data = data.trim();
@@ -16,10 +26,8 @@ function histZoekGemeenten()
         while(i_count<keyValueList.length)
         {
             keyvaluearray=keyValueList[i_count].split("##");
-
             targetToPush += '<li><a href="#" class="small" data-value="';
             targetToPush += i_count;//id
-
             targetToPush += '" tabIndex="-1"><input type="checkbox" />&nbsp;';
             targetToPush += keyvaluearray[1]  ;//Item
             targetToPush += '</a></li>';      
@@ -33,11 +41,8 @@ function histZoekGemeenten()
     });
 }
 
-
 function histZoekGemeentenZoekString()
 {
-    selLg = getCookie('selLg');
-    selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
     var filter = $(".gemeenteTextBox").val();
     argumenten = '?gemeente='+filter;
@@ -84,8 +89,6 @@ function histZoekGemeentenZoekString()
 }
 
 
-
-
 function demZoekTijdslijnLagen() {
     var formatter = new ol.format.WMSCapabilities();
     var endpoint = mapviewerIP+ '/geoserver/wms';
@@ -127,25 +130,16 @@ function demZoekTijdslijnLagen() {
         $('.lagenTextBox').attr("placeholder","Zoek laag");        
     });
 }
+
+
+
 function demVerwijderTijdslijn() {
      $('#dem_tijdslijn').hide();
 }
 
-initTijdslijst = false;
-min=0;
-max = 0;
-minCurr=0;
-maxCurr = 0;
-minCurrDayDate=0;
-maxCurrDayDate = 0;
-interval = 0;
-var selLg = [];
-kleurLegend = [];
-
 
 function demToonTijdslijn()
 {
-    selLg = getCookie('selLg');
     var targetToPush = '';     
     var poutput = [];// voorbereiding
 
@@ -197,13 +191,18 @@ function demToonTijdslijn()
               i=0;
           },
           afterChange: function(currYear) {
-            if (tmpYear == 0) {
-                tmpYear = currYear;
-                histGetLayerInTime(selGem,currYear,currYear+1);                 
+            if (stepSlide) {
+                stepSlide = false;
+                histGetLayerInTime(selGem,minCurrDayDate,maxCurrDayDate);                      
             } else {
-                if (tmpYear != currYear) {
-                    histGetLayerInTime(selGem,currYear,currYear+1);                 
+                if (tmpYear == 0) {
                     tmpYear = currYear;
+                    histGetLayerInTime(selGem,currYear,currYear+1);                 
+                } else {
+                    if (tmpYear != currYear) {
+                        histGetLayerInTime(selGem,currYear,currYear+1);                 
+                        tmpYear = currYear;
+                    }
                 }
             }
           },
@@ -231,7 +230,6 @@ function hexToRgb(hex) {
 
 function demBerekenKleurenVoorLegende() 
 {
-    selLg = getCookie('selLg');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLegendItems.script.php";
     $.post(targetUrl,{selLg}, function(data) {
             keyValueList = data.split("%%");
@@ -258,8 +256,6 @@ function demBerekenKleurenVoorLegende()
 }
 function demBerekenTijdsinterval()
 {
-    selLg = getCookie('selLg');
-    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
     
     var lg;
@@ -339,11 +335,11 @@ function demBerekenTijdsinterval()
 
 function herberekenTot(tijd)
 {
-
     //var selectVal = $('#tijdslijn_vanaf').val();
     
     minCurrDayDate = tijd;
     minCurr = parseInt(tijd.split("-")[0]);
+    tmpYear = minCurr;
 
     var poutputEnd = [];// voorbereiding
     var endYearToPush = ''; 
@@ -457,10 +453,7 @@ function resetTotMet()
 
 function tijdslijnVanaf(tijd)
 {
-    $('#dem_tijdslijn').timeliny('destroy');
-    var div = document.createElement("div");
-    div.id="dem_tijdslijn";
-    document.getElementById("tijdslijn_control").appendChild(div);        
+    rebuildTijdslijnDiv();
     herberekenTot(tijd);
     currentSlide =  parseInt(0);
     slideInterval = parseInt(0);
@@ -469,10 +462,7 @@ function tijdslijnVanaf(tijd)
 
 function tijdslijnTot(tijd)
 {
-    $('#dem_tijdslijn').timeliny('destroy');
-    var div = document.createElement("div");
-    div.id="dem_tijdslijn";
-    document.getElementById("tijdslijn_control").appendChild(div);        
+    rebuildTijdslijnDiv();
     herberekenVanaf(tijd);
     currentSlide =  parseInt(0);
     stop = parseInt(0);
@@ -525,6 +515,7 @@ function naDestroy(){
           onLeave: function(currYear, nextYear) {
           },
           afterChange: function(currYear) {
+              
              if (tmpYear == 0) {
                 tmpYear = currYear;
                 histGetLayerInTime(selGem,currYear,currYear+1);                 
@@ -545,7 +536,6 @@ async function tijdFilm() {
     
     
     var i;
-    selLg = getCookie('selLg');
     
     if ($('#play').hasClass("play")) {
         $('#play').removeClass("play");
@@ -579,19 +569,15 @@ function nextSlide(){
 var playing = false;
 
 function pauseSlideshow(){
-
     $('#dem_film_pause').hide();
     $('#dem_film_play').show();
-    
     playing = false;
     clearInterval(slideInterval);
 }
 
 function playSlideshow(){
-    
     $('#dem_film_pause').show();
     $('#dem_film_play').hide();
-
     playing = true;
     currentSlide =(parseInt(tmpYear));
     stop = maxCurr;
@@ -609,7 +595,6 @@ function frSlideshow() {
     $('#dem_film_pause').hide();
     $('#dem_film_play').show();
     clearInterval(slideInterval);
-//        currentSlide = parseInt($('#tijdslijn_vanaf').val());
     currentSlide =  minCurr;
     $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
@@ -619,25 +604,50 @@ function ffSlideshow() {
     $('#dem_film_pause').hide();
     $('#dem_film_play').show();
     clearInterval(slideInterval);
-//  currentSlide = parseInt($('#tijdslijn_TotMet').val());
     currentSlide =  maxCurr;
     $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
 
 function spSlideshow() {
-    playing = true;
-    clearInterval(slideInterval);
-//        currentSlide = parseInt($('#tijdslijn_vanaf').val());
-    currentSlide = (parseInt(tmpYear)-1);
-    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
     playing = false;
+    stepSlide = true;
+    
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
+    clearInterval(slideInterval);
+  targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVorigeDatumHist.script.php";
+  arguments = "?datum="+minCurrDayDate;
+  $.post(targetUrl+arguments,{selLg}, function(data) {
+    data = data.trim();
+    if(data.length>0) {
+        minCurrDayDate = data;
+        minCurr = parseInt(minCurrDayDate.split("-")[0]);
+        tmpYear = minCurr;
+        currentSlide = tmpYear;
+        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    }
+  });
+
 }
 
 function snSlideshow() {
-    playing = true;
-    clearInterval(slideInterval);
-//  currentSlide = parseInt($('#tijdslijn_TotMet').val());
-    currentSlide = (parseInt(tmpYear)+1);
-    $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
     playing = false;
+    stepSlide = true;
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
+    clearInterval(slideInterval);
+    
+  targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVolgendeDatumHist.script.php";
+  arguments = "?datum="+minCurrDayDate;
+  $.post(targetUrl+arguments,{selLg}, function(data) {
+    data = data.trim();
+    if(data.length>0) {
+        minCurrDayDate = data;
+        minCurr = parseInt(minCurrDayDate.split("-")[0]);
+        tmpYear = minCurr;
+        currentSlide = tmpYear;
+        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    }
+  });
+
 }

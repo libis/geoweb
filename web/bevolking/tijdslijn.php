@@ -35,7 +35,6 @@
      <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
   </div>
   <div id="control-form" class="collapse in" >
-    <h2>Kadastrale Eigenaar </h2>
     <div>
         <div>
             <button id ="dem_toon_kaart" onclick="tijdsloop();">
@@ -106,17 +105,18 @@
 <div id="map" class="map"></div>
 
 <script language="javascript">
-    var selLg = [];
-    var selGem = [];
-    var firstOpenLg = true;
-    var tijdlijn = false;
-    var firstOpenGem = true;
 
     google.charts.load('current', {packages: ['corechart']});
     google.charts.load('current', {packages:['bar']});
 
     $(document).ready(function(){
     $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+
+    selLg = [];
+    selGem = [];
+    firstOpenLg = true;
+    firstOpenGem = true;
+
 
     demZoekTijdslijnLagen();
 
@@ -154,11 +154,9 @@ $(document).on('click','#gemeentebox a',function(event){
 
    if (( idx = selGem.indexOf( href.trim()))  > -1 ) {
       selGem.splice( idx, 1 );
-      setCookie('selGem',selGem);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
    } else {
       selGem.push(href.trim());
-      setCookie('selGem',selGem);
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
    }
 
@@ -231,12 +229,10 @@ $(document).on('click','#lagenbox a',function(event){
 
     if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
        selLg.splice( idx, 1 );
-       setCookie('selLg',selLg);
        setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
     } else {
        selLg.splice(0,selLg.length)
        selLg.push(href.trim());
-       setCookie('selLg',selLg);
        $('#dem_tijdslijn').show();
        $('#dem_toon_kaart').show();
        $('#dem_eig_reset').show();
@@ -295,6 +291,7 @@ function resetTijdslijn()
 //    $('#hist_reset_vanaf').hide();
 //    $('#hist_reset_totMet').hide();
     $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
     resetVanaf();
     resetTotMet();
 
@@ -322,9 +319,11 @@ function histFullReset() {
     $('.gemeenteTextBox').hide();
     $('#gemeente_btn').hide();
     $('#dem_film_pause').hide();
+    selGem.splice( idx, 1 );
 
     demZoekTijdslijnLagen();
     rebuildTijdslijnDiv();
+    
     initTijdslijst = false;
     $('#map').empty();
 

@@ -5,7 +5,6 @@
 <div id="map" class="map"></div>
 <script language="javascript">
     $(document).ready(function () {
-
         getMapStartup();
     });
 
