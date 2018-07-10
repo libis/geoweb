@@ -8,6 +8,7 @@ minCurrDayDate=0;
 maxCurrDayDate = 0;
 interval = 0;
 kleurLegend = [];
+stepSlide = false;
 
 
 function histZoekGemeenten()
@@ -195,6 +196,7 @@ function demToonTijdslijn()
                 stepSlide = false;
                 histGetLayerInTime(selGem,minCurrDayDate,maxCurrDayDate);                      
             } else {
+                minCurrDayDate = currYear+"-01-01";
                 if (tmpYear == 0) {
                     tmpYear = currYear;
                     histGetLayerInTime(selGem,currYear,currYear+1);                 
@@ -515,7 +517,8 @@ function naDestroy(){
           onLeave: function(currYear, nextYear) {
           },
           afterChange: function(currYear) {
-              
+             minCurrDayDate = currYear+"-01-01";
+  
              if (tmpYear == 0) {
                 tmpYear = currYear;
                 histGetLayerInTime(selGem,currYear,currYear+1);                 
@@ -596,6 +599,7 @@ function frSlideshow() {
     $('#dem_film_play').show();
     clearInterval(slideInterval);
     currentSlide =  minCurr;
+    minCurrDayDate = minCurr+"-01-01";
     $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
 
@@ -605,6 +609,8 @@ function ffSlideshow() {
     $('#dem_film_play').show();
     clearInterval(slideInterval);
     currentSlide =  maxCurr;
+    maxCurrDayDate = maxCurr+"-12-31";
+    minCurrDayDate = maxCurr+"-01-01";
     $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
 }
 
@@ -621,8 +627,7 @@ function spSlideshow() {
     data = data.trim();
     if(data.length>0) {
         minCurrDayDate = data;
-        minCurr = parseInt(minCurrDayDate.split("-")[0]);
-        tmpYear = minCurr;
+        tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;
         $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
     }
@@ -643,8 +648,7 @@ function snSlideshow() {
     data = data.trim();
     if(data.length>0) {
         minCurrDayDate = data;
-        minCurr = parseInt(minCurrDayDate.split("-")[0]);
-        tmpYear = minCurr;
+        tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;
         $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
     }
