@@ -1,5 +1,6 @@
  vectorLayers = [];
  vectorLayersP = [];
+ metadataID = "";
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -11,14 +12,70 @@ async function demo() {
   console.log('Two second later');
 }
 
-//demo();
+function histShowMetadata(metadataID) {
+
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekMetadataHist.script.php";
+    argumenten = '?metadataId='+metadataID+'&begindatum='+minCurrDayDate;
+    ;
+    $.post(targetUrl+argumenten,{selLg}, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            for(i_count2=0;i_count2<keyValueList.length;i_count2++)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+
+                var poutput = [];// voorbereiding
+                var targetToPush = '<table class="fixed">';
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'heerser:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += keyvaluearray[1];
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'naam:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += keyvaluearray[2];
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'begindatum:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += keyvaluearray[3];
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'einddatum:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += keyvaluearray[4];
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '</table>';                        
+                poutput.push(targetToPush);
+                $('#infobox').html('');
+                $('#infobox').html(poutput.join(''));                
+                $('#infobox').show();        
+            }
+        } 
+    });
+}
 
 function histRemoveLayersMap() {
-
-        for(var i=0;i<vectorLayers.length;i++){
-            map.removeLayer(vectorLayers[i]);
-        }
-        vectorLayers = [];
+    for(var i=0;i<vectorLayers.length;i++){
+        map.removeLayer(vectorLayers[i]);
+    }
+    vectorLayers = [];
 }
 
 function histInitMap(selLg){
@@ -71,16 +128,15 @@ function histInitMap(selLg){
         view: view
       });
     
+      map.on('singleclick', function(evt) {
+
+      feat = map.getFeaturesAtPixel(evt.pixel);
+      showMetadata();
+    });
 }
 
-function histGetLayerInTime(selGem,vanaf,speler)
-{
-    
-
-    map.on('singleclick', function(evt) {
-
-        var feat = map.getFeaturesAtPixel(evt.pixel);
-       
+        
+function showMetadata() {        
         for (var i=0;i< feat.length;i++) {
             var laag = feat[i].getId();
             if (laag.includes(selLg[0])) {
@@ -125,9 +181,19 @@ function histGetLayerInTime(selGem,vanaf,speler)
                 $('#infobox').html(poutput.join(''));                
                 $('#infobox').show();
                 $('#metadata-form').collapse('show');
+                metadataID = eigenschappen.NAAM;
             }
         }
-    });
+    }
+
+function histGetLayerInTime(selGem,vanaf,speler)
+{
+    
+    if ( $('#metadata-form').is(':visible') )
+    {
+        histShowMetadata(metadataID);
+    }
+
     
 //show feature
 

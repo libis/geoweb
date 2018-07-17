@@ -3,11 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/css/style.css</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/globalVars.js</file>
             <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapTijdslijn.js</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/composer.json</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php</file>
             <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/tijdslijn.js</file>
-            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_beroep.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekVolgendeDatumHist.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/composer.lock</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekGrondgebruikByGemeente.script.php</file>
             <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/tijdslijn.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/db/demTijdslijnController.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekArtikelnummers.script.php</file>
         </group>
     </open-files>
 </project-private>

@@ -104,7 +104,6 @@ public function getGemeentenHist($layer)
     pg_free_result($s);
     return $result;
 }    
- 
 
 public function getGemeentenHistFilter($filter,$layer)
 {
@@ -123,6 +122,25 @@ public function getGemeentenHistFilter($filter,$layer)
         pg_free_result($s);
         return $result;
     }
+}
+
+public function getMetadataHist($layer,$filter,$begindatum){
+        $result = array();
+        $index = 0;
+
+    if (count($layer) > 0) 
+    {
+        $theme = $layer[0];
+        $query="select distinct \"Heerser\",\"NAAM\",\"begindatum\",\"einddatum\" from public.".$theme." where lower(\"NAAM\") = lower('".$filter."') and begindatum <= '".$begindatum."' and einddatum > '".$begindatum."' order by \"NAAM\"";
+ 
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0].'##'.$row[1].'##'.$row[2].'##'.$row[3];
+        }
+        pg_free_result($s);
+        return $result;
+    }    
 }
 }
 ?>

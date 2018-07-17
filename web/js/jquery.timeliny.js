@@ -267,6 +267,7 @@
 			// Destroy the object when we are done
 			function _stop_move() {
 				if (selected) {
+                                    
 					// active the closest elem
 					var linePos = $el.find('.' + options.className + '-vertical-line').offset().left;
 					var closestDotYear = null;
@@ -284,6 +285,7 @@
 					});
 
 					$el.find('.' + options.className + '-dot[data-year=' + closestDotYear + ']').trigger('click');
+                                
 					selected = null;
 				}
 			}

@@ -15,3 +15,4 @@ var lagenprefix = 'geonode';
 var themalagenprefix = 'geonode'
 
 var tijdsvakken = 100;
+var intervaltijd = 1500;

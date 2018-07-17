@@ -454,6 +454,7 @@ function resetTotMet()
 
 function tijdslijnVanaf(tijd)
 {
+    if (playing) stopSlideshow();
     rebuildTijdslijnDiv();
     herberekenTot(tijd);
     currentSlide =  parseInt(0);
@@ -463,6 +464,7 @@ function tijdslijnVanaf(tijd)
 
 function tijdslijnTot(tijd)
 {
+    if (playing) stopSlideshow();
     rebuildTijdslijnDiv();
     herberekenVanaf(tijd);
     currentSlide =  parseInt(0);
@@ -570,6 +572,8 @@ function nextSlide(){
     if (currentSlide <= maxCurr) {
         minCurrDayDate = currentSlide.toString()+"-01-01";
         histGetLayerInTime(selGem,minCurrDayDate,true);   
+    }else {
+        stopSlideshow();
     }
 }
 
@@ -588,10 +592,12 @@ function playSlideshow(){
     playing = true;
     currentSlide =(parseInt(tmpYear));
     stop = maxCurr;
-    slideInterval = setInterval(nextSlide,3000);
+    slideInterval = setInterval(nextSlide,intervaltijd);
 }
 
 function stopSlideshow() {
+    $('#dem_film_pause').hide();
+    $('#dem_film_play').show();
     playing = false;
     clearInterval(slideInterval);
     currentSlide =  minCurr;
@@ -603,7 +609,7 @@ function frSlideshow() {
     tmpYear = minCurr;
     minCurrDayDate = minCurr+"-01-01";
     histGetLayerInTime(selGem,minCurrDayDate,true);   
-    if (playing) slideInterval = setInterval(nextSlide,3000);
+    if (playing) slideInterval = setInterval(nextSlide,intervaltijd);
 }
 
 function ffSlideshow() {
@@ -614,7 +620,7 @@ function ffSlideshow() {
     currentSlide =  maxCurr;
     maxCurrDayDate = maxCurr+"-12-31";
     minCurrDayDate = maxCurr+"-01-01";
-    histGetLayerInTime(selGem,minCurrDayDate,true);     
+    histGetLayerInTime(selGem,minCurrDayDate,true);  
 }   
  
 
@@ -630,7 +636,7 @@ function spSlideshow() {
         tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;
         histGetLayerInTime(selGem,minCurrDayDate,true);                      
-        if (playing) slideInterval = setInterval(nextSlide,3000);
+        if (playing) slideInterval = setInterval(nextSlide,intervaltijd);
     }
   });
 
@@ -648,7 +654,7 @@ function snSlideshow() {
         tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;
         histGetLayerInTime(selGem,minCurrDayDate,true);                      
-        if (playing) slideInterval = setInterval(nextSlide,3000);
+        if (playing) slideInterval = setInterval(nextSlide,intervaltijd);
     }
   });
 
