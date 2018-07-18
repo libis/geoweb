@@ -206,7 +206,8 @@ function histGetLayerInTime(selGem,vanaf,speler)
     if (vanaf.split("-").length == 1) {
         vanaf = vanaf+"-01-01";
     }
-        
+    $('#hist_curr_day_date').text(vanaf);
+
     farray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',vanaf);
     farray[1]=ol.format.filter.greaterThan('einddatum',vanaf);
 

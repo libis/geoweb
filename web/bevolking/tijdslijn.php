@@ -32,7 +32,9 @@
 
 <div class="control">
   <div class="control-top">
-     <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
+      
+            <div id="hist_curr_day_date" class="one"></div>
+            <div class="two"><button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button></div>
   </div>
   <div id="control-form" class="collapse in" >
     <div>
@@ -116,6 +118,7 @@
     selGem = [];
     firstOpenLg = true;
     firstOpenGem = true;
+    tijdlijn = false;
 
 
     demZoekTijdslijnLagen();
@@ -306,6 +309,7 @@ function resetTijdslijn()
 
 function histFullReset() {
 
+    $('#hist_curr_day_date').text("");
     $('#dem_tijdslijn').hide();
     $('#dem_toon_kaart').hide();
     $('#dem_eig_reset').hide();
@@ -319,7 +323,7 @@ function histFullReset() {
     $('.gemeenteTextBox').hide();
     $('#gemeente_btn').hide();
     $('#dem_film_pause').hide();
-    selGem.splice( idx, 1 );
+    selGem.splice(0,selGem.length);
 
     demZoekTijdslijnLagen();
     rebuildTijdslijnDiv();

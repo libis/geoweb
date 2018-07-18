@@ -8030,5 +8030,13 @@ ul#flashes li {
     background: #66afe9;
 }
 
+dp_tot{
+    font-family: "Lato", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+}
+
 
 /*# sourceMappingURL=style.css.map */

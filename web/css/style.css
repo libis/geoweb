@@ -6494,6 +6494,7 @@ hr {
   position: absolute;
   right: 0rem;
   z-index: 1001;
+  width:100%;
 }
 
 .control .control-top button {
@@ -6524,6 +6525,23 @@ hr {
   color: white;
   font-weight: bold;
 }
+
+
+.control .control-top .one {
+float:left;
+width:75%;
+overflow:hidden;
+padding: 0.4rem 0.7rem;
+}
+.control .control-top .two{
+float:right;
+width:25%;
+overflow:hidden;
+} 
+
+
+
+
 
 .control #control-form {
   padding: 3.5rem 1rem 1rem 1rem;
@@ -8070,5 +8088,6 @@ table.fixed td {
 .button:hover {
   border-color: transparent transparent transparent #404040;
 }
+
 
 /*# sourceMappingURL=style.css.map */
