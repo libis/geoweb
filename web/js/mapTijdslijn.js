@@ -239,7 +239,7 @@ function histGetLayerInTime(selGem,vanaf,speler)
 
 
       // then post the request and add the received features to a layer
-      fetch(mapviewerIP+'/geoserver/wfs', {
+      fetch(mapviewerIPHist+'/geoserver/wfs', {
         method: 'POST',
         body: new XMLSerializer().serializeToString(featureRequest)
       }).then(function(response) {

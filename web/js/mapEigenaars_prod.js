@@ -1,46 +1,43 @@
-function demGetEigenaarsBeroep(gem,nm,vnm,art,brp,selLg){
-    
 
+function demGetEigenaars(){
+
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+   
     var keyValueList = new Array;
 
-    if (nm == "") nm = 'Alle';
-    if (vnm == "") vnm = 'Alle';
-    if (art == "") art = 'Alle';
-    if (brp == "") art = 'Alle';
-    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroep.script.php";
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaars.script.php";
     $('#map').html('');
-    if ((vnm.includes('Alle')) &&
-            (nm.includes('Alle')) &&
-            (brp.includes('Alle')) &&
-            (art.includes('Alle'))) {
-        
-        keyValueList[0] = 'gemeente##'+gem;
-        getMapBrp(keyValueList,gem,selLg);
-    } else {
-            
-    argumenten = '?gemeente='+gem+'&voornaam='+vnm+'&naam='+nm+'&artikelnr='+art+'&beroep='+brp;
-   $.post(targetUrl+argumenten, function(data) {
-        data = data.trim();
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            getMapBrp(keyValueList,gem,selLg);
-            i_count = 0;
-        }
-    });
-    }
-       
-}
-    
-    
 
-function getMapBrp(keyValueList,gemeente,selLg)
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            data = data.trim();
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapEig(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
+}
+
+
+function getMapEig(keyValueList,gemeente,selLg)
 {
-    var scaleLineControl = new ol.control.ScaleLine();
-    var imgwms;
+    var mywindow = null;
+    var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
-    
+    var imgwms;
     for (var i=0;i<selLg.length;i++)  {
         var laag = lagenprefix+":"+selLg[i];
         imgwms = new ol.source.ImageWMS({
@@ -50,9 +47,10 @@ function getMapBrp(keyValueList,gemeente,selLg)
         });
         layerArr.push(imgwms);
     }
+
     var wmsPerceel = new ol.source.ImageWMS({
       url: mapviewerIP+'/geoserver/ows',
-      params: {'LAYERS': 'aezelprojek:vw_minperceel','VERSION':'1.1.1','serverType':'geoserver','BBOX':'626172.135625,6574807.4240625,665307.89410156,6613943.1825391'},
+      params: {'LAYERS': 'aezel_dominique:vw_minperceel0','VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
       serverType: 'geoserver'
     });
 
@@ -185,22 +183,24 @@ function getMapBrp(keyValueList,gemeente,selLg)
 
 
 
-//scale
-    scaleLineControl.setUnits('metric');
-                                                                                                                                           
 
+//scale
+
+      scaleLineControl.setUnits('metric');
 
 //show feature
 
-    var farray = [];   
-    var i_count=0;  
+    var farray = [];
+     var farrayGem = [];
+    var i_count=0;
     var featureRequest;
-    
+    var featureGemRequest;
+
     if (keyValueList.length == 1) {
-        
+
         keyvaluearray=keyValueList[i_count].split("##");
         wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
-        
+
         if (keyvaluearray[0] == 'gemeente'){
 
       // generate a GetFeature request
@@ -212,25 +212,51 @@ function getMapBrp(keyValueList,gemeente,selLg)
         outputFormat: 'application/json',
         maxFeatures : 1,
         filter: ol.format.filter.equalTo('naam', keyvaluearray[1])
-      });            
+      });
         } else {
-        
+
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezelprojek',
-        featurePrefix: 'aezelprojek',
-        featureTypes: ['vw_minperceel'],
+        featureNS: 'http://opengeo.org/#aezel_dominique',
+        featurePrefix: 'aezel_dominique',
+        featureTypes: ['vw_minperceel0'],
         outputFormat: 'application/json',
         maxFeatures : 1,
         filter: ol.format.filter.equalTo('objkoppel', keyvaluearray[1])
+        
+       
+        
       });
     }
   } else {
 
-          
-    wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
-    
+
+            var i_count2 = 0;
+            var targetToPush="";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += ",'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
+
+                } else {
+                    first = false;
+                    targetToPush += "('";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
+                }
+                i_count2++;                
+            }
+            targetToPush +=")";
+            
+
+    wmsPerceel.updateParams({'cql_filter': "gemeente in "+targetToPush});
+
+    i_count=0;
+
     while(i_count<keyValueList.length)
     {
         keyvaluearray=keyValueList[i_count].split("##");
@@ -241,26 +267,46 @@ function getMapBrp(keyValueList,gemeente,selLg)
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezelprojek',
-        featurePrefix: 'aezelprojek',
-        featureTypes: ['vw_minperceel'],
+        featureNS: 'http://opengeo.org/#aezel_dominique',
+        featurePrefix: 'aezel_dominique',
+        featureTypes: ['vw_minperceel0'],
         outputFormat: 'application/json',
-        maxFeatures : 50,
+        maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
+//          ol.format.filter.like('objkoppel', 'NL/LI/ASR00/A/A-011*'),
 
       });
   }
   
+
         // generate a GetFeature request voor hele gemeente 
-        featureGemRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel_dominique',
-        featurePrefix: 'aezel_dominique',
-        featureTypes: ['vw_minperceel'],
-        outputFormat: 'application/json',
-        //maxFeatures : 1,
-        filter: ol.format.filter.equalTo('gemeente', gemeente)
-    });
+        if (selGem.length > 1) {
+            i_count=0;
+            while(i_count<selGem.length)
+            {
+                farrayGem[i_count] = ol.format.filter.equalTo('gemeente', selGem[i_count]);
+                i_count++;
+            }              
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel_dominique',
+            featurePrefix: 'aezel_dominique',
+            featureTypes: ['vw_minperceel0'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.or.apply(null, farrayGem)
+            });
+        } else {
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel_dominique',
+            featurePrefix: 'aezel_dominique',
+            featureTypes: ['vw_minperceel0'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.equalTo('gemeente', selGem[0])
+            });
+        }
+
+
 
       // then post the request and add the received features to a layer
       fetch(mapviewerIP+'/geoserver/wfs', {
@@ -275,7 +321,7 @@ function getMapBrp(keyValueList,gemeente,selLg)
         map.getView().fit(vectorSource.getExtent());
 
       });
-      
+
       // then post the request and add the received features to a layer
       fetch(mapviewerIP+'/geoserver/wfs', {
         method: 'POST',
@@ -286,6 +332,6 @@ function getMapBrp(keyValueList,gemeente,selLg)
         var features = new ol.format.GeoJSON().readFeatures(json);
         vectorSourceGem.addFeatures(features);
         map.addLayer(vector_layer_gem);
-      });      
-   };
+      });
 
+   };

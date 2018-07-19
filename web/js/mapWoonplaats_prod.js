@@ -1,43 +1,40 @@
 function demGetEigenaarsWoonplaats(){
+
     
-
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selWpl = getCookie('selWpl');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selWpl.length == 0) selWpl=['Alle '];
+    
     var keyValueList = new Array;
-
-    if (nm == "") nm = 'Alle';
-    if (vnm == "") vnm = 'Alle';
-    if (art == "") art = 'Alle';
-    if (wpl == "") art = 'Alle';
     
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsWoonplaats.script.php";
     $('#map').html('');
-    if ((vnm.includes('Alle')) &&
-            (nm.includes('Alle')) &&
-            (wpl.includes('Alle')) &&
-            (art.includes('Alle'))) {
-        
-        keyValueList[0] = 'gemeente##'+gem;
-        getMapWpl(keyValueList,gem,selLg);
-    } else {
             
-    argumenten = '?gemeente='+gem+'&voornaam='+vnm+'&naam='+nm+'&artikelnr='+art+'&woonplaats='+wpl;
-   $.post(targetUrl+argumenten, function(data) {
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selWpl}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selWpl.splice(0,selWpl.length);
         data = data.trim();
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            getMapWpl(keyValueList,gem,selLg);
-            i_count = 0;
-        }
-    });
-    }
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapWpl(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
        
 }
-    
-    
-
-
-
-
+   
 function getMapWpl(keyValueList,gemeente,selLg)
 {
     var mywindow = null;
@@ -196,6 +193,7 @@ function getMapWpl(keyValueList,gemeente,selLg)
 //show feature
 
     var farray = [];
+    var farrayGem = [];
     var i_count=0;
     var featureRequest;
     var featureGemRequest;
@@ -235,9 +233,27 @@ function getMapWpl(keyValueList,gemeente,selLg)
     }
   } else {
 
+            var i_count2 = 0;
+            var targetToPush="";
+            var first = true;
+            while(i_count2<selGem.length)
+            {            
+                if (first != true) {
+                    targetToPush += ",'";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
 
-    wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
-
+                } else {
+                    first = false;
+                    targetToPush += "('";
+                    targetToPush += selGem[i_count2] ;//Item
+                    targetToPush += "'";
+                }
+                i_count2++;                
+            }
+            targetToPush +=")";
+            
+    wmsPerceel.updateParams({'cql_filter': "gemeente in "+targetToPush});
     while(i_count<keyValueList.length)
     {
         keyvaluearray=keyValueList[i_count].split("##");
@@ -252,25 +268,40 @@ function getMapWpl(keyValueList,gemeente,selLg)
         featurePrefix: 'aezel_dominique',
         featureTypes: ['vw_minperceel0'],
         outputFormat: 'application/json',
-        maxFeatures : 50,
+        maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
 //          ol.format.filter.like('objkoppel', 'NL/LI/ASR00/A/A-011*'),
 
       });
   }
   
-  
-      // generate a GetFeature request voor hele gemeente 
-        featureGemRequest = new ol.format.WFS().writeGetFeature({
-        srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel_dominique',
-        featurePrefix: 'aezel_dominique',
-        featureTypes: ['vw_minperceel0'],
-        outputFormat: 'application/json',
-        //maxFeatures : 1,
-        filter: ol.format.filter.equalTo('gemeente', gemeente)
-    });
-
+        // generate a GetFeature request voor hele gemeente 
+        if (selGem.length > 1) {
+            i_count=0;
+            while(i_count<selGem.length)
+            {
+                farrayGem[i_count] = ol.format.filter.equalTo('gemeente', selGem[i_count]);
+                i_count++;
+            }              
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel_dominique',
+            featurePrefix: 'aezel_dominique',
+            featureTypes: ['vw_minperceel0'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.or.apply(null, farrayGem)
+            });
+        } else {
+            featureGemRequest = new ol.format.WFS().writeGetFeature({
+            srsName: 'EPSG:900913',
+            featureNS: 'http://opengeo.org/#aezel_dominique',
+            featurePrefix: 'aezel_dominique',
+            featureTypes: ['vw_minperceel0'],
+            outputFormat: 'application/json',
+            filter: ol.format.filter.equalTo('gemeente', selGem[0])
+            });
+        }
+        
       // then post the request and add the received features to a layer
       fetch(mapviewerIP+'/geoserver/wfs', {
         method: 'POST',

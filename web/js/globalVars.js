@@ -5,13 +5,14 @@ var websiteIP = "localhost";
 var websiteOutputIP = "134.58.23.232";
 //var websiteIP = "134.58.23.232";
 var websitePath = "/geoweb/web";
+var mapviewerIPHist = "http://libis-p-aezel-3.lnx.icts.kuleuven.be:8080";
 var mapviewerIP = "http://libis-p-aezel-3.lnx.icts.kuleuven.be:8080";
 //var mapviewerIP = "http://test.heron-net.be";
 
 var mylegendberoepwindow = null;
 // Tot hier global vars
 
-var lagenprefix = 'geonode';
+var lagenprefix = 'aezel';
 var themalagenprefix = 'geonode'
 
 var tijdsvakken = 100;

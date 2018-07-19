@@ -92,7 +92,7 @@ function histZoekGemeentenZoekString()
 
 function demZoekTijdslijnLagen() {
     var formatter = new ol.format.WMSCapabilities();
-    var endpoint = mapviewerIP+ '/geoserver/wms';
+    var endpoint = mapviewerIPHist+ '/geoserver/wms';
 
     // async call to geoserver 
     $.get(endpoint + '?request=GetCapabilities',function(data) {
@@ -109,7 +109,7 @@ function demZoekTijdslijnLagen() {
         var targetToPush = '';  
         for(var i=0;i<layer.Layer.length;i++){
             var naam = layer.Layer[i].Name ;
-            if (naam.substr(0,naam.indexOf(':')) === lagenprefix) {
+            if (naam.substr(0,naam.indexOf(':')) === themalagenprefix) {
                 naam = naam.substr(naam.indexOf(':')+1);
                 if  (
                     (naam === 'sittard_amstenrade') || 
