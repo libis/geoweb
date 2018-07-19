@@ -2915,7 +2915,7 @@ input[type="button"].btn-block {
   border-radius: 0rem;
   height:200px;
     overflow:scroll;
-    overflow-x:hidden;    
+    overflow-x:hidden;
 }
 
 .dropdown-divider {
@@ -7365,6 +7365,14 @@ ul#flashes li {
   border: 1px solid #eee;
 }
 
+.geotextbox::placeholder,.geotextbox:-ms-input-placeholde,
+.geotextbox::-ms-input-placeholder
+{
+  color: #333;
+  opacity: 1; /* Firefox */
+}
+
+
 .zoekknop, #dem_toon_kaart {
   width: auto;
   margin-left: 35px;
@@ -8019,16 +8027,24 @@ table.fixed td {
 
 .select_tijd{
   width: 55%;
-  float:left;
+  display:inline;
 }
 
 .reset_tijd{
-    padding-left : 10px; float:left;
+    padding-left : 10px; display:inline;
+}
+
+.reset_tijd button{
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.2rem;
+  border: 1px solid transparent;
+  line-height: 1.25;
 }
 
 .dem_player{
      padding: 1rem 0rem 1rem 0rem;
-    
+
 }
 
 .button {
@@ -8046,7 +8062,7 @@ table.fixed td {
 .button.paused {
   border-style: double;
   border-width: 0px 0 0px 18px;
-  
+
 .button.stop {
   border-style: solid;
   border-width: 0px 0 0px 18px;
