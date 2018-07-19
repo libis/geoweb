@@ -106,7 +106,9 @@ var firstOpenLg = true;
      getMapStartup();     
      
  //test     
+var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
 //production     
+//    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel_dominique:vw_minperceel0">';
       $("#legend-form").html(imag);
 
 $(document).on('click','#gemeentebox a',function(event){
