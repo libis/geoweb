@@ -25,21 +25,22 @@ class demstatisticsController {
         $this->conn = $pcontroller->getConn();
    }
    
-   function getGemGrondbezit($gemeente)
+   function getGemGrondbezit($kadastergemeente)
    {
           $oppgem = 0;
-//        if (!isset($_SESSION[$gemeente])) {
-            $query = "select sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-            $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+//        if (!isset($_SESSION[$kadastergemeente])) {
+            $query = "select sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+            $query .= "where naam is not null and voornamen is not null ";
+            
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -47,35 +48,35 @@ class demstatisticsController {
             $s = pg_query($this->conn, $query);
             while($row = pg_fetch_row($s))
             {
-                //$_SESSION[$gemeente] = $row[0];
+                //$_SESSION[$kadastergemeente] = $row[0];
                 $oppgem = $row[0];
             }
             }
             pg_free_result($s);
 //        }           
-//       return $_SESSION[$gemeente];
+//       return $_SESSION[$kadastergemeente];
        return $oppgem;
     }
    
-   function getAantalGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+   function getAantalGrondbezit($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;    
         
-        $gemOpp = $this->getGemGrondbezit($gemeente);
+        $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
         $query = "select aantal,naam || ' ' || voornamen from ( ";
-        $query .= "select count(naam) as aantal,naam,voornamen from aezelschema.oat ";
+        $query .= "select count(naam) as aantal,naam,voornamen from vw_minuutplan_percelen_oat ";
         $query .= "where naam is not null and voornamen is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -86,10 +87,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -100,10 +101,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -113,10 +114,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -127,10 +128,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -141,10 +142,10 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
@@ -167,26 +168,25 @@ class demstatisticsController {
         return $result;       
    }
    
-   function getGrondbezit($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+   function getGrondbezit($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
 
-        $gemOpp = $this->getGemGrondbezit($gemeente);
+        $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
         $query = "select sum(sqm),naam || ' ' || voornamen from ( ";
-        $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where naam is not null and voornamen is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -197,10 +197,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -211,10 +211,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -224,10 +224,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -238,10 +238,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -252,17 +252,17 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by naam,voornamen,minperceel.geom ";
+        $query .= "group by naam,voornamen,geom ";
         $query .= "order by naam,voornamen ";
         $query .= ") as opp ";
 	$query .= "group by naam,voornamen ";
@@ -282,28 +282,27 @@ class demstatisticsController {
         return $result;       
    }   
 
-   function getGrondbezitPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+   function getGrondbezitPerGem($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
 
-        $gemOpp = $this->getGemGrondbezit($gemeente);
+        $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
-        $query = "select sum(sqm),gemeente from ( 
-    select oat.gemeente,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat 
-        inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel
+        $query = "select sum(sqm),kadastergemeente from ( 
+    select kadastergemeente,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat 
         where naam is not null and voornamen is not null ";       
         
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -314,10 +313,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -328,10 +327,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -341,10 +340,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -355,10 +354,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -369,21 +368,21 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
 
-        $query .= "group by oat.gemeente,minperceel.geom 
-        order by gemeente
+        $query .= "group by kadastergemeente,geom 
+        order by kadastergemeente
         ) as opp 
-	group by gemeente
-        order by sum(sqm),gemeente";             
+	group by kadastergemeente
+        order by sum(sqm),kadastergemeente";             
         
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -399,24 +398,23 @@ class demstatisticsController {
         return $result;       
    }   
    
-   function getGrondbezitBeroep($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+   function getGrondbezitBeroep($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
        
         $query = "select sum(sqm),beroep  from ( ";
-        $query .= "select beroep,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "select beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where beroep is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -427,10 +425,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -441,10 +439,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -454,10 +452,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -468,10 +466,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -482,17 +480,17 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by beroep,minperceel.geom ";
+        $query .= "group by beroep,geom ";
         $query .= "order by beroep ";
         $query .= ") as opp ";
 	$query .= "group by beroep ";
@@ -510,24 +508,23 @@ class demstatisticsController {
         pg_free_result($s);
         return $result;       
    }      
-      function getGrondbezitBeroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+      function getGrondbezitBeroepPerGem($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
        
-        $query = "select sum(sqm),beroep || ' - ' ||gemeente from ( 
-    select oat.gemeente,oat.beroep,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat 
-        inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel
+        $query = "select sum(sqm),beroep || ' - ' ||kadastergemeente from ( 
+    select kadastergemeente,beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat 
         where naam is not null and voornamen is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -538,10 +535,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -552,10 +549,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -565,10 +562,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -579,10 +576,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -593,21 +590,21 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by oat.gemeente,oat.beroep,minperceel.geom 
-        order by gemeente
+        $query .= "group by kadastergemeente,beroep,geom 
+        order by kadastergemeente
         ) as opp 
-	group by beroep,gemeente
-    order by sum(sqm),beroep,gemeente";        
+	group by beroep,kadastergemeente
+    order by sum(sqm),beroep,kadastergemeente";        
 
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -622,24 +619,23 @@ class demstatisticsController {
         return $result;       
    }      
    
- function getGrondbezitBeroepsgroep($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+ function getGrondbezitBeroepsgroep($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
        
         $query = "select sum(sqm),beroepsgroep  from ( ";
-        $query .= "select beroepsgroep,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "select beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where beroepsgroep is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -650,10 +646,10 @@ class demstatisticsController {
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -664,10 +660,10 @@ class demstatisticsController {
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -677,10 +673,10 @@ class demstatisticsController {
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -691,10 +687,10 @@ class demstatisticsController {
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -705,17 +701,17 @@ class demstatisticsController {
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by beroepsgroep,minperceel.geom ";
+        $query .= "group by beroepsgroep,geom ";
         $query .= "order by beroepsgroep ";
         $query .= ") as opp ";
 	$query .= "group by beroepsgroep ";
@@ -734,25 +730,24 @@ class demstatisticsController {
         return $result;       
    }      
 
-function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+function getGrondbezitBeroepsgroepPerGem($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
 
-        $query = "select sum(sqm),beroepsgroep || ' - ' ||gemeente from ( 
-        select oat.gemeente,oat.beroepsgroep,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat 
-        inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query = "select sum(sqm),beroepsgroep || ' - ' ||kadastergemeente from ( 
+        select kadastergemeente,beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where beroepsgroep is not null ";
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -763,10 +758,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -777,10 +772,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -790,10 +785,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -804,10 +799,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -818,21 +813,21 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by oat.gemeente,oat.beroepsgroep,minperceel.geom 
-        order by gemeente
+        $query .= "group by kadastergemeente,beroepsgroep,geom 
+        order by kadastergemeente
         ) as opp 
-	group by beroepsgroep,gemeente
-        order by sum(sqm),beroepsgroep,gemeente";   
+	group by beroepsgroep,kadastergemeente
+        order by sum(sqm),beroepsgroep,kadastergemeente";   
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -846,24 +841,23 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
         return $result;       
    }       
    
- function getGrondbezitWoonplaats($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+ function getGrondbezitWoonplaats($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
        
         $query = "select sum(sqm),woonplaats  from ( ";
-        $query .= "select woonplaats,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query .= "select woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where woonplaats is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -874,10 +868,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -888,10 +882,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -901,10 +895,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -915,10 +909,10 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -929,17 +923,17 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
             if ($first == false){ $query .= ")"; }
         }
         
-        $query .= "group by woonplaats,minperceel.geom ";
+        $query .= "group by woonplaats,geom ";
         $query .= "order by woonplaats ";
         $query .= ") as opp ";
 	$query .= "group by woonplaats ";
@@ -958,24 +952,23 @@ function getGrondbezitBeroepsgroepPerGem($gemeente,$naam,$artikelnr,$beroepen,$w
         return $result;       
    }         
 
-function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
+function getGrondbezitWoonplaatsPerGem($kadastergemeente,$naam,$artikelnr,$beroepen,$woonplaatsen,$beroepsgroepen){
     
         $result = array();
         $index = 0;       
        
-        $query = "select sum(sqm),woonplaats || ' - ' || gemeente from ( ";
-        $query .= "select  oat.gemeente,oat.woonplaats,sum(ST_Area(ST_Transform(minperceel.geom,'28992'))) As sqm from aezelschema.oat ";
-        $query .= "inner join aezelschema.minperceel on oat.objkoppel = minperceel.objkoppel ";
+        $query = "select sum(sqm),woonplaats || ' - ' || kadastergemeente from ( ";
+        $query .= "select  kadastergemeente,woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
         $query .= "where woonplaats is not null ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.gemeente =  '".$value."'"; 
+                    $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.gemeente =  '".$value."'";
+                    $query .= " or kadastergemeente =  '".$value."'";
                 }
                 }
             }
@@ -986,10 +979,10 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
             foreach ($naam as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.naam =  '".$value."'"; 
+                    $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.naam =  '".$value."'";
+                    $query .= " or naam =  '".$value."'";
                 }
                 }
             }
@@ -1000,10 +993,10 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
             foreach ($artikelnr as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.artnr =  '".$value."'"; 
+                    $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.artnr =  '".$value."'";
+                    $query .= " or artnr =  '".$value."'";
                 }
                 }
             }
@@ -1013,10 +1006,10 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
             foreach ($woonplaatsen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.woonplaats =  '".$value."'"; 
+                    $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.woonplaats =  '".$value."'";
+                    $query .= " or woonplaats =  '".$value."'";
                 }
                 }
             }
@@ -1027,10 +1020,10 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
             foreach ($beroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroep =  '".$value."'"; 
+                    $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroep =  '".$value."'";
+                    $query .= " or beroep =  '".$value."'";
                 }
                 }
             }
@@ -1041,10 +1034,10 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
             foreach ($beroepsgroepen as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (oat.beroepsgroep =  '".$value."'"; 
+                    $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or oat.beroepsgroep =  '".$value."'";
+                    $query .= " or beroepsgroep =  '".$value."'";
                 }
                 }
             }
@@ -1052,11 +1045,11 @@ function getGrondbezitWoonplaatsPerGem($gemeente,$naam,$artikelnr,$beroepen,$woo
         }
         
         
-        $query .= "group by oat.gemeente,oat.woonplaats,minperceel.geom 
-        order by gemeente
+        $query .= "group by kadastergemeente,woonplaats,geom 
+        order by kadastergemeente
         ) as opp 
-	group by woonplaats,gemeente
-        order by sum(sqm),woonplaats,gemeente";  
+	group by woonplaats,kadastergemeente
+        order by sum(sqm),woonplaats,kadastergemeente";  
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {

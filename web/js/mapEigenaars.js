@@ -29,6 +29,7 @@ function demGetEigenaars(){
                 getMapEig(keyValueList,selGem,selLg);
                 i_count = 0;
         });
+      
 }
 
 
@@ -37,20 +38,43 @@ function getMapEig(keyValueList,gemeente,selLg)
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
+    var omgeving;
+    var stijl;
     var imgwms;
     for (var i=0;i<selLg.length;i++)  {
+        
+        
         var laag = lagenprefix+":"+selLg[i];
+        for (var j=0;j<keyValueLayerList.length;j++){
+            keyvaluearray=keyValueLayerList[j].split("##");
+            if (keyvaluearray[1].indexOf(selLg[i]) > -1){
+              omgeving = keyvaluearray[2];
+              omgeving = omgeving.trim();
+              stijl = keyvaluearray[3];
+              laag = omgeving+":"+selLg[i];
+              stijl = stijl.trim();
+              laag = laag.trim();
+              j= keyValueLayerList.length;
+            }
+        }
         imgwms = new ol.source.ImageWMS({
           url: mapviewerIP+'/geoserver/ows',
-          params: {'LAYERS':laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
+          params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
           serverType: 'geoserver'
         });
         layerArr.push(imgwms);
     }
 
+    var mainlayer = mainLayer.split("##");
+    omgeving = mainlayer[2];
+    omgeving = omgeving.trim();
+    laag = mainlayer[1].trim();
+    laag  = laag.trim();
+    stijl = mainlayer[3];
+    stijl = stijl.trim();
     var wmsPerceel = new ol.source.ImageWMS({
       url: mapviewerIP+'/geoserver/ows',
-      params: {'LAYERS': 'aezel:vw_minperceel0','VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
+      params: {'LAYERS':laag,'STYLES':stijl,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
       serverType: 'geoserver'
     });
 
@@ -110,8 +134,8 @@ function getMapEig(keyValueList,gemeente,selLg)
         var feat = map.getFeaturesAtPixel(evt.pixel);
         
         for (var i=0;i< feat.length;i++) {
-            var laag = feat[i].getId();
-            if (laag.indexOf('minperceel') > 0) {
+            var featlaag = feat[i].getId();
+            if (featlaag.indexOf(laag) >= 0) {
                 var eigenschappen = feat[i].getProperties();
                 var poutput = [];// voorbereiding
                 var targetToPush = '<table class="fixed">';
@@ -120,7 +144,7 @@ function getMapEig(keyValueList,gemeente,selLg)
                     targetToPush += 'artikelnummer:';
                     targetToPush += '</td>';                        
                     targetToPush += '<td>';
-                    targetToPush += eigenschappen.artnr;
+                    targetToPush += eigenschappen.artikelnummer;
                     targetToPush += '</td>';                        
                     targetToPush += '</tr>';                        
                     targetToPush += '<tr>';
@@ -196,15 +220,15 @@ function getMapEig(keyValueList,gemeente,selLg)
     if (keyValueList.length == 1) {
 
         keyvaluearray=keyValueList[i_count].split("##");
-        wmsPerceel.updateParams({'cql_filter': "gemeente = '"+gemeente+"'"});
+        wmsPerceel.updateParams({'cql_filter': "woonplaats = '"+gemeente+"'"});
 
         if (keyvaluearray[0] == 'gemeente'){
 
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel',
-        featurePrefix: 'aezel',
+        featureNS: 'http://opengeo.org/#'+omgeving,
+        featurePrefix: omgeving,
         featureTypes: ['a_2011_Gemeentegrenzen_NL_LI0'],
         outputFormat: 'application/json',
         maxFeatures : 1,
@@ -215,9 +239,9 @@ function getMapEig(keyValueList,gemeente,selLg)
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel',
-        featurePrefix: 'aezel',
-        featureTypes: ['vw_minperceel0'],
+        featureNS: 'http://opengeo.org/#'+omgeving,
+        featurePrefix: omgeving,
+        featureTypes: [laag],
         outputFormat: 'application/json',
         maxFeatures : 1,
         filter: ol.format.filter.equalTo('objkoppel', keyvaluearray[1])
@@ -246,7 +270,7 @@ function getMapEig(keyValueList,gemeente,selLg)
             targetToPush +=")";
             
 
-    wmsPerceel.updateParams({'cql_filter': "gemeente in "+targetToPush});
+    wmsPerceel.updateParams({'cql_filter': "woonplaats in "+targetToPush});
 
     i_count=0;
     while(i_count<keyValueList.length)
@@ -259,39 +283,40 @@ function getMapEig(keyValueList,gemeente,selLg)
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#aezel',
-        featurePrefix: 'aezel',
-        featureTypes: ['vw_minperceel0'],
+        featureNS: 'http://opengeo.org/#'+omgeving,
+        featurePrefix: omgeving,
+        featureTypes: [laag],
         outputFormat: 'application/json',
         maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
 
       });
+
   }
         // generate a GetFeature request voor hele gemeente 
         if (selGem.length > 1) {
             i_count=0;
             while(i_count<selGem.length)
             {
-                farrayGem[i_count] = ol.format.filter.equalTo('gemeente', selGem[i_count]);
+                farrayGem[i_count] = ol.format.filter.equalTo('woonplaats', selGem[i_count]);
                 i_count++;
             }              
             featureGemRequest = new ol.format.WFS().writeGetFeature({
             srsName: 'EPSG:900913',
-            featureNS: 'http://opengeo.org/#aezel',
-            featurePrefix: 'aezel',
-            featureTypes: ['vw_minperceel0'],
+            featureNS: 'http://opengeo.org/#'+omgeving,
+            featurePrefix: omgeving,
+            featureTypes: [laag],
             outputFormat: 'application/json',
             filter: ol.format.filter.or.apply(null, farrayGem)
             });
         } else {
             featureGemRequest = new ol.format.WFS().writeGetFeature({
             srsName: 'EPSG:900913',
-            featureNS: 'http://opengeo.org/#aezel',
-            featurePrefix: 'aezel',
-            featureTypes: ['vw_minperceel0'],
+            featureNS: 'http://opengeo.org/#'+omgeving,
+            featurePrefix: omgeving,
+            featureTypes: [laag],
             outputFormat: 'application/json',
-            filter: ol.format.filter.equalTo('gemeente', selGem[0])
+            filter: ol.format.filter.equalTo('woonplaats', selGem[0])
             });
         }
 

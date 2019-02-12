@@ -18,11 +18,13 @@ class lijstenController {
     
    private $pcontroller;
    private $conn;
+   private $conn_geonode;
    
    function __construct()
    {
         $pcontroller = new parameterController();
         $this->conn = $pcontroller->getConn();
+        $this->conn_geonode = $pcontroller->getConn_geonode();
    }
 
     public function getGemeenten()
@@ -30,7 +32,7 @@ class lijstenController {
         $result = array();
         $index = 0;
 
-        $query="select distinct gemeente from aezelschema.oat order by gemeente";
+        $query="select distinct kadastergemeente from vw_minuutplan_percelen_oat order by kadastergemeente";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -44,7 +46,7 @@ class lijstenController {
         $result = array();
         $index = 0;
 
-        $query="select distinct gemeente from aezelschema.oat where lower(gemeente) like lower('%".$filter."%') order by gemeente";
+        $query="select distinct kadastergemeente from vw_minuutplan_percelen_oat where lower(kadastergemeente) like lower('%".$filter."%') order by kadastergemeente";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -58,7 +60,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from aezelschema.oat order by voornamen";
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -69,21 +71,21 @@ class lijstenController {
     }
 
     
-    public function getVoornamenFilterByGemeente($gemeente)
+    public function getVoornamenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from aezelschema.oat ";
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat ";
         
-       if (($gemeente != NULL) || (count($gemeente)) > 0) {
+       if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -98,21 +100,21 @@ class lijstenController {
         return $result;
     }
     
-    public function getVoornamenBeroepFilter($filter,$gemeente,$naam,$artikelnummer,$beroep) {
+    public function getVoornamenBeroepFilter($filter,$kadastergemeente,$naam,$artikelnummer,$beroep) {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -124,10 +126,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -174,21 +176,21 @@ class lijstenController {
     } 
     
 
-    public function getVoornamenWoonplaatsFilter($filter,$gemeente,$naam,$artikelnummer,$woonplaats) {
+    public function getVoornamenWoonplaatsFilter($filter,$kadastergemeente,$naam,$artikelnummer,$woonplaats) {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -200,10 +202,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -253,17 +255,17 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -275,10 +277,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -325,22 +327,22 @@ class lijstenController {
         return $result;
     } 
     
-    public function getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer)
+    public function getFamilenamenFilterEig($filter,$kadastergemeente,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -352,10 +354,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -388,22 +390,22 @@ class lijstenController {
         return $result;
     }    
     
-    public function getFamilenamenBeroepFilter($filter,$gemeente,$voornaam,$artikelnummer,$beroep) 
+    public function getFamilenamenBeroepFilter($filter,$kadastergemeente,$voornaam,$artikelnummer,$beroep) 
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -415,10 +417,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -464,22 +466,22 @@ class lijstenController {
         return $result;
     } 
     
-    public function getFamilenamenWoonplaatsFilter($filter,$gemeente,$voornaam,$artikelnummer,$woonplaats) 
+    public function getFamilenamenWoonplaatsFilter($filter,$kadastergemeente,$voornaam,$artikelnummer,$woonplaats) 
    {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -491,10 +493,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -540,22 +542,22 @@ class lijstenController {
         return $result;
     }  
     
-    public function getFamilenamenBeroepsgroepFilter($filter,$gemeente,$voornaam,$artikelnummer,$beroepsgroep) 
+    public function getFamilenamenBeroepsgroepFilter($filter,$kadastergemeente,$voornaam,$artikelnummer,$beroepsgroep) 
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -567,10 +569,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -616,20 +618,20 @@ class lijstenController {
         return $result;
     }  
 
-    public function getFamilenamenFilterByGemeente($gemeente)
+    public function getFamilenamenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat ";
-       if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct naam from vw_minuutplan_percelen_oat ";
+       if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -647,7 +649,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."' and voornamen = '".$voornaam."'";
+        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and voornamen = '".$voornaam."'";
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -661,7 +663,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."' and artnr = '".$artikelnummer."'";;
+        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and artikelnummer = '".$artikelnummer."'";;
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -672,21 +674,21 @@ class lijstenController {
         return $result;
     }
     
-       public function getFamilienamenStat($filter,$gemeente,$artikelnummer,$beroep,$beroepsgroep,$woonplaatsen)
+       public function getFamilienamenStat($filter,$kadastergemeente,$artikelnummer,$beroep,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from aezelschema.oat where lower(naam) like lower('%".$filter."%')" ;
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -698,10 +700,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -762,22 +764,22 @@ class lijstenController {
     }    
 
     
-    public function getVoornamenFilter($filter,$gemeente,$naam,$artikelnummer)
+    public function getVoornamenFilter($filter,$kadastergemeente,$naam,$artikelnummer)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from aezelschema.oat where lower(voornamen) like lower('%".$filter."%')";
+        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')";
      
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -789,10 +791,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -829,8 +831,8 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct artnr from aezelschema.oat";
-        $query .= " order by artnr";
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -841,27 +843,27 @@ class lijstenController {
     }
 
     
-    public function getArtikelnummersFilterByGemeente($gemeente)
+    public function getArtikelnummersFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat ";
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat ";
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
         }  
         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -871,22 +873,22 @@ class lijstenController {
         return $result;
     }    
     
-    public function getArtikelnummersBeroepFilter($filter,$gemeente,$familienaam,$voornaam,$beroep)    
+    public function getArtikelnummersBeroepFilter($filter,$kadastergemeente,$familienaam,$voornaam,$beroep)    
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -941,7 +943,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -951,22 +953,22 @@ class lijstenController {
         return $result;
     }
     
-    public function getArtikelnummersWoonplaatsFilter($filter,$gemeente,$familienaam,$voornaam,$woonplaats)    
+    public function getArtikelnummersWoonplaatsFilter($filter,$kadastergemeente,$familienaam,$voornaam,$woonplaats)    
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1021,7 +1023,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1031,22 +1033,22 @@ class lijstenController {
         return $result;
     }
 
-    public function getArtikelnummersBeroepsgroepFilter($filter,$gemeente,$familienaam,$voornaam,$beroepsgroep)    
+    public function getArtikelnummersBeroepsgroepFilter($filter,$kadastergemeente,$familienaam,$voornaam,$beroepsgroep)    
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1101,7 +1103,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1111,22 +1113,22 @@ class lijstenController {
         return $result;
     }
 
-    public function getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam)
+    public function getArtikelnummersFilterEig($filter,$kadastergemeente,$familienaam,$voornaam)
     {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1165,7 +1167,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1177,23 +1179,23 @@ class lijstenController {
 
 
     
-    public function getArtikelnummersStat($filter,$gemeente,$familienaam,$beroep,$beroepsgroep,$woonplaatsen)
+    public function getArtikelnummersStat($filter,$kadastergemeente,$familienaam,$beroep,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
         
         
         
-        $query="select distinct to_number(artnr,'9999') from aezelschema.oat where lower(artnr) like lower('%".$filter."%')" ;
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1258,7 +1260,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }         
-        $query .= " order by to_number(artnr,'9999')";
+        $query .= " order by to_number(artikelnummer,'9999')";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1270,20 +1272,20 @@ class lijstenController {
 
     
     
-    public function getBeroepen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
+    public function getBeroepen($filter,$kadastergemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from aezelschema.oat where lower(beroep) like lower('%".$filter."%')" ;
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1311,10 +1313,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -1345,20 +1347,20 @@ class lijstenController {
         return $result;
     }    
     
-    public function getBeroepsgroepen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
+    public function getBeroepsgroepen($filter,$kadastergemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from aezelschema.oat where lower(beroep) like lower('%".$filter."%')" ;
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1386,10 +1388,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -1420,20 +1422,20 @@ class lijstenController {
         return $result;
     }       
     
-    public function getBeroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroepsgroep,$woonplaatsen)
+    public function getBeroepenStat($filter,$kadastergemeente,$familienaam,$artikelnummer,$beroepsgroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from aezelschema.oat where lower(beroep) like lower('%".$filter."%')" ;
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1460,10 +1462,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -1509,20 +1511,20 @@ class lijstenController {
         return $result;
     }    
     
-        public function getBeroepenFilterByGemeente($gemeente)
+        public function getBeroepenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from aezelschema.oat ";
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct beroep from vw_minuutplan_percelen_oat ";
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1537,21 +1539,21 @@ class lijstenController {
         return $result;
     }
     
-    public function getWoonplaatsenFilterByGemeente($gemeente)
+    public function getWoonplaatsenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from aezelschema.oat ";
+        $query="select distinct woonplaats from vw_minuutplan_percelen_oat ";
         
-                if (($gemeente != NULL) || (count($gemeente)) > 0) {
+                if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1567,21 +1569,21 @@ class lijstenController {
         return $result;
     } 
     
-    public function getBeroepsgroepenFilterByGemeente($gemeente)
+    public function getBeroepsgroepenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from aezelschema.oat ";
+        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat ";
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1596,20 +1598,20 @@ class lijstenController {
         return $result;
     } 
 
-    public function getGrondgebruikFilterByGemeente($gemeente)
+    public function getGrondgebruikFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct soort from aezelschema.oat where gemeente = '".$filter."'";
-      if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        $query="select distinct soort from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+      if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1624,21 +1626,21 @@ class lijstenController {
         return $result;
     }     
     
-    public function getToponiemenFilterByGemeente($gemeente)
+    public function getToponiemenFilterByGemeente($kadastergemeente)
     {
         $result = array();
         $index = 0;
-        $query="select distinct toponiem from aezelschema.oat ";
+        $query="select distinct toponiem from vw_minuutplan_percelen_oat ";
 
-       if (($gemeente != NULL) || (count($gemeente)) > 0) {
+       if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where gemeente = '".$value."'"; 
+                    $query .= " where kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1657,9 +1659,9 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroep from aezelschema.oat where gemeente = '".$filter."'";
+        $query="select distinct beroep from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
+//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -1681,10 +1683,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -1743,21 +1745,21 @@ class lijstenController {
         return $result;
     }
 
-    public function getWoonplaatsen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer)
+    public function getWoonplaatsen($filter,$kadastergemeente,$familienaam,$voornaam,$artikelnummer)
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from aezelschema.oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from vw_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1782,10 +1784,10 @@ class lijstenController {
             foreach ($artikelnummer as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
                 }
             }
@@ -1817,21 +1819,21 @@ class lijstenController {
         return $result;
     }
     
-    public function getWoonplaatsenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroep,$beroepsgroep)
+    public function getWoonplaatsenStat($filter,$kadastergemeente,$familienaam,$artikelnummer,$beroep,$beroepsgroep)
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from aezelschema.oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from vw_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -1856,10 +1858,10 @@ class lijstenController {
             foreach ($artikelnummer as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
                 }
             }
@@ -1909,9 +1911,9 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-       $query="select distinct woonplaats from aezelschema.oat where gemeente = '".$filter."'";
+       $query="select distinct woonplaats from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
+//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -1933,10 +1935,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -1994,21 +1996,21 @@ class lijstenController {
         return $result;
     }
 
-    public function getBeroepsgroepenStat($filter,$gemeente,$familienaam,$artikelnummer,$beroep,$woonplaatsen)
+    public function getBeroepsgroepenStat($filter,$kadastergemeente,$familienaam,$artikelnummer,$beroep,$woonplaatsen)
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from aezelschema.oat where lower(beroepsgroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat where lower(beroepsgroep) like lower('%".$filter."%')" ;
         
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (gemeente = '".$value."'"; 
+                    $query .= " and (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -2035,10 +2037,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -2089,9 +2091,9 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroepsgroep from aezelschema.oat where gemeente = '".$filter."'";
+        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
+//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -2113,10 +2115,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -2180,9 +2182,9 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct naam from aezelschema.oat where gemeente = '".$filter."'";
+        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
+//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -2204,10 +2206,10 @@ class lijstenController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -2271,9 +2273,9 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct artnr from aezelschema.oat where gemeente = '".$filter."'";
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
-//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artnr = '".$artikelnummer."'" ;
+//        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
             $first = true;
             foreach ($familienaam as $value) {
@@ -2295,10 +2297,10 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -2347,7 +2349,7 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
             }
             if ($first == false){ $query .= ")"; }
         }
-        $query .= " order by artnr";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -2357,5 +2359,108 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         return $result;
     }
         
+ 
+    public function getLagen($filter)
+    {
+        $result = array();
+        $index = 0;
+
+        $query="select lagen.invoernaam,lagen.omgeving,stijlen.naam from themas.lagen inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
+                inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
+                inner join themas.stijlen on stijlen.stijl_id = lagen.stijl_id
+                where themas.thema.naam like lower('%".$filter."%')
+                order by rangorde";
+        
+        $s = pg_query($this->conn_geonode, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++] = $row[0]."##".$row[1]."##".$row[2];
+        }
+        pg_free_result($s);
+        return $result;
+    }    
+
+ 
+    public function checkStijlen($filter)
+    {
+        $result = array();
+        $index = 0;
+
+        
+        $query="select stijlen.stijl_id,stijlen.naam,stijlen.sld from themas.stijlen inner join themas.lagen on stijlen.stijl_id = lagen.stijl_id inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
+                inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
+                where themas.thema.naam like lower('%".$filter."%')
+                and stijlen.in_geoserver = false;";
+        
+        $s = pg_query($this->conn_geonode, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$row[0]]= $row[1];
+            
+            $ch = curl_init();  
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml'));
+            curl_setopt($ch, CURLOPT_URL, "http://libis-p-aezel-3.lnx.icts.kuleuven.be:8080/geoserver/rest/styles"); 
+            curl_setopt($ch, CURLOPT_HTTPAUTH,CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_USERPWD,"admin:geoserver");    
+            curl_setopt($ch, CURLOPT_POST,1 );
+            $data .= "<style><name>".$row[1]."</name><filename>".$row[1].".sld</filename></style>";
+            $data = preg_replace('/\s+/','',$data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);             
+            $output = curl_exec($ch); 
+
+            if (!(curl_errno($ch))) {
+                $filename = $row[1];
+                $filename .= ".sld";
+                $filename = preg_replace('/\s+/','',$filename);
+
+                $file = fopen($filename,"w");
+                $xml = trim($row[2]);
+                fwrite($file, $xml);     
+                fclose($file);
+
+                $stijl = "http://libis-p-aezel-3.lnx.icts.kuleuven.be:8080/geoserver/rest/styles/";
+                $stijl .= $row[1];
+                $stijl = preg_replace('/\s+/','',$stijl);
+
+                $headers = array(
+                   "Content-type: application/vnd.ogc.sld+xml",
+                   "Connection: close",
+                );
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL,$stijl);
+
+                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+                curl_setopt($ch, CURLOPT_USERPWD, "admin:geoserver");
+
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 100);
+                curl_setopt($ch, CURLOPT_PUT, true);
+                $myfile = fopen($filename,"r");
+                curl_setopt($ch, CURLOPT_INFILE, $myfile);
+                curl_setopt($ch, CURLOPT_INFILESIZE, strlen($xml));  
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                $data = curl_exec($ch);
+                if(curl_errno($ch))
+                   $err = curl_error($ch);
+                else{
+                   unlink($filename);
+                   $response_info = curl_getinfo($ch);
+                   //print_r($response_info);
+                   curl_close($ch);
+                   $updquery="update themas.stijlen set in_geoserver = true where stijl_id = ".$row[0];
+                   $supd = pg_query($this->conn_geonode, $updquery);
+                }
+    /*     
+    $cmd = "curl -u admin:geoserver -XPUT -H \"Content-type: application/vnd.ogc.sld+xml\" -d \"@".$filename."\" ".$stijl;
+     $result = shell_exec ( $cmd );
+    */
+            }
+            pg_free_result($s);
+        }      
+        return $result;
+    }
     
  }
+
+ 

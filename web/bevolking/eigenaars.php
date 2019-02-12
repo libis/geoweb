@@ -58,12 +58,12 @@
         <ul id=artikelnummerbox class="dropdown-menu">
         </ul>
       </div>
-          <div class="button-group">
-              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString();" maxlength="25"/>
-              <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
-              <ul id=lagenbox class="dropdown-menu">
-              </ul>
-          </div>
+        <div class="button-group">
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString();" maxlength="25"/>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
+            <ul id=lagenbox class="dropdown-menu">
+            </ul>
+        </div>
       </div>
   </div>
 </div>
@@ -74,6 +74,8 @@ var  selNm = [];
 var  selVnm = [];
 var  selArt = [];
 var  selLg = [];
+mainLayer = null;
+keyValueLayerList = null;
 
 var firstOpenGem = true;
 var firstOpenNm = true;
@@ -94,18 +96,30 @@ var firstOpenLg = true;
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
 
-     demZoekLagen();
-     demZoekGemeenten();
-     getMapStartup();
 
-//test     
-var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
-//production     
-//    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel_dominique:vw_minperceel0">';
-     
-    $("#legend-form").html(imag);
-     
-     
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var result = 'false';
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){
+                result = pair[1];
+            }
+        }
+        return(result);
+    }
+
+    var thema = getQueryVariable("thema");
+
+    demCheckStijlen(thema);
+    demZoekLagen(thema);
+    demZoekGemeenten();
+    getMapStartup(thema);
+
+//legende wordt ingevuld in demZoekLagen!!
+
 $(document).on('click','#gemeentebox a',function(event){
 
     $('#artikelnummerbox').slideUp();
@@ -462,6 +476,7 @@ resetMap();
     setCookie('selVnm',selVnm);
     setCookie('selNm',selNm);
     setCookie('selGem',selGem);
+    setCookie('selLg',selLg);
 
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");

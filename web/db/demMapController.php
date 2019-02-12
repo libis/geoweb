@@ -27,22 +27,22 @@ class demMapController {
         $this->conn = $pcontroller->getConn();
    }
    
-   function getEigenaars($gemeente,$naam,$voornaam,$artikelnummer){
+   function getEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer){
     
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from aezelschema.oat";
+        $query = "select objkoppel from vw_minuutplan_percelen_oat";
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " where (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -71,10 +71,10 @@ class demMapController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -107,22 +107,22 @@ class demMapController {
         return $result;       
    }
    
-   function getBeroepEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$beroep){
+   function getBeroepEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer,$beroep){
      
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from aezelschema.oat";
+        $query = "select objkoppel from vw_minuutplan_percelen_oat";
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " where (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -151,10 +151,10 @@ class demMapController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -198,22 +198,22 @@ class demMapController {
         pg_free_result($s);
         return $result;       
    }
-   function getBeroepsgroepEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$beroepsgroep){
+   function getBeroepsgroepEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer,$beroepsgroep){
       
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from aezelschema.oat";
+        $query = "select objkoppel from vw_minuutplan_percelen_oat";
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " where (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -242,10 +242,10 @@ class demMapController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -291,21 +291,21 @@ class demMapController {
    }
    
    
-   function getWoonplaatsEigenaars($gemeente,$naam,$voornaam,$artikelnummer,$woonplaats){
+   function getWoonplaatsEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer,$woonplaats){
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from aezelschema.oat";
+        $query = "select objkoppel from vw_minuutplan_percelen_oat";
 
-        if (($gemeente != NULL) || (count($gemeente)) > 0) {
+        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
-            foreach ($gemeente as $value) {
+            foreach ($kadastergemeente as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " where (gemeente = '".$value."'"; 
+                    $query .= " where (kadastergemeente = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or gemeente = '".$value."'";
+                    $query .= " or kadastergemeente = '".$value."'";
                 }
                 }
             }
@@ -334,10 +334,10 @@ class demMapController {
             if (strncasecmp($value,"alle ",5) != 0) {
 
                 if ($first == true){
-                    $query .= " and (artnr = '".$value."'"; 
+                    $query .= " and (artikelnummer = '".$value."'"; 
                     $first = false;
                 } else {
-                    $query .= " or artnr = '".$value."'";
+                    $query .= " or artikelnummer = '".$value."'";
                 }
             }
             }
@@ -383,13 +383,13 @@ class demMapController {
    }
    
 
-      function getToponiemen($gemeente,$toponiemen){
+      function getToponiemen($kadastergemeente,$toponiemen){
     
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from aezelschema.oat";
-        $query .= " where gemeente = '".$gemeente."'";
+        $query = "select distinct objkoppel from vw_minuutplan_percelen_oat";
+        $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle toponiemen") { $query .= " and toponiem = '".$toponiemen."'";  }
 
         $s = pg_query($this->conn, $query);
@@ -401,13 +401,13 @@ class demMapController {
         return $result;    
    }
    
-      function getGrondgebruik($gemeente,$grondgebruik){
+      function getGrondgebruik($kadastergemeente,$grondgebruik){
     
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from aezelschema.oat";
-        $query .= " where gemeente = '".$gemeente."'";
+        $query = "select distinct objkoppel from vw_minuutplan_percelen_oat";
+        $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle grondgebruik") { $query .= " and soort = '".$grondgebruik."'";  }
 
         $s = pg_query($this->conn, $query);

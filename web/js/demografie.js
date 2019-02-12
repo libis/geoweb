@@ -2336,7 +2336,85 @@ function demZoekToponiemenByGemeente(selGem)
     });
 }
 */
-function demZoekLagen() {
+function demZoekLagen(thema) {
+    
+   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagen.script.php";
+   argumenten = '?thema='+thema;
+   $.post(targetUrl+argumenten, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueLayerList = data.split("%%");
+            i_count = 0;
+        
+            var targetToPush = '';  
+            
+            while(i_count<keyValueLayerList.length)
+            {
+                keyvaluearray=keyValueLayerList[i_count].split("##");
+                if (i_count == 0) {
+                    mainLayer = keyValueLayerList[0];
+                    
+                    var legendlayer = mainLayer.split("##");
+                    
+                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+legendlayer[2].trim()+':'+legendlayer[1].trim()+'">';
+                    //var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
+                    //production     
+                    //    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel_dominique:vw_minperceel0">';
+                    $("#legend-form").html(imag);
+                    
+                    
+                } else {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                }
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#lagenbox').html('');
+        $('#lagenbox').html(poutput.join(''));
+        $('.lagenTextBox').attr("placeholder","Zoek laag");        
+    });
+}
+
+function demCheckStijlen(thema) {
+    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/checkStijlen.script.php";
+    argumenten = '?thema='+thema;
+   
+    $.post(targetUrl+argumenten, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+        
+            var targetToPush = '';  
+            
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#lagenbox').html('');
+        $('#lagenbox').html(poutput.join(''));
+        $('.lagenTextBox').attr("placeholder","Zoek laag");        
+    });    
+    
+}
+
+
+function demZoekLagenGeoserver() {
     var formatter = new ol.format.WMSCapabilities();
     var endpoint = mapviewerIP+ '/geoserver/wms';
 
