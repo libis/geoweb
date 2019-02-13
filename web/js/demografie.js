@@ -1,5 +1,4 @@
 
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,12 +8,12 @@
 function demZoekVoornamen(selGem,selNm,selVnm,selArt)
 {
     
-   selGem = getCookie('selGem');
-   selNm = getCookie('selNm');
-   selVnm = getCookie('selVnm');
-   selArt = getCookie('selArt');
-   var voornaam = $(".voornaamTextBox").val();
-   argumenten = '?voornaam='+voornaam;
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    var voornaam = $(".voornaamTextBox").val();
+    argumenten = '?voornaam='+voornaam;
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamen.script.php";
     
     var lg,lv,ln,la;
@@ -2358,10 +2357,7 @@ function demZoekLagen(thema) {
                     
                     var legendlayer = mainLayer.split("##");
                     
-                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+legendlayer[2].trim()+':'+legendlayer[1].trim()+'">';
-                    //var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
-                    //production     
-                    //    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel_dominique:vw_minperceel0">';
+                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+legendlayer[2].trim()+':'+legendlayer[1].trim()+'&amp;STYLE='+legendlayer[3]+'">';
                     $("#legend-form").html(imag);
                     
                     
@@ -2508,8 +2504,6 @@ function demZoekLagenZoekString(selLg)
         });
 }
 
-
-
 function demZoekGemeenten()
 {
     
@@ -2543,7 +2537,6 @@ function demZoekGemeenten()
         $('.gemeenteTextBox').attr("placeholder","Kies een gemeente...");        
     });
 }
-
 
 function demZoekGemeentenZoekString()
 {
@@ -2621,3 +2614,17 @@ function getCookie(cname) {
     }
     return "";
 }
+
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var result = 'false';
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){
+                result = pair[1];
+            }
+        }
+        return(result);
+    }

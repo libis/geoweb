@@ -252,16 +252,16 @@ function decodeHtml(html) {
 }
 
 function eigenaars() {
-  window.open("./eigenaars.php","_self");
+  window.open("./eigenaars.php?thema="+thema,"_self");
 }
 function eigenaars_beroep() {
-  window.open("./eigenaars_beroep.php","_self");
+  window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
 }
 function eigenaars_woonplaats() {
-  window.open("./eigenaars_woonplaats.php","_self");
+  window.open("./eigenaars_woonplaats.php?thema="+thema,"_self");
 }
 function eigenaars_beroepsgroepen() {
-  window.open("./eigenaars_beroepsgroepen.php","_self");
+  window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
 }
 
 $(document).on('click','#gemeente_btn',function(event){

@@ -82,6 +82,9 @@ var firstOpenNm = true;
 var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenLg = true;
+
+    var thema = getQueryVariable("thema");
+
      $(document).ready(function(){
          
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -96,22 +99,6 @@ var firstOpenLg = true;
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
 
-
-    function getQueryVariable(variable)
-    {
-        var query = window.location.search.substring(1);
-        var result = 'false';
-        var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
-            var pair = vars[i].split("=");
-            if(pair[0] == variable){
-                result = pair[1];
-            }
-        }
-        return(result);
-    }
-
-    var thema = getQueryVariable("thema");
 
     demCheckStijlen(thema);
     demZoekLagen(thema);
@@ -498,20 +485,19 @@ function decodeHtml(html) {
 var mylegendeigenaarwindow = null;
 
 function eigenaars_beroep() {
- window.open("./eigenaars_beroep.php","_self");
+ window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
 }
 function eigenaars_beroepsgroepen() {
- window.open("./eigenaars_beroepsgroepen.php","_self");
+ window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
 }
 function eigenaars_woonplaats() {
- window.open("./eigenaars_woonplaats.php","_self");
+ window.open("./eigenaars_woonplaats.php?thema="+thema,"_self");
 }
 function eigenaars_statistieken() {
- window.open("./eigenaars_statistieken.php","_self");
+ window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
 
 function getEigenaars() {
-
 
     $('#infobox').empty();
     $('#artikelnummerbox').slideUp();

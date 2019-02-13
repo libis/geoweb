@@ -1,43 +1,3 @@
-function demGetEigenaarsBeroepsgroep(){
-
-    
-    selGem = getCookie('selGem');
-    selNm = getCookie('selNm');
-    selVnm = getCookie('selVnm');
-    selArt = getCookie('selArt');
-    selBgp = getCookie('selBgp');
-    selLg = getCookie('selLg');
-   
-    var lg,lv,ln,la,lb;
-    if (ln=selNm.length == 0) selNm=['Alle '];
-    if (la=selArt.length == 0) selArt=['Alle '];
-    if (lv=selVnm.length == 0) selVnm=['Alle '];
-    if (lg=selGem.length == 0) selGem=['Alle '];
-    if (lb=selBgp.length == 0) selBgp=['Alle '];
-    
-    var keyValueList = new Array;
-    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroepsgroep.script.php";
-    $('#map').html('');
-           
-        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selBgp}, function(data) {    
-            if (ln==true) selNm.splice(0,selNm.length);
-            if (la==true) selArt.splice(0,selArt.length);
-            if (lv==true) selVnm.splice(0,selVnm.length);
-            if (lg==true) selGem.splice(0,selGem.length);
-            if (lb==true) selBgp.splice(0,selBgp.length);
-        data = data.trim();
-            if(data.length>0)
-                keyValueList = data.split("%%");
-                getMapBgp(keyValueList,selGem,selLg);
-                i_count = 0;
-        });
-}
-       
-  
-    
-
-
 
 
 function getMapBgp(keyValueList,gemeente,selLg)
@@ -46,11 +6,29 @@ function getMapBgp(keyValueList,gemeente,selLg)
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
     var imgwms;
+    
+    var omgeving;
+    var stijl;
+    var imgwms;
     for (var i=0;i<selLg.length;i++)  {
+        
+        
         var laag = lagenprefix+":"+selLg[i];
+        for (var j=0;j<keyValueLayerList.length;j++){
+            keyvaluearray=keyValueLayerList[j].split("##");
+            if (keyvaluearray[1].indexOf(selLg[i]) > -1){
+              omgeving = keyvaluearray[2];
+              omgeving = omgeving.trim();
+              stijl = keyvaluearray[3];
+              laag = omgeving+":"+selLg[i];
+              stijl = stijl.trim();
+              laag = laag.trim();
+              j= keyValueLayerList.length;
+            }
+        }
         imgwms = new ol.source.ImageWMS({
           url: mapviewerIP+'/geoserver/ows',
-          params: {'LAYERS':laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
+          params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
           serverType: 'geoserver'
         });
         layerArr.push(imgwms);

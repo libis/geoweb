@@ -1,7 +1,7 @@
 <?php include 'common/header.php'; ?>
 
 <script type="text/javascript" src="../js/jquery-editable-select.js"></script>
-<script type="text/javascript" src="../js/mapBeroep.js"></script>
+<script type="text/javascript" src="../js/mapEigenaars.js"></script>
 <script type="text/javascript" src="../js/mapStartup.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
@@ -87,6 +87,10 @@ var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenBrp = true;
 var firstOpenLg = true;
+mainLayer = null;
+keyValueLayerList = null;
+
+var thema = getQueryVariable("thema");
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -101,16 +105,12 @@ var firstOpenLg = true;
     $('.voornaamTextBox').attr("placeholder","");
     $('.beroepTextBox').attr("placeholder","");
     
-     demZoekLagen();
-     demZoekGemeenten();
-     getMapStartup();     
+
+    demCheckStijlen(thema);
+    demZoekLagen(thema);
+    demZoekGemeenten();
+    getMapStartup(thema);   
      
-//test     
-     var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel">';
-//production     
-//    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezelprojek:vw_minperceel">';
-      
-     $("#legend-form").html(imag);
 
 $(document).on('click','#gemeentebox a',function(event){
 
@@ -545,7 +545,8 @@ function resetEigenaarsBeroep()
     setCookie('selNm',selNm);
     setCookie('selBrp',selBrp);
     setCookie('selGem',selGem);
-
+    setCookie('selLg',selLg);
+    
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");
     $('.voornaamTextBox').attr("placeholder","");
@@ -564,16 +565,16 @@ function decodeHtml(html) {
 
 
 function eigenaars() {
-    window.open("./eigenaars.php","_self");
+    window.open("./eigenaars.php?thema="+thema,"_self");
 }
 function eigenaars_beroepsgroepen() {
-    window.open("./eigenaars_beroepsgroepen.php","_self");
+    window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
 }
 function eigenaars_woonplaats() {
-    window.open("./eigenaars_woonplaats.php","_self");
+    window.open("./eigenaars_woonplaats.php?thema="+thema,"_self");
 }
 function eigenaars_statistieken() {
-    window.open("./eigenaars_statistieken.php","_self");
+    window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
 
 function getEigenaarsBeroep() {

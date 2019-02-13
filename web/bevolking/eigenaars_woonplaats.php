@@ -87,6 +87,10 @@ var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenWpl = true;
 var firstOpenLg = true;
+mainLayer = null;
+keyValueLayerList = null;
+
+    var thema = getQueryVariable("thema");
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -101,16 +105,11 @@ var firstOpenLg = true;
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
     
-     demZoekLagen();
-     demZoekGemeenten();
-     getMapStartup();     
+    demCheckStijlen(thema);
+    demZoekLagen(thema);
+    demZoekGemeenten();
+    getMapStartup(thema);  
      
- //test     
-var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel:vw_minperceel0">';
-//production     
-//    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER=aezel_dominique:vw_minperceel0">';
-      $("#legend-form").html(imag);
-
 $(document).on('click','#gemeentebox a',function(event){
 
     $('#artikelnummerbox').slideUp();
@@ -545,6 +544,7 @@ function resetEigenaarsWoonplaats()
     setCookie('selNm',selNm);
     setCookie('selWpl',selWpl);
     setCookie('selGem',selGem);
+    setCookie('selLg',selLg);
 
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");
@@ -556,7 +556,6 @@ function resetEigenaarsWoonplaats()
 }
 
 
-
 function decodeHtml(html) {
  var txt = document.createElement("textarea");
  txt.innerHTML = html;
@@ -564,16 +563,16 @@ function decodeHtml(html) {
 }
 
 function eigenaars() {
-    window.open("./eigenaars.php","_self");
+    window.open("./eigenaars.php?thema="+thema,"_self");
 }
 function eigenaars_beroepsgroepen() {
-    window.open("./eigenaars_beroepsgroepen.php","_self");
+    window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
 }
 function eigenaars_beroep() {
-    window.open("./eigenaars_beroep.php","_self");
+    window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
 }
 function eigenaars_statistieken() {
-    window.open("./eigenaars_statistieken.php","_self");
+    window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
 
 

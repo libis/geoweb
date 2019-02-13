@@ -1,4 +1,113 @@
+function demGetEigenaarsBeroepsgroep(){
 
+    
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selBgp = getCookie('selBgp');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selBgp.length == 0) selBgp=['Alle '];
+    
+    var keyValueList = new Array;
+    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroepsgroep.script.php";
+    $('#map').html('');
+           
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selBgp}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selBgp.splice(0,selBgp.length);
+        data = data.trim();
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapBgp(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
+}
+   
+function demGetEigenaarsWoonplaats(){
+
+    
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selWpl = getCookie('selWpl');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selWpl.length == 0) selWpl=['Alle '];
+    
+    var keyValueList = new Array;
+    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsWoonplaats.script.php";
+    $('#map').html('');
+            
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selWpl}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selWpl.splice(0,selWpl.length);
+        data = data.trim();
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMapWpl(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
+       
+}
+   
+function demGetEigenaarsBeroep(){
+
+    
+    selGem = getCookie('selGem');
+    selNm = getCookie('selNm');
+    selVnm = getCookie('selVnm');
+    selArt = getCookie('selArt');
+    selBrp = getCookie('selBrp');
+    selLg = getCookie('selLg');
+   
+    var lg,lv,ln,la,lb;
+    if (ln=selNm.length == 0) selNm=['Alle '];
+    if (la=selArt.length == 0) selArt=['Alle '];
+    if (lv=selVnm.length == 0) selVnm=['Alle '];
+    if (lg=selGem.length == 0) selGem=['Alle '];
+    if (lb=selBrp.length == 0) selBrp=['Alle '];
+    
+    var keyValueList = new Array;
+    
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaarsBeroep.script.php";
+    $('#map').html('');
+            
+        $.post(targetUrl,{selGem,selNm,selVnm,selArt,selBrp}, function(data) {    
+            if (ln==true) selNm.splice(0,selNm.length);
+            if (la==true) selArt.splice(0,selArt.length);
+            if (lv==true) selVnm.splice(0,selVnm.length);
+            if (lg==true) selGem.splice(0,selGem.length);
+            if (lb==true) selBrp.splice(0,selBrp.length);
+        data = data.trim();
+            if(data.length>0)
+                keyValueList = data.split("%%");
+                getMap(keyValueList,selGem,selLg);
+                i_count = 0;
+        });
+       
+}
+   
 function demGetEigenaars(){
 
     selGem = getCookie('selGem');
@@ -26,14 +135,14 @@ function demGetEigenaars(){
             data = data.trim();
             if(data.length>0)
                 keyValueList = data.split("%%");
-                getMapEig(keyValueList,selGem,selLg);
+                getMap(keyValueList,selGem,selLg);
                 i_count = 0;
         });
       
 }
 
 
-function getMapEig(keyValueList,gemeente,selLg)
+function getMap(keyValueList,gemeente,selLg)
 {
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();

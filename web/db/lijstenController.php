@@ -847,7 +847,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat ";
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -863,7 +863,7 @@ class lijstenController {
             }
         }  
         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -878,7 +878,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -943,7 +943,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -958,7 +958,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1023,7 +1023,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1038,7 +1038,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1103,7 +1103,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1118,7 +1118,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1167,7 +1167,7 @@ class lijstenController {
             if ($first == false){ $query .= ")"; }
         }        
         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -1186,7 +1186,7 @@ class lijstenController {
         
         
         
-        $query="select distinct to_number(artikelnummer,'9999') from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1260,7 +1260,7 @@ class lijstenController {
             }
             if ($first == false){ $query .= ")"; }
         }         
-        $query .= " order by to_number(artikelnummer,'9999')";
+        $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -2367,8 +2367,8 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
 
         $query="select lagen.invoernaam,lagen.omgeving,stijlen.naam from themas.lagen inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
                 inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
-                inner join themas.stijlen on stijlen.stijl_id = lagen.stijl_id
-                where themas.thema.naam like lower('%".$filter."%')
+                inner join themas.stijlen on stijlen.stijl_id = thema_lagen.stijl_id
+                where themas.thema.naam = lower('".$filter."')
                 order by rangorde";
         
         $s = pg_query($this->conn_geonode, $query);
@@ -2387,10 +2387,11 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         $index = 0;
 
         
-        $query="select stijlen.stijl_id,stijlen.naam,stijlen.sld from themas.stijlen inner join themas.lagen on stijlen.stijl_id = lagen.stijl_id inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
+        $query="select stijlen.stijl_id,stijlen.naam,stijlen.sld from themas.stijlen 
+		inner join themas.thema_lagen on thema_lagen.stijl_id = stijlen.stijl_id
                 inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
-                where themas.thema.naam like lower('%".$filter."%')
-                and stijlen.in_geoserver = false;";
+                where themas.thema.naam = lower('".$filter."')
+                and stijlen.in_geoserver = false";
         
         $s = pg_query($this->conn_geonode, $query);
         while($row = pg_fetch_row($s))
