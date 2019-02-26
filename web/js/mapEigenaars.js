@@ -27,10 +27,11 @@ function demGetEigenaarsBeroepsgroep(){
             if (lg==true) selGem.splice(0,selGem.length);
             if (lb==true) selBgp.splice(0,selBgp.length);
         data = data.trim();
-            if(data.length>0)
+            if(data.length>0){
                 keyValueList = data.split("%%");
-                getMapBgp(keyValueList,selGem,selLg);
+                getMap(keyValueList,selGem,selLg);
                 i_count = 0;
+            }
         });
 }
    
@@ -63,10 +64,11 @@ function demGetEigenaarsWoonplaats(){
             if (lg==true) selGem.splice(0,selGem.length);
             if (lb==true) selWpl.splice(0,selWpl.length);
         data = data.trim();
-            if(data.length>0)
+            if(data.length>0) {
                 keyValueList = data.split("%%");
-                getMapWpl(keyValueList,selGem,selLg);
+                getMap(keyValueList,selGem,selLg);
                 i_count = 0;
+            }
         });
        
 }
@@ -100,15 +102,16 @@ function demGetEigenaarsBeroep(){
             if (lg==true) selGem.splice(0,selGem.length);
             if (lb==true) selBrp.splice(0,selBrp.length);
         data = data.trim();
-            if(data.length>0)
+            if(data.length>0) {
                 keyValueList = data.split("%%");
                 getMap(keyValueList,selGem,selLg);
                 i_count = 0;
+            }
         });
        
 }
    
-function demGetEigenaars(){
+function demGetEigenaars(vanaf,speler){
 
     selGem = getCookie('selGem');
     selNm = getCookie('selNm');
@@ -133,16 +136,17 @@ function demGetEigenaars(){
             if (lv==true) selVnm.splice(0,selVnm.length);
             if (lg==true) selGem.splice(0,selGem.length);
             data = data.trim();
-            if(data.length>0)
+            if(data.length>0) {
                 keyValueList = data.split("%%");
-                getMap(keyValueList,selGem,selLg);
+                getMap(keyValueList,selGem,selLg,vanaf,speler);
                 i_count = 0;
+            }
         });
       
 }
 
 
-function getMap(keyValueList,gemeente,selLg)
+function getMap(keyValueList,gemeente,selLg,vanaf,speler)
 {
     var mywindow = null;
     var scaleLineControl= new ol.control.ScaleLine();
@@ -321,17 +325,41 @@ function getMap(keyValueList,gemeente,selLg)
 //show feature
 
     var farray = [];
+    var ftarray = [];
     var farrayGem = [];
     var i_count=0;
     var featureRequest;
     var featureGemRequest;
 
+
+    var filters = null;
+    
+    if (vanaf != null) {
+    if (vanaf.length == 4) {
+        vanaf = vanaf+"0101";
+    }
+    vanaf = vanaf+"5";
+    
+//    $('#hist_curr_day_date').text(vanaf);
+
+    ftarray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',parseInt(vanaf));
+    ftarray[1]=ol.format.filter.greaterThan('einddatum',parseInt(vanaf));
+
+    filters = ol.format.filter.and.apply(null,farray);
+    }
+
     if (keyValueList.length == 1) {
 
         keyvaluearray=keyValueList[i_count].split("##");
-        wmsPerceel.updateParams({'cql_filter': "woonplaats = '"+gemeente+"'"});
+        wmsPerceel.updateParams({'cql_filter': "kadastergemeente = '"+gemeente+"'"});
 
         if (keyvaluearray[0] == 'gemeente'){
+
+        if (vanaf != null) {
+            filters = ol.format.filter.and(ol.format.filter.equalTo('naam', keyvaluearray[1]),ol.format.filter.and.apply(null,ftarray));
+        } else {
+            filters = ol.format.filter.equalTo('naam', keyvaluearray[1]);
+        }
 
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
@@ -341,9 +369,14 @@ function getMap(keyValueList,gemeente,selLg)
         featureTypes: ['a_2011_Gemeentegrenzen_NL_LI0'],
         outputFormat: 'application/json',
         maxFeatures : 1,
-        filter: ol.format.filter.equalTo('naam', keyvaluearray[1])
+        filter: filters
       });
         } else {
+        if (vanaf != null) {
+            filters = ol.format.filter.and(ol.format.filter.equalTo('objkoppel', keyvaluearray[1]),ol.format.filter.and.apply(null,ftarray));
+        } else {
+            filters = ol.format.filter.equalTo('objkoppel', keyvaluearray[1]);
+        }
 
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
@@ -353,7 +386,7 @@ function getMap(keyValueList,gemeente,selLg)
         featureTypes: [laag],
         outputFormat: 'application/json',
         maxFeatures : 1,
-        filter: ol.format.filter.equalTo('objkoppel', keyvaluearray[1])
+        filter: filters
       });
     }
   } else {
@@ -379,7 +412,7 @@ function getMap(keyValueList,gemeente,selLg)
             targetToPush +=")";
             
 
-    wmsPerceel.updateParams({'cql_filter': "woonplaats in "+targetToPush});
+    wmsPerceel.updateParams({'cql_filter': "kadastergemeente in "+targetToPush});
 
     i_count=0;
     while(i_count<keyValueList.length)
@@ -392,9 +425,9 @@ function getMap(keyValueList,gemeente,selLg)
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
         srsName: 'EPSG:900913',
-        featureNS: 'http://opengeo.org/#'+omgeving,
-        featurePrefix: omgeving,
-        featureTypes: [laag],
+            featureNS: 'http://opengeo.org/#aezel',
+            featurePrefix: 'aezel',
+            featureTypes: [laag],
         outputFormat: 'application/json',
         maxFeatures : 250,
         filter:                 ol.format.filter.or.apply(null, farray)
@@ -407,13 +440,13 @@ function getMap(keyValueList,gemeente,selLg)
             i_count=0;
             while(i_count<selGem.length)
             {
-                farrayGem[i_count] = ol.format.filter.equalTo('woonplaats', selGem[i_count]);
+                farrayGem[i_count] = ol.format.filter.equalTo('kadastergemeente', selGem[i_count]);
                 i_count++;
             }              
             featureGemRequest = new ol.format.WFS().writeGetFeature({
             srsName: 'EPSG:900913',
-            featureNS: 'http://opengeo.org/#'+omgeving,
-            featurePrefix: omgeving,
+            featureNS: 'http://opengeo.org/#aezel',
+            featurePrefix: 'aezel',            
             featureTypes: [laag],
             outputFormat: 'application/json',
             filter: ol.format.filter.or.apply(null, farrayGem)
@@ -421,11 +454,11 @@ function getMap(keyValueList,gemeente,selLg)
         } else {
             featureGemRequest = new ol.format.WFS().writeGetFeature({
             srsName: 'EPSG:900913',
-            featureNS: 'http://opengeo.org/#'+omgeving,
-            featurePrefix: omgeving,
+            featureNS: 'http://opengeo.org/#aezel',
+            featurePrefix: 'aezel',            
             featureTypes: [laag],
             outputFormat: 'application/json',
-            filter: ol.format.filter.equalTo('woonplaats', selGem[0])
+            filter: ol.format.filter.equalTo('kadastergemeente', selGem[0])
             });
         }
 

@@ -2352,23 +2352,36 @@ function demZoekLagen(thema) {
             while(i_count<keyValueLayerList.length)
             {
                 keyvaluearray=keyValueLayerList[i_count].split("##");
-                if (i_count == 0) {
+                if ((i_count == 0) && (thema.indexOf('geo') == 0)){
                     mainLayer = keyValueLayerList[0];
                     
                     var legendlayer = mainLayer.split("##");
                     
                     var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+legendlayer[2].trim()+':'+legendlayer[1].trim()+'&amp;STYLE='+legendlayer[3]+'">';
                     $("#legend-form").html(imag);
-                    
-                    
+
+                    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
+                    argumenten = '?laag='+legendlayer[1].trim()+'&omgeving='+legendlayer[2].trim();
+                    $.post(targetUrl+argumenten, function(data) {
+                        if (data == true) {
+                            openTijdslijn = true;
+                            tijdlijn = false;
+                            $('#dp_vanaf').show();
+                            $('#dp_tot').show();
+                            $('#hist_reset_vanaf').show();
+                            $('#hist_reset_totMet').show();                                
+                            $('#dem_player').show();
+                            demBerekenTijdsinterval(legendlayer[2].trim(),legendlayer[1].trim());                            µ
+                            
+                        }                            
+                    });
                 } else {
+                    targetToPush += '<li><a href="#" class="small" data-value="';
+                    targetToPush += keyvaluearray[2];//id
 
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1]  ;//Item
-                targetToPush += '</a></li>';      
+                    targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                    targetToPush += keyvaluearray[1]  ;//Item
+                    targetToPush += '</a></li>';      
                 }
                 i_count++;
             }
@@ -2382,31 +2395,11 @@ function demZoekLagen(thema) {
 
 function demCheckStijlen(thema) {
     
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/checkStijlen.script.php";
-    argumenten = '?thema='+thema;
+    targetUrlStijlen="http://"+websiteIP+websitePath+"/CRUDScripts/checkStijlen.script.php";
+    argumentenStijlen = '?thema='+thema;
    
-    $.post(targetUrl+argumenten, function(data) {
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-        
-            var targetToPush = '';  
-            
-            while(i_count<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count].split("##");
-                i_count++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#lagenbox').html('');
-        $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek laag");        
+    $.post(targetUrlStijlen+argumentenStijlen, function(data){
     });    
-    
 }
 
 

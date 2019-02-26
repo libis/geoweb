@@ -60,7 +60,7 @@
     <div>
         <div>
             <div class="select_tijd">
-<input type="text" id="dp_vanaf" name="dp_vanaf">
+                <input type="text" id="dp_vanaf" name="dp_vanaf">
                 <select style="width: 100%;"  id="tijdslijn_vanaf" naam="tijdslijn_vanaf" onChange="tijdslijnVanaf(this.selectedIndex);"size="1">
                 </select>
             </div>
@@ -73,7 +73,7 @@
         </div>
         <div>
             <div class="select_tijd">
-<input type="text" id="dp_tot" name = "dp_tot">
+                <input type="text" id="dp_tot" name = "dp_tot">
                 <select style="width: 100%;"  id="tijdslijn_TotMet" naam="tijdslijn_TotMet" onChange="tijdslijnTot(this.selectedIndex);"size="1">
                 </select>
             </div>
@@ -85,20 +85,19 @@
         </div>
       </div>
       <div id="multilayer">
-          <div class="button-group">
-              <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="histZoekLagenZoekString();" maxlength="25"/>
-              <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
-              <ul id=lagenbox class="dropdown-menu">
-              </ul>
-          </div>
-            <div class="button-group">
-                <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="histZoekGemeentenZoekString();" maxlength="20"/>
-                <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Gemeenten<span class="caret"></span></button>
-                <ul id=gemeentebox class="dropdown-menu">
-                </ul>
-            </div>
+        <div class="button-group">
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="histZoekLagenZoekString();" maxlength="25"/>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
+            <ul id=lagenbox class="dropdown-menu">
+            </ul>
+        </div>
+        <div class="button-group">
+            <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="histZoekGemeentenZoekString();" maxlength="20"/>
+            <button id="gemeente_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Gemeenten<span class="caret"></span></button>
+            <ul id=gemeentebox class="dropdown-menu">
+            </ul>
+        </div>
       </div>
-
   </div>
 </div>
 <div id ="tijdslijn_control">
@@ -120,8 +119,8 @@
     firstOpenGem = true;
     tijdlijn = false;
 
-
-    demZoekTijdslijnLagen();
+   demZoekLagen(thema);
+    //demZoekTijdslijnLagen();
 
     //getMapStartup();
     $('#dem_tijdslijn').hide();
@@ -225,10 +224,9 @@ $(function() {
 $(document).on('click','#lagenbox a',function(event){
 
     var $target = $( event.currentTarget ),
-       href = $target.text(),
+       href = $target.text().trim(),
        $inp = $target.find( 'input' ),
-       idx;
-
+       omgeving = $target.data('value').trim();
 
     if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
        selLg.splice( idx, 1 );
@@ -254,9 +252,11 @@ $(document).on('click','#lagenbox a',function(event){
     $('#hist_reset_totMet').show();
     $('.lagenTextBox').attr("placeholder",selLg[0]);
     $('#lagenbox').slideUp();
+    
     histZoekGemeenten();
-    histInitMap(selLg);
-    demBerekenTijdsinterval();
+    histInitMap(omgeving,selLg);
+    demBerekenTijdsinterval(omgeving,selLg[0]);
+   
     } else {
         histFullReset();
     }
@@ -302,7 +302,7 @@ function resetTijdslijn()
     histZoekGemeenten();
     rebuildTijdslijnDiv();
     initTijdslijst = false;
-    demBerekenTijdsinterval();
+    demBerekenTijdsinterval('themas',selLg[0]);
 
 }
 
@@ -325,7 +325,9 @@ function histFullReset() {
     $('#dem_film_pause').hide();
     selGem.splice(0,selGem.length);
 
-    demZoekTijdslijnLagen();
+//    demZoekTijdslijnLagen();
+    demZoekLagen(thema);
+
     rebuildTijdslijnDiv();
     
     initTijdslijst = false;
@@ -356,17 +358,6 @@ function eigenaars_statistieken() {
  window.open("./eigenaars_statistieken.php","_self");
 }
 
-function tijdsloop() {
-    if (tijdlijn==false){
-        tijdlijn = true;
-        hideLagenbox();
-        demToonTijdslijn();
-    } else {
-        tijdlijn = false
-        hideLagenbox();
-        demVerwijderTijdslijn();
-    }
-}
 
 </script>
 <?php include 'common/footer.php'; ?>

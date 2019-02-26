@@ -2367,7 +2367,7 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
 
         $query="select lagen.invoernaam,lagen.omgeving,stijlen.naam from themas.lagen inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
                 inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
-                inner join themas.stijlen on stijlen.stijl_id = thema_lagen.stijl_id
+                left join themas.stijlen on stijlen.stijl_id = thema_lagen.stijl_id
                 where themas.thema.naam = lower('".$filter."')
                 order by rangorde";
         
@@ -2380,6 +2380,20 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         return $result;
     }    
 
+    public function isTijdAanwezig($omgeving,$laag){
+        if ($omgeving === 'aezel') $schema = 'public';
+        else $schema = 'themas';
+        $query = "select begindatum from ".$schema.".".$laag." limit 1";
+        
+        if (pg_query($this->conn_geonode, $query) == false) {
+           $result = false;
+        } else {
+            $result = true;
+        }
+        return $result;
+    }
+
+    
  
     public function checkStijlen($filter)
     {

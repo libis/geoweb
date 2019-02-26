@@ -1,7 +1,6 @@
 <?php include 'common/header.php'; ?>
 
 <script type="text/javascript" src="../js/jquery-editable-select.js"></script>
-<script type="text/javascript" src="../js/mapBeroepsgroep.js"></script>
 <script type="text/javascript" src="../js/mapStartup.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
@@ -81,6 +80,7 @@ var  selVnm = [];
 var  selArt = [];
 var  selBgp = [];
 var selLg=[];
+setCookie('selLg',selLg);
 var firstOpenGem = true;
 var firstOpenNm = true;
 var firstOpenVnm = true;
@@ -89,8 +89,6 @@ var firstOpenBgp = true;
 var firstOpenLg = true;
 mainLayer = null;
 keyValueLayerList = null;
-
-var thema = getQueryVariable("thema");
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -554,7 +552,7 @@ function resetEigenaarsBeroepsgroep()
     $('.voornaamTextBox').attr("placeholder","");
     $('.beroepsgroepTextBox').attr("placeholder","");
      demZoekGemeenten();
-     getMapStartup();
+     getMapStartup(thema);
 }
 
 
@@ -567,7 +565,7 @@ function decodeHtml(html) {
 
 
 var mylegendberoepsgroepwindow = null;
-
+/*
 function eigenaars() {
     window.open("./eigenaars.php?thema="+thema,"_self");
 }
@@ -580,7 +578,7 @@ function eigenaars_woonplaats() {
 function eigenaars_statistieken() {
     window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
-
+*/
 function getEigenaarsBeroepsgroep() {
 
     demGetEigenaarsBeroepsgroep();

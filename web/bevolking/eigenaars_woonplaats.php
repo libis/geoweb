@@ -1,7 +1,6 @@
 <?php include 'common/header.php'; ?>
 
 <script type="text/javascript" src="../js/jquery-editable-select.js"></script>
-<script type="text/javascript" src="../js/mapWoonplaats.js"></script>
 <script type="text/javascript" src="../js/mapStartup.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
@@ -90,7 +89,6 @@ var firstOpenLg = true;
 mainLayer = null;
 keyValueLayerList = null;
 
-    var thema = getQueryVariable("thema");
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -552,7 +550,7 @@ function resetEigenaarsWoonplaats()
     $('.woonplaatsTextBox').attr("placeholder","");
 
      demZoekGemeenten();
-     getMapStartup();
+     getMapStartup(thema);
 }
 
 
@@ -561,7 +559,7 @@ function decodeHtml(html) {
  txt.innerHTML = html;
  return txt.value;
 }
-
+/*
 function eigenaars() {
     window.open("./eigenaars.php?thema="+thema,"_self");
 }
@@ -574,7 +572,7 @@ function eigenaars_beroep() {
 function eigenaars_statistieken() {
     window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
-
+*/
 
 function getEigenaarsWoonplaats() {
 

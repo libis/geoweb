@@ -1,11 +1,6 @@
 <?php include 'common/header.php'; ?>
 
-<script type="text/javascript" src="../js/jquery-editable-select.js"></script>
-<script type="text/javascript" src="../js/mapEigenaars.js"></script>
-<script type="text/javascript" src="../js/mapStartup.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
-<link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
 
 <div class="control legend">
         <div id="dem_eig_lege_chk" class="control-top legend-top">
@@ -22,17 +17,32 @@
   <div class="control-top">
      <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
   </div>
+    
   <div id="control-form" class="collapse in" >
-      <h2>Kadastrale Eigenaar </h2>
+      <div>
+      <h2>Kadastrale Eigenaar</h2>
       <div>
           <button id ="dem_toon_kaart" onclick="getEigenaars();">
               Toon kaart
           </button>
+            <button id ="dem_toon_tijdlijn" onclick="tijdsloop();">
+                Toon tijdlijn
+            </button>
           <button id ="dem_eig_reset" onclick="resetEigenaars();">
               Reset
           </button>
       </div>
-         
+        <div id="multilayer">
+            <div id = "dem_player" class="dem_player">
+                <button id ="dem_film_fr" onclick="frSlideshow();" <i class="material-icons">skip_previous</i></button>
+                <button id ="dem_film_sp" onclick="spSlideshow();" <i class="material-icons">fast_rewind</i></button>
+                <button id ="dem_film_pause" onclick="pauseSlideshow();"<i class="material-icons">pause</i></button>
+                <button id ="dem_film_play" onclick="playSlideshow();" <i class="material-icons">play_arrow</i></button>
+                <button id ="dem_film_sn"  onclick="snSlideshow();"<i class="material-icons">fast_forward</i></button>
+                <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">skip_next</i></button>
+            </div>
+        </div>
+  </div>
       <div id="multilayer">
       <div class="button-group">
         <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
@@ -65,9 +75,40 @@
             </ul>
         </div>
       </div>
+    <div>
+        <div>
+            <div class="select_tijd">
+                <input type="text" id="dp_vanaf" name="dp_vanaf">
+                <select style="width: 100%;"  id="tijdslijn_vanaf" naam="tijdslijn_vanaf" onChange="tijdslijnVanaf(this.selectedIndex);"size="1">
+                </select>
+            </div>
+
+            <div class="reset_tijd">
+                <button id ="hist_reset_vanaf" onclick="resetVanaf();">
+                     Reset
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="select_tijd">
+                <input type="text" id="dp_tot" name = "dp_tot">
+                <select style="width: 100%;"  id="tijdslijn_TotMet" naam="tijdslijn_TotMet" onChange="tijdslijnTot(this.selectedIndex);"size="1">
+                </select>
+            </div>
+            <div class="reset_tijd">
+                <button id ="hist_reset_totMet" onclick="resetTotMet();">
+                    Reset
+                </button>
+            </div>
+        </div>
+      </div>      
   </div>
 </div>
-<div id="map" class="map"></div>
+<div id ="tijdslijn_control">
+<div id="dem_tijdslijn"></div>
+</div>
+<div id="map" class="map">
+</div>
  <script language="javascript">
 var  selGem = [];
 var  selNm = [];
@@ -83,27 +124,66 @@ var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenLg = true;
 
-    var thema = getQueryVariable("thema");
 
      $(document).ready(function(){
-         
+
+
+
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
      $("#dem_toon_kaart").hide();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
+     if ("openTijdslijn") { $("#dem_toon_tijdlijn").hide();}
 
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
 
-
+    hideTimeItems();
     demCheckStijlen(thema);
     demZoekLagen(thema);
     demZoekGemeenten();
     getMapStartup(thema);
+    
+$(function() {
+    van = $( "#dp_vanaf" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yymmdd",
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true
+    }).on( "change", function() {
+        tijdslijnVanaf( this.value );
+    });
+    tot = $( "#dp_tot" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yymmdd",
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true
+    }).on( "change", function() {
+        tijdslijnTot( this.value );
+    });
+    function getDate( element ) {
+        var date;
+        var dateFormat = "yy-mm-dd";
+        try {
+          date = $.datepicker.parseDate( dateFormat, element.value );
+        } catch( error ) {
+          date = null;
+        }
+        return date;
+    }
+});
+    
+    
 
 //legende wordt ingevuld in demZoekLagen!!
 
@@ -147,6 +227,7 @@ $(document).on('click','#gemeentebox a',function(event){
    demZoekVoornamenByGemeente();
    $("#dem_toon_kaart").show();
    $("#dem_eig_reset").show();
+   if ("openTijdslijn") { $("#dem_toon_tijdlijn").show();}
    return false;
 });
 
@@ -443,6 +524,7 @@ function resetEigenaars()
 {
 resetMap();
      $("#dem_toon_kaart").hide();
+     $("#dem_toon_tijdlijn").hide();
      $("#dem_eig_reset").hide();
 
     $('#artikelnummerbox').slideUp();
@@ -471,7 +553,7 @@ resetMap();
     $('.woonplaatsTextBox').attr("placeholder","");
 
      demZoekGemeenten();
-     getMapStartup();
+     getMapStartup(thema);
 }
 
 
@@ -483,7 +565,7 @@ function decodeHtml(html) {
 }
 
 var mylegendeigenaarwindow = null;
-
+/*
 function eigenaars_beroep() {
  window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
 }
@@ -496,7 +578,7 @@ function eigenaars_woonplaats() {
 function eigenaars_statistieken() {
  window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
-
+*/
 function getEigenaars() {
 
     $('#infobox').empty();
@@ -505,7 +587,7 @@ function getEigenaars() {
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();	
     hideLagenbox();
-    demGetEigenaars();
+    if (openTijdslijn) demGetEigenaars(vanaf,false); else demGetEigenaars(null,false);
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();

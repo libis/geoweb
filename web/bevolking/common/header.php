@@ -19,7 +19,39 @@ $sid = session_id();
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>LGGI - Geografisch kaartenbestand</title>
+<!--
+        <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../css/layout.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="../css/map.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery.timeliny.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.structure.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
 
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        
+        <script type="text/javascript" src="../js/globalVars.js"></script>
+        <script type="text/javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" src="../js/jquery.slim.js"></script>
+        <script type="text/javascript" src="../js/jquery.autocomplete.js"></script>
+        <script type="text/javascript" src="../js/jquery.livequery.js"></script>
+<script type="text/javascript" src="../js/jquery.timeliny.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/tijdslijn.js"></script>
+
+
+        <script type="text/javascript" src="../js/jquery.blockUI.js"></script>
+        <script type="text/javascript" src="../js/demografie.js"></script>
+        <script type="text/javascript" src="../js/mapEigenaars.js"></script>
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.3.3/ol-debug.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+        -->
         <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="../css/layout.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="../css/map.css" media="screen" />
@@ -43,6 +75,26 @@ $sid = session_id();
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+        
+<script type="text/javascript" src="../js/jquery-editable-select.js"></script>
+<script type="text/javascript" src="../js/mapEigenaars.js"></script>
+<script type="text/javascript" src="../js/mapStartup.js"></script>
+<script type="text/javascript" src="../js/tijdslijn.js"></script>
+<script type="text/javascript" src="../js/mapTijdslijn.js"></script>
+<script type="text/javascript" src="../js/jquery.timeliny.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/palette.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/jquery-editable-select.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery.timeliny.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.structure.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../css/jquery-ui.theme.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://openlayers.org/en/v4.3.2/css/ol.css" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+
 
     </head>
 
@@ -77,3 +129,40 @@ $sid = session_id();
        </div><!-- /.container-fluid -->
      </nav>
   </header>
+<script>
+openTijdslijn = false;
+thema = getQueryVariable("thema");
+function eigenaars() {
+    if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
+    window.open("./eigenaars.php?thema="+thema,"_self");
+}
+function eigenaars_beroepsgroepen() {
+    if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
+    window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
+}
+function eigenaars_beroep() {
+    if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
+    window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
+}
+function eigenaars_statistieken() {
+    if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
+    window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
+}
+function eigenaars_woonplaats() {
+    if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
+    window.open("./eigenaars_woonplaats.php?thema="+thema,"_self");
+}
+
+function hideTimeItems() {
+
+                            $('#dem_tijdslijn').hide();
+                            $('#dem_player').hide();
+                            $('#tijdslijn_vanaf').hide();
+                            $('#tijdslijn_TotMet').hide();
+                            $('#dp_vanaf').hide();
+                            $('#dp_tot').hide();
+                            $('#hist_reset_vanaf').hide();
+                            $('#hist_reset_totMet').hide();
+                            $('#dem_film_pause').hide();
+                        }
+</script>

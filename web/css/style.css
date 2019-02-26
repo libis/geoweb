@@ -6753,7 +6753,7 @@ ul#flashes li {
   border: 1px solid #ccc;
 }
 
-.zoekknop, #dem_toon_kaart, #dem_toon_stat_beroep, #dem_toon_stat_beroepsgroep, #dem_toon_stat_woonplaats {
+.zoekknop, #dem_toon_kaart, #dem_toon_stat_beroep, #dem_toon_stat_beroepsgroep, #dem_toon_stat_woonplaats,#dem_toon_tijdlijn {
   width: auto;
   background: #3775BB;
   font-family: "Lato", sans-serif;
@@ -6765,7 +6765,7 @@ ul#flashes li {
   border-right: 2px solid #3169a7;
 }
 
-#dem_toon_kaart, #dem_toon_stat_beroep, #dem_toon_stat_beroepsgroep, #dem_toon_stat_woonplaats {
+#dem_toon_kaart, #dem_toon_stat_beroep, #dem_toon_stat_beroepsgroep, #dem_toon_stat_woonplaats,#dem_toon_tijdlijn {
   margin-left: 0px;
 }
 

@@ -250,7 +250,7 @@ function decodeHtml(html) {
   txt.innerHTML = html;
   return txt.value;
 }
-
+/*
 function eigenaars() {
   window.open("./eigenaars.php?thema="+thema,"_self");
 }
@@ -263,7 +263,7 @@ function eigenaars_woonplaats() {
 function eigenaars_beroepsgroepen() {
   window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
 }
-
+*/
 $(document).on('click','#gemeente_btn',function(event){
     $('#familienaambox').slideUp();
     $('#artikelnummerbox').slideUp();

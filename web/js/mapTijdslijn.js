@@ -78,27 +78,15 @@ function histRemoveLayersMap() {
     vectorLayers = [];
 }
 
-function histInitMap(selLg){
+function histInitMap(omgeving,selLg){
 
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
     themalaag = selLg[0];
     for (var i=0;i<selLg.length;i++)  {
-        var laag = themalagenprefix+":"+selLg[i];
+        var laag = omgeving+":"+selLg[i];
     }
-/*
-    var imgwms;
-    imgwms = new ol.source.ImageWMS({
-        url: mapviewerIP+'/geoserver/ows',
-      params: {'LAYERS': laag,'VERSION':'1.1.1','serverType':'geoserver','BBOX':'626172.135625,6574807.4240625,665307.89410156,6613943.1825391'},
-        serverType: 'geoserver'
-      });
-    layerArr.push(imgwms);
-*/  
-    
-    var layers = [
-//      new ol.layer.Tile({source: new ol.source.OSM()}),
-   ];
+    var layers = [];
     
     for (var i=0;i<layerArr.length;i++)  {
          var ly = new ol.layer.Image({source: layerArr[i]})
@@ -188,7 +176,9 @@ function showMetadata() {
 
 function histGetLayerInTime(selGem,vanaf,speler)
 {
-    
+    if (thema.indexOf(geo) == 0) {
+        demGetEigenaars(vanaf,speler);
+    }
     if ( $('#metadata-form').is(':visible') )
     {
         histShowMetadata(metadataID);

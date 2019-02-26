@@ -10,6 +10,17 @@ interval = 0;
 kleurLegend = [];
 player = false;
 
+function tijdsloop() {
+    if (tijdlijn==false){
+        tijdlijn = true;
+        hideLagenbox();
+        demToonTijdslijn();
+    } else {
+        tijdlijn = false
+        hideLagenbox();
+        demVerwijderTijdslijn();
+    }
+}
 
 function histZoekGemeenten()
 {
@@ -256,14 +267,16 @@ function demBerekenKleurenVoorLegende()
             
    });
 }
-function demBerekenTijdsinterval()
+function demBerekenTijdsinterval(omgeving,laag)
 {
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
     
     var lg;
-    if (lg=selLg.length == 0) selLg=['Alle '];
-    $.post(targetUrl,{selLg}, function(data) {    
-        if (lg==true) selLg.splice(0,selLg.length);
+    var schema = 'themas';
+    //if (lg=selLg.length == 0) selLg=['Alle '];
+    if (omgeving == 'aezel') schema = 'public';
+    $.post(targetUrl,{schema,laag}, function(data) {    
+        //if (lg==true) selLg.splice(0,selLg.length);
         
         data = data.trim();
         var poutputStart = [];// voorbereiding
