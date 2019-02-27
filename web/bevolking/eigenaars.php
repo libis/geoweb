@@ -151,7 +151,7 @@ var firstOpenLg = true;
 $(function() {
     van = $( "#dp_vanaf" ).datepicker({
         defaultDate: "+1w",
-        dateFormat: "yymmdd",
+        dateFormat: "yy-mm-dd",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -162,7 +162,7 @@ $(function() {
     });
     tot = $( "#dp_tot" ).datepicker({
         defaultDate: "+1w",
-        dateFormat: "yymmdd",
+        dateFormat: "yy-mm-dd",
         changeMonth: true,
         changeYear: true,
         numberOfMonths: 1,
@@ -173,7 +173,7 @@ $(function() {
     });
     function getDate( element ) {
         var date;
-        var dateFormat = "yy-mm-dd";
+        var dateFormat = "yymmdd";
         try {
           date = $.datepicker.parseDate( dateFormat, element.value );
         } catch( error ) {
@@ -587,7 +587,7 @@ function getEigenaars() {
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();	
     hideLagenbox();
-    if (openTijdslijn) demGetEigenaars(vanaf,false); else demGetEigenaars(null,false);
+    if (openTijdslijn) demGetEigenaars(minCurrDayDate.replace(/-/g,""),false); else demGetEigenaars(null,false);
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();

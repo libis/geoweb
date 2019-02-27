@@ -335,17 +335,15 @@ function getMap(keyValueList,gemeente,selLg,vanaf,speler)
     var filters = null;
     
     if (vanaf != null) {
-    if (vanaf.length == 4) {
-        vanaf = vanaf+"0101";
-    }
-    vanaf = vanaf+"5";
-    
-//    $('#hist_curr_day_date').text(vanaf);
+        if (vanaf.length == 4) {
+            vanaf = vanaf+"0101";
+        }
+        vanaf = vanaf+"5";
 
-    ftarray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',parseInt(vanaf));
-    ftarray[1]=ol.format.filter.greaterThan('einddatum',parseInt(vanaf));
+    //    $('#hist_curr_day_date').text(vanaf);
 
-    filters = ol.format.filter.and.apply(null,farray);
+        ftarray[0]=ol.format.filter.lessThanOrEqualTo('begindatum',parseFloat(vanaf));
+        ftarray[1]=ol.format.filter.greaterThan('einddatum',parseFloat(vanaf));
     }
 
     if (keyValueList.length == 1) {
@@ -421,6 +419,13 @@ function getMap(keyValueList,gemeente,selLg,vanaf,speler)
             farray[i_count] = ol.format.filter.equalTo('objkoppel', keyvaluearray[1]);
             i_count++;
     }
+    
+    if (vanaf != null) {
+        filters = ol.format.filter.and(ol.format.filter.or.apply(null, farray),ol.format.filter.and.apply(null,ftarray));
+    } else {
+        filters = ol.format.filter.or.apply(null, farray);
+    }    
+
 
       // generate a GetFeature request
         featureRequest = new ol.format.WFS().writeGetFeature({
@@ -430,7 +435,7 @@ function getMap(keyValueList,gemeente,selLg,vanaf,speler)
             featureTypes: [laag],
         outputFormat: 'application/json',
         maxFeatures : 250,
-        filter:                 ol.format.filter.or.apply(null, farray)
+        filter: filters
 
       });
 

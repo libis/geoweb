@@ -343,7 +343,9 @@ function demBerekenTijdsinterval(omgeving,laag)
         maxCurrDayDate = maxCurr+"-12-31";
         minCurrDayDate = minCurr+"-01-01";
        
-        demBerekenKleurenVoorLegende();
+        if (thema.indexOf('geo_percelen') == -1) {
+            demBerekenKleurenVoorLegende();
+        }        
     });
 }
 

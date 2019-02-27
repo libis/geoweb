@@ -2371,7 +2371,7 @@ function demZoekLagen(thema) {
                             $('#hist_reset_vanaf').show();
                             $('#hist_reset_totMet').show();                                
                             $('#dem_player').show();
-                            demBerekenTijdsinterval(legendlayer[2].trim(),legendlayer[1].trim());                            µ
+                            demBerekenTijdsinterval(legendlayer[2].trim(),legendlayer[1].trim());
                             
                         }                            
                     });

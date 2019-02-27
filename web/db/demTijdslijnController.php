@@ -79,7 +79,7 @@ function getJaartallenVoorTijdslijnPercelen($scheme,$theme)
             $result[$index++]= $row[0];
         }
         pg_free_result($s);
-        $query= "select max(to_char(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+        $query= "select max(to_char(to_date(substr(to_char(einddatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
