@@ -20,27 +20,19 @@ class demTijdslijnController {
         $this->conn = $pcontroller->getConn_geonode();
    }
 
-function getVolgendeDatum($layer,$datum) 
+function getVolgendeDatum($layer,$datum,$scheme) 
 {
-    if (count($layer) > 0) 
-    {    
-        $theme = $layer[0];
-        $query = "select min(begindatum) from themas.".$theme." where begindatum > '".$datum."'";
+        $query = "select min(begindatum) from ".$scheme.".".$layer." where begindatum > '".$datum."'";
         $s = pg_query($this->conn, $query);
         $row = pg_fetch_row($s);
         return $row[0];
-    }
 }
-function getVorigeDatum($layer,$datum) 
+function getVorigeDatum($layer,$datum,$scheme) 
 {
-    if (count($layer) > 0) 
-    {    
-        $theme = $layer[0];
-        $query = "select max(begindatum) from themas.".$theme." where begindatum < '".$datum."'";
+        $query = "select max(begindatum) from ".$scheme.".".$layer." where begindatum < '".$datum."'";
         $s = pg_query($this->conn, $query);
         $row = pg_fetch_row($s);
         return $row[0];
-    }
 }
    
 function getJaartallenVoorTijdslijn($scheme,$theme)

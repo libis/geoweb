@@ -115,8 +115,6 @@ var  selNm = [];
 var  selVnm = [];
 var  selArt = [];
 var  selLg = [];
-mainLayer = null;
-keyValueLayerList = null;
 
 var firstOpenGem = true;
 var firstOpenNm = true;
@@ -135,7 +133,7 @@ var firstOpenLg = true;
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
-     if ("openTijdslijn") { $("#dem_toon_tijdlijn").hide();}
+     $("#dem_toon_tijdlijn").hide();
 
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");
@@ -227,7 +225,24 @@ $(document).on('click','#gemeentebox a',function(event){
    demZoekVoornamenByGemeente();
    $("#dem_toon_kaart").show();
    $("#dem_eig_reset").show();
-   if ("openTijdslijn") { $("#dem_toon_tijdlijn").show();}
+   
+   
+   
+   if (openTijdslijn) {     
+        $('#dp_vanaf').show();
+        $('#dp_tot').show();
+
+        $( event.target ).blur();
+        $('#hist_reset_vanaf').show();
+        $('#hist_reset_totMet').show();
+        $("#dem_toon_tijdlijn").show();
+        $("#dem_tijdslijn").show();
+        $('#dem_player').show();
+        demBerekenTijdsinterval(hoofdlaag[2].trim(),hoofdlaag[1].trim());
+    }
+   
+        
+        
    return false;
 });
 

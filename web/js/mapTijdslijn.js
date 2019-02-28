@@ -176,14 +176,16 @@ function showMetadata() {
 
 function histGetLayerInTime(selGem,vanaf,speler)
 {
+
+    if ( $('#metadata-form').is(':visible') )
+    {
+        histShowMetadata(metadataID);
+    }
+    
     if (thema.indexOf('geo') == 0) {
         demGetEigenaars(vanaf,speler);
     } else {
         
-        if ( $('#metadata-form').is(':visible') )
-        {
-            histShowMetadata(metadataID);
-        }
 
 
     //show feature

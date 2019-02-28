@@ -2354,25 +2354,16 @@ function demZoekLagen(thema) {
                 keyvaluearray=keyValueLayerList[i_count].split("##");
                 if ((i_count == 0) && (thema.indexOf('geo') == 0)){
                     mainLayer = keyValueLayerList[0];
-                    
-                    var legendlayer = mainLayer.split("##");
-                    
-                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+legendlayer[2].trim()+':'+legendlayer[1].trim()+'&amp;STYLE='+legendlayer[3]+'">';
+                    hoofdlaag = mainLayer.split("##");
+                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+hoofdlaag[2].trim()+':'+hoofdlaag[1].trim()+'&amp;STYLE='+hoofdlaag[3]+'">';
                     $("#legend-form").html(imag);
 
                     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
-                    argumenten = '?laag='+legendlayer[1].trim()+'&omgeving='+legendlayer[2].trim();
+                    argumenten = '?laag='+hoofdlaag[1].trim()+'&omgeving='+hoofdlaag[2].trim();
                     $.post(targetUrl+argumenten, function(data) {
                         if (data == true) {
                             openTijdslijn = true;
                             tijdlijn = false;
-                            $('#dp_vanaf').show();
-                            $('#dp_tot').show();
-                            $('#hist_reset_vanaf').show();
-                            $('#hist_reset_totMet').show();                                
-                            $('#dem_player').show();
-                            demBerekenTijdsinterval(legendlayer[2].trim(),legendlayer[1].trim());
-                            
                         }                            
                     });
                 } else {

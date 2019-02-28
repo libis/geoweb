@@ -345,7 +345,9 @@ function demBerekenTijdsinterval(omgeving,laag)
        
         if (thema.indexOf('geo_percelen') == -1) {
             demBerekenKleurenVoorLegende();
-        }        
+        }  else {
+            demToonTijdslijn();
+        }      
     });
 }
 
@@ -645,7 +647,15 @@ function spSlideshow() {
   clearInterval(slideInterval);
   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVorigeDatumHist.script.php";
   arguments = "?datum="+minCurrDayDate;
-  $.post(targetUrl+arguments,{selLg}, function(data) {
+  var schema = 'themas';
+  var laag;
+  if (omgeving == 'aezel') {
+      schema = 'public';
+      laag = legendLayer[1];
+  } else {
+      laag = selLg[0];
+  }
+  $.post(targetUrl+arguments,{laag,schema}, function(data) {
     data = data.trim();
     if(data.length>0) {
         minCurrDayDate = data;
@@ -662,7 +672,16 @@ function snSlideshow() {
   clearInterval(slideInterval);
   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVolgendeDatumHist.script.php";
   arguments = "?datum="+minCurrDayDate;
-  $.post(targetUrl+arguments,{selLg}, function(data) {
+  var schema = 'themas';
+  var laag;
+  if (omgeving == 'aezel') {
+      schema = 'public';
+      laag = legendLayer[1];
+  } else {
+      laag = selLg[0];
+  }
+  
+  $.post(targetUrl+arguments,{laag,schema}, function(data) {
     data = data.trim();
     if(data.length>0) {
         minCurrDayDate = data;

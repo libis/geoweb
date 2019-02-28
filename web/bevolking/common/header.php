@@ -132,6 +132,11 @@ $sid = session_id();
 <script>
 openTijdslijn = false;
 thema = getQueryVariable("thema");
+omgeving = 'aezel';
+hoofdlaag = null;
+legendLayer = null;
+keyValueLayerList = null;
+
 function eigenaars() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
     window.open("./eigenaars.php?thema="+thema,"_self");

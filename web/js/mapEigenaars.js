@@ -138,8 +138,10 @@ function demGetEigenaars(vanaf,speler){
             data = data.trim();
             if(data.length>0) {
                 keyValueList = data.split("%%");
+                if (keyValueList.length < 250) {
                 getMap(keyValueList,selGem,selLg,vanaf,speler);
-                i_count = 0;
+                    i_count = 0;
+                }
             }
         });
       
