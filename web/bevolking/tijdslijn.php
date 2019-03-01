@@ -118,6 +118,7 @@
     firstOpenLg = true;
     firstOpenGem = true;
     tijdlijn = false;
+    omgeving = 'geonode';
 
    demZoekLagen(thema);
     //demZoekTijdslijnLagen();

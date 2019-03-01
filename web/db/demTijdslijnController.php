@@ -27,9 +27,23 @@ function getVolgendeDatum($layer,$datum,$scheme)
         $row = pg_fetch_row($s);
         return $row[0];
 }
+function getVolgendeDatumPercelen($layer,$datum,$scheme) 
+{
+        $query = "select min(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD')) from ".$scheme.".".$layer." where begindatum > '".$datum."'";
+        $s = pg_query($this->conn, $query);
+        $row = pg_fetch_row($s);
+        return $row[0];
+}
 function getVorigeDatum($layer,$datum,$scheme) 
 {
         $query = "select max(begindatum) from ".$scheme.".".$layer." where begindatum < '".$datum."'";
+        $s = pg_query($this->conn, $query);
+        $row = pg_fetch_row($s);
+        return $row[0];
+}
+function getVorigeDatumPercelen($layer,$datum,$scheme) 
+{
+        $query = "select max(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD')) from ".$scheme.".".$layer." where begindatum < '".$datum."'";
         $s = pg_query($this->conn, $query);
         $row = pg_fetch_row($s);
         return $row[0];

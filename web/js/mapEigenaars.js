@@ -337,6 +337,7 @@ function getMap(keyValueList,gemeente,selLg,vanaf,speler)
     var filters = null;
     
     if (vanaf != null) {
+        vanaf = vanaf.replace(/-/g,"")
         if (vanaf.length == 4) {
             vanaf = vanaf+"0101";
         }

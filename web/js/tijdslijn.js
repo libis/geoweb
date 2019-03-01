@@ -649,15 +649,20 @@ function spSlideshow() {
   arguments = "?datum="+minCurrDayDate;
   var schema = 'themas';
   var laag;
+  var datum;
   if (omgeving == 'aezel') {
       schema = 'public';
-      laag = legendLayer[1];
+      laag = hoofdlaag[1];
+      datum = minCurrDayDate.replace(/-/g,'');
+      datum = datum + '5';
   } else {
       laag = selLg[0];
+      datum = minCurrDayDate;
   }
   $.post(targetUrl+arguments,{laag,schema}, function(data) {
     data = data.trim();
     if(data.length>0) {
+        data = data.substr(0,10);
         minCurrDayDate = data;
         tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;
@@ -674,16 +679,22 @@ function snSlideshow() {
   arguments = "?datum="+minCurrDayDate;
   var schema = 'themas';
   var laag;
+  var datum;
   if (omgeving == 'aezel') {
+      datum = minCurrDayDate.replace(/-/g,'');
+      datum = datum + '5';
       schema = 'public';
-      laag = legendLayer[1];
+      laag = hoofdlaag[1];
   } else {
       laag = selLg[0];
+      datum = minCurrDayDate;
   }
+  arguments = "?datum="+datum;
   
   $.post(targetUrl+arguments,{laag,schema}, function(data) {
     data = data.trim();
     if(data.length>0) {
+        data = data.substr(0,10);
         minCurrDayDate = data;
         tmpYear = parseInt(minCurrDayDate.split("-")[0]);
         currentSlide = tmpYear;

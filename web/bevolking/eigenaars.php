@@ -227,21 +227,7 @@ $(document).on('click','#gemeentebox a',function(event){
    $("#dem_eig_reset").show();
    
    
-   
-   if (openTijdslijn) {     
-        $('#dp_vanaf').show();
-        $('#dp_tot').show();
 
-        $( event.target ).blur();
-        $('#hist_reset_vanaf').show();
-        $('#hist_reset_totMet').show();
-        $("#dem_toon_tijdlijn").show();
-        $("#dem_tijdslijn").show();
-        $('#dem_player').show();
-        demBerekenTijdsinterval(hoofdlaag[2].trim(),hoofdlaag[1].trim());
-    }
-   
-        
         
    return false;
 });
@@ -602,7 +588,24 @@ function getEigenaars() {
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();	
     hideLagenbox();
-    if (openTijdslijn) demGetEigenaars(minCurrDayDate.replace(/-/g,""),false); else demGetEigenaars(null,false);
+    if (openTijdslijn) demGetEigenaars(minCurrDayDate,false); else demGetEigenaars(null,false);
+
+   
+   if (openTijdslijn) {     
+        $('#dp_vanaf').show();
+        $('#dp_tot').show();
+
+        $( event.target ).blur();
+        $('#hist_reset_vanaf').show();
+        $('#hist_reset_totMet').show();
+        $("#dem_toon_tijdlijn").show();
+        $("#dem_tijdslijn").show();
+        $('#dem_player').show();
+        demBerekenTijdsinterval(hoofdlaag[2].trim(),hoofdlaag[1].trim());
+    }
+   
+                
+        
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();
