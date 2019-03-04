@@ -169,5 +169,22 @@ public function getMetadataHist($layer,$filter,$begindatum){
         return $result;
     }    
 }
+
+public function getMetadataGeo($schema,$laag,$filter,$begindatum){
+        $result = array();
+        $index = 0;
+
+        
+        
+        $query="select distinct \"artikelnummer\",\"voornamen\",\"naam\",\"woonplaats\",\"beroep\",\"tekst\",\"toponiem\" from ".$schema.".".$laag." where \"artikelnummer\" = '".$filter."' and begindatum <= '".$begindatum."' and einddatum > '".$begindatum."' order by \"artikelnummer\"";
+ 
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++]= $row[0].'##'.$row[1].'##'.$row[2].'##'.$row[3].'##'.$row[4].'##'.$row[5].'##'.$row[6];
+        }
+        pg_free_result($s);
+        return $result;
+}
 }
 ?>

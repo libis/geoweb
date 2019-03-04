@@ -2,15 +2,6 @@
  vectorLayersP = [];
  metadataID = "";
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function demo() {
-  console.log('Taking a break...');
-  await sleep(2000);
-  console.log('Two second later');
-}
 
 function histShowMetadata(metadataID) {
 
@@ -177,19 +168,17 @@ function showMetadata() {
 function histGetLayerInTime(selGem,vanaf,speler)
 {
 
-    if ( $('#metadata-form').is(':visible') )
-    {
-        histShowMetadata(metadataID);
-    }
-    
+   
     if (thema.indexOf('geo') == 0) {
-        demGetEigenaars(vanaf,speler);
+        geoGetMap(vanaf,speler);
     } else {
         
-
-
     //show feature
-
+        if ( $('#metadata-form').is(':visible') )
+        {
+            histShowMetadata(metadataID);
+        }
+    
         var farray = [];
         var farrayGem = [];
         var featureRequest;

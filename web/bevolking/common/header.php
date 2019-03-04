@@ -136,6 +136,8 @@ omgeving = 'aezel';
 hoofdlaag = null;
 legendLayer = null;
 keyValueLayerList = null;
+geoKeyValueList = null;
+geoWmsPerceel = null;
 
 function eigenaars() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
@@ -170,4 +172,39 @@ function hideTimeItems() {
                             $('#hist_reset_totMet').hide();
                             $('#dem_film_pause').hide();
                         }
+$(function() {
+    van = $( "#dp_vanaf" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true
+    }).on( "change", function() {
+        tijdslijnVanaf( this.value );
+    });
+    tot = $( "#dp_tot" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true
+    }).on( "change", function() {
+        tijdslijnTot( this.value );
+    });
+    function getDate( element ) {
+        var date;
+        var dateFormat = "yymmdd";
+        try {
+          date = $.datepicker.parseDate( dateFormat, element.value );
+        } catch( error ) {
+          date = null;
+        }
+        return date;
+    }
+});
+  
 </script>

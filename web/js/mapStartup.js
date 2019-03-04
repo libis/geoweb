@@ -24,7 +24,7 @@ function getMapStartup(thema)
           center: [665300, 6660430],
           zoom: 9
         });
-      var map = new ol.Map({
+      map = new ol.Map({
         controls: ol.control.defaults({
         attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
           collapsible: false

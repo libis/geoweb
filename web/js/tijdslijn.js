@@ -557,30 +557,7 @@ function naDestroy(){
         });
     
 }
-/*
-async function tijdFilm() {
-    
-    
-    var i;
-    
-    if ($('#play').hasClass("play")) {
-        $('#play').removeClass("play");
-        $('#play').addClass("pause");
-    }
-    
-    var start = parseInt($('#tijdslijn_vanaf').val());
-    var stop = parseInt($('#tijdslijn_TotMet').val());
-     
-    for (i = start; i <= stop; i = i+interval) { 
-        $('#dem_tijdslijn').timeliny('goToYear', i);
-        await sleep(2000);
-    }        
-}
-    
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-*/
+
 currentSlide =  parseInt(0);
 var stop = parseInt(0);
 var slideInterval = parseInt(0);

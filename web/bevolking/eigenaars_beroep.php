@@ -68,10 +68,39 @@
             <ul id=lagenbox class="dropdown-menu">
             </ul>
         </div>
+    <div>
+        <div>
+            <div class="select_tijd">
+                <input type="text" id="dp_vanaf" name="dp_vanaf">
+                <select style="width: 100%;"  id="tijdslijn_vanaf" naam="tijdslijn_vanaf" onChange="tijdslijnVanaf(this.selectedIndex);"size="1">
+                </select>
+            </div>
+
+            <div class="reset_tijd">
+                <button id ="hist_reset_vanaf" onclick="resetVanaf();">
+                     Reset
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="select_tijd">
+                <input type="text" id="dp_tot" name = "dp_tot">
+                <select style="width: 100%;"  id="tijdslijn_TotMet" naam="tijdslijn_TotMet" onChange="tijdslijnTot(this.selectedIndex);"size="1">
+                </select>
+            </div>
+            <div class="reset_tijd">
+                <button id ="hist_reset_totMet" onclick="resetTotMet();">
+                    Reset
+                </button>
+            </div>
+        </div>
+      </div>              
       </div>    
   </div>
 </div>
-    
+<div id ="tijdslijn_control">
+<div id="dem_tijdslijn"></div>
+</div>    
 <div id="map" class="map"></div>
 <script language="javascript">
 var  selGem = [];
@@ -86,8 +115,6 @@ var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenBrp = true;
 var firstOpenLg = true;
-mainLayer = null;
-keyValueLayerList = null;
 
 
    $(document).ready(function(){
@@ -103,7 +130,7 @@ keyValueLayerList = null;
     $('.voornaamTextBox').attr("placeholder","");
     $('.beroepTextBox').attr("placeholder","");
     
-
+    hideTimeItems();
     demCheckStijlen(thema);
     demZoekLagen(thema);
     demZoekGemeenten();
@@ -577,7 +604,6 @@ function eigenaars_statistieken() {
 */
 function getEigenaarsBeroep() {
 
-    demGetEigenaarsBeroep();
     $('#infobox').empty();
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
@@ -586,6 +612,14 @@ function getEigenaarsBeroep() {
     $('#beroepbox').slideUp();	
     
     hideLagenbox();
+    
+    var html = $('#dem_tijdslijn').html();
+    if ($('#dem_tijdslijn').html().length > 10){
+        rebuildTijdslijnDiv();
+    }
+    initTijdslijst = false;
+    demGetEigenaarsBeroep();
+    
     $("#dem_eig_legend_chk").show();
     $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();

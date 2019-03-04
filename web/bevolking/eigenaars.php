@@ -146,41 +146,7 @@ var firstOpenLg = true;
     demZoekGemeenten();
     getMapStartup(thema);
     
-$(function() {
-    van = $( "#dp_vanaf" ).datepicker({
-        defaultDate: "+1w",
-        dateFormat: "yy-mm-dd",
-        changeMonth: true,
-        changeYear: true,
-        numberOfMonths: 1,
-        showOtherMonths: true,
-        selectOtherMonths: true
-    }).on( "change", function() {
-        tijdslijnVanaf( this.value );
-    });
-    tot = $( "#dp_tot" ).datepicker({
-        defaultDate: "+1w",
-        dateFormat: "yy-mm-dd",
-        changeMonth: true,
-        changeYear: true,
-        numberOfMonths: 1,
-        showOtherMonths: true,
-        selectOtherMonths: true
-    }).on( "change", function() {
-        tijdslijnTot( this.value );
-    });
-    function getDate( element ) {
-        var date;
-        var dateFormat = "yymmdd";
-        try {
-          date = $.datepicker.parseDate( dateFormat, element.value );
-        } catch( error ) {
-          date = null;
-        }
-        return date;
-    }
-});
-    
+  
     
 
 //legende wordt ingevuld in demZoekLagen!!
@@ -580,6 +546,8 @@ function eigenaars_statistieken() {
  window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
 }
 */
+
+
 function getEigenaars() {
 
     $('#infobox').empty();
@@ -588,30 +556,20 @@ function getEigenaars() {
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();	
     hideLagenbox();
-    if (openTijdslijn) demGetEigenaars(minCurrDayDate,false); else demGetEigenaars(null,false);
-
-   
-   if (openTijdslijn) {     
-        $('#dp_vanaf').show();
-        $('#dp_tot').show();
-
-        $( event.target ).blur();
-        $('#hist_reset_vanaf').show();
-        $('#hist_reset_totMet').show();
-        $("#dem_toon_tijdlijn").show();
-        $("#dem_tijdslijn").show();
-        $('#dem_player').show();
-        demBerekenTijdsinterval(hoofdlaag[2].trim(),hoofdlaag[1].trim());
+    var html = $('#dem_tijdslijn').html();
+    if ($('#dem_tijdslijn').html().length > 10){
+        rebuildTijdslijnDiv();
     }
+    initTijdslijst = false;
+    demGetEigenaars();
    
-                
-        
      $("#dem_eig_legend_chk").show();
      $("#eig_legende_spam").show();
     var headerHeight = $('nav.navbar.navbar-toggleable-md.navbar-default').height();
     var bodyHeight = $(window).height();
     $("#map").height(bodyHeight-headerHeight);
 }
+
 
 </script>
 <?php include 'common/footer.php'; ?>
