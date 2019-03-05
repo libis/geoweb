@@ -878,7 +878,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -958,7 +958,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1038,7 +1038,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1118,7 +1118,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1186,7 +1186,7 @@ class lijstenController {
         
         
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
