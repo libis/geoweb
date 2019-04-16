@@ -129,6 +129,7 @@ $sid = session_id();
        </div><!-- /.container-fluid -->
      </nav>
   </header>
+
 <script>
 openTijdslijn = false;
 thema = getQueryVariable("thema");

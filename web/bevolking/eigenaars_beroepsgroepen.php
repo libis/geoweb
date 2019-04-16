@@ -594,8 +594,12 @@ function resetEigenaarsBeroepsgroep()
     $('.artTextBox').attr("placeholder","");
     $('.voornaamTextBox').attr("placeholder","");
     $('.beroepsgroepTextBox').attr("placeholder","");
-     demZoekGemeenten();
-     getMapStartup(thema);
+
+    tijdlijn = false
+    demVerwijderTijdslijn();
+        
+    demZoekGemeenten();
+    getMapStartup(thema);
 }
 
 

@@ -592,15 +592,18 @@ function resetEigenaarsWoonplaats()
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
 
-     demZoekGemeenten();
-     getMapStartup(thema);
+    tijdlijn = false
+    demVerwijderTijdslijn();
+
+    demZoekGemeenten();
+    getMapStartup(thema);
 }
 
 
 function decodeHtml(html) {
- var txt = document.createElement("textarea");
- txt.innerHTML = html;
- return txt.value;
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
 }
 /*
 function eigenaars() {

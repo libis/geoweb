@@ -104,6 +104,10 @@
       </div>      
   </div>
 </div>
+<div id="eig_popup" style="display:none;z-index:1000;position:absolute;color:black;padding:10px;border:solid 2px #ddd;background:beige;text-align:center;">
+                               <select id="eig_popup_list" name="eig_popup_list" size="2" onchange=geo_link(this); onfocus="$(this).css({'background-color': 'white'});">
+                            </select>
+</div>
 <div id ="tijdslijn_control">
 <div id="dem_tijdslijn"></div>
 </div>
@@ -466,9 +470,10 @@ $(document).on('click','#eig_lagen_btn',function(event){
     }
 });
 
-$('#map').contextmenu(function() {
-  alert( "Handler for .contextmenu() called." );
+$('#map').contextmenu(function(evt) {
+  openLinkMenu(evt);
 });
+        
 });
 
 function hideLagenbox() {
@@ -518,6 +523,9 @@ resetMap();
     $('.artTextBox').attr("placeholder","");
     $('.voornaamTextBox').attr("placeholder","");
     $('.woonplaatsTextBox').attr("placeholder","");
+
+    tijdlijn = false
+    demVerwijderTijdslijn();
 
      demZoekGemeenten();
      getMapStartup(thema);

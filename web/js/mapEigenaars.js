@@ -37,7 +37,7 @@ function demGetEigenaarsBeroepsgroep(){
                         $('#dp_vanaf').show();
                         $('#dp_tot').show();
 
-                        $( event.target ).blur();
+//                        $( event.target ).blur();
                         $('#hist_reset_vanaf').show();
                         $('#hist_reset_totMet').show();
                         $("#dem_toon_tijdlijn").show();
@@ -293,6 +293,44 @@ function geoInitMap(selLg)
     
 }
 
+function openLinkMenu(evt) {
+    var pixel = [evt.offsetX,evt.offsetY];
+    feat = map.getFeaturesAtPixel(pixel);
+    var mainlayer = mainLayer.split("##");
+    var laag = mainlayer[1].trim();    
+    for (var i=0;i< feat.length;i++) {
+        var featlaag = feat[i].getId();
+        if (featlaag.indexOf(laag) >= 0) {
+            var eigenschappen = feat[i].getProperties();
+            var poutput = [];// voorbereiding
+    
+    
+                    targetToPush = '<option value="';
+                    targetToPush += eigenschappen.adacode;// key                    
+                    targetToPush += '">';
+                    targetToPush += 'adacode';// value
+                    targetToPush += '</option>';
+                    targetToPush += '<option value="';
+                    targetToPush += eigenschappen.feit_id;// key                    
+                    targetToPush += '">';
+                    targetToPush += 'administratieve info';// value
+                    targetToPush += '</option>';
+                    poutput.push(targetToPush);
+                    $('#eig_popup_list').html('');
+                    $('#eig_popup_list').html(poutput.join(''));
+                    $("#eig_popup").css({left: evt.offsetX});
+                    $("#eig_popup").css({top: evt.offsetY});
+                    $("#eig_popup").show();
+            break;
+        }
+    }
+   
+}
+
+function geo_link(select) {
+   alert(select.options[select.selectedIndex].value);
+   window.open('http://'+websiteIP+'/limburgers/feit/'+select.options[select.selectedIndex].value,"_blank");
+}
 function geoShowMetadata() { 
     var mainlayer = mainLayer.split("##");
     var laag = mainlayer[1].trim();    

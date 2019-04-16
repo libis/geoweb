@@ -590,6 +590,10 @@ function resetEigenaarsBeroep()
     $('.artTextBox').attr("placeholder","");
     $('.voornaamTextBox').attr("placeholder","");
     $('.beroepTextBox').attr("placeholder","");
+    
+    tijdlijn = false
+    demVerwijderTijdslijn();
+    
      demZoekGemeenten();
      getMapStartup(thema);
  }
