@@ -71,12 +71,26 @@ function getJaartallenVoorTijdslijn($scheme,$theme)
 }   
     
 
-function getJaartallenVoorTijdslijnPercelen($scheme,$theme)
+function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selGem)
 {
     $result = array();
     $index = 0;
         //$query = "select min(\"begindatum\") from ".$scheme.".".$theme."";
         $query= "select min(to_char(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+        $query .= " where ";
+
+            $first = true;
+            foreach ($selGem as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " (kadastergemeente =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or kadastergemeente =  '".$value."'";
+                }
+                }
+            }
+            $query .= ")";
 
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -85,11 +99,26 @@ function getJaartallenVoorTijdslijnPercelen($scheme,$theme)
             $result[$index++]= $row[0];
         }
         pg_free_result($s);
-        $query= "select max(to_char(to_date(substr(to_char(einddatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+        $query= "select max(to_char(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+        $query .= " where ";
+
+            $first = true;
+            foreach ($selGem as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " (kadastergemeente =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or kadastergemeente =  '".$value."'";
+                }
+                }
+            }
+            $query .= ")";
+
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
-            $einddatum = $row[0];
+            $eindatum = $row[0];
             $result[$index++]= $row[0];
         }
         pg_free_result($s);

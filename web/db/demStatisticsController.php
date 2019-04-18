@@ -29,7 +29,7 @@ class demstatisticsController {
    {
           $oppgem = 0;
 //        if (!isset($_SESSION[$kadastergemeente])) {
-            $query = "select sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+            $query = "select sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
             $query .= "where naam is not null and voornamen is not null ";
             
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
@@ -66,7 +66,7 @@ class demstatisticsController {
         $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
         $query = "select aantal,naam || ' ' || voornamen from ( ";
-        $query .= "select count(naam) as aantal,naam,voornamen from vw_minuutplan_percelen_oat ";
+        $query .= "select count(naam) as aantal,naam,voornamen from mv_minuutplan-percelen-oat ";
         $query .= "where naam is not null and voornamen is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -176,7 +176,7 @@ class demstatisticsController {
         $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
         $query = "select sum(sqm),naam || ' ' || voornamen from ( ";
-        $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where naam is not null and voornamen is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -290,7 +290,7 @@ class demstatisticsController {
         $gemOpp = $this->getGemGrondbezit($kadastergemeente);
        
         $query = "select sum(sqm),kadastergemeente from ( 
-    select kadastergemeente,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat 
+    select kadastergemeente,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat 
         where naam is not null and voornamen is not null ";       
         
         
@@ -404,7 +404,7 @@ class demstatisticsController {
         $index = 0;       
        
         $query = "select sum(sqm),beroep  from ( ";
-        $query .= "select beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        $query .= "select beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where beroep is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -514,7 +514,7 @@ class demstatisticsController {
         $index = 0;       
        
         $query = "select sum(sqm),beroep || ' - ' ||kadastergemeente from ( 
-    select kadastergemeente,beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat 
+    select kadastergemeente,beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat 
         where naam is not null and voornamen is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -625,7 +625,7 @@ class demstatisticsController {
         $index = 0;       
        
         $query = "select sum(sqm),beroepsgroep  from ( ";
-        $query .= "select beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        $query .= "select beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where beroepsgroep is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -736,7 +736,7 @@ function getGrondbezitBeroepsgroepPerGem($kadastergemeente,$naam,$artikelnr,$ber
         $index = 0;       
 
         $query = "select sum(sqm),beroepsgroep || ' - ' ||kadastergemeente from ( 
-        select kadastergemeente,beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        select kadastergemeente,beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where beroepsgroep is not null ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
@@ -847,7 +847,7 @@ function getGrondbezitBeroepsgroepPerGem($kadastergemeente,$naam,$artikelnr,$ber
         $index = 0;       
        
         $query = "select sum(sqm),woonplaats  from ( ";
-        $query .= "select woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        $query .= "select woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where woonplaats is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -958,7 +958,7 @@ function getGrondbezitWoonplaatsPerGem($kadastergemeente,$naam,$artikelnr,$beroe
         $index = 0;       
        
         $query = "select sum(sqm),woonplaats || ' - ' || kadastergemeente from ( ";
-        $query .= "select  kadastergemeente,woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from vw_minuutplan_percelen_oat ";
+        $query .= "select  kadastergemeente,woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from mv_minuutplan-percelen-oat ";
         $query .= "where woonplaats is not null ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;

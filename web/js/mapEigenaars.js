@@ -320,6 +320,8 @@ function openLinkMenu(evt) {
                     $('#eig_popup_list').html(poutput.join(''));
                     $("#eig_popup").css({left: evt.offsetX});
                     $("#eig_popup").css({top: evt.offsetY});
+                    $("#eig_wait_popup").css({left: evt.offsetX});
+                    $("#eig_wait_popup").css({top: evt.offsetY});
                     $("#eig_popup").show();
             break;
         }
@@ -328,9 +330,41 @@ function openLinkMenu(evt) {
 }
 
 function geo_link(select) {
-   alert(select.options[select.selectedIndex].value);
-   window.open('http://'+websiteIP+'/limburgers/feit/'+select.options[select.selectedIndex].value,"_blank");
+
+    $("#eig_wait_popup").show();
+    $("#eig_popup").hide();
+
+    var item = select.options[select.selectedIndex].text;
+    if (item == 'adacode') {
+        
+        targetUrl="http://"+websiteIP+websitePath+"/gdrive/openFile.php";
+        argumenten = '?adacode=NL-LI-RMD00-100-001-1842-a02';
+//        argumenten = '?adacode='+select.options[select.selectedIndex].value;
+        $.post(targetUrl+argumenten, function(data) {
+            $("#eig_wait_popup").hide();
+            
+        data = data.trim();
+        if(data.length==0){
+            alert ('file niet gevonden.');
+        } else {
+            i_count = 0;
+            keyValueList = data.split("%%");
+            keyvaluearray=keyValueList[i_count].split("##");
+            newwindow = window.open("http://"+websiteIP+websitePath+"/"+keyvaluearray[0], "_blank");
+            newwindow.onload = function () {
+            targetUrl="http://"+websiteIP+websitePath+"/gdrive/verwijderFile.php";
+            $.post(targetUrl+argumenten,{keyvaluearray}, function(data) {
+                 });
+             }
+         }
+        }); 
+    } else if (item == 'administratieve info') {
+        window.open('http://'+websiteIP+'/limburgers/feit/'+select.options[select.selectedIndex].value,"_blank");
+        $("#eig_wait_popup").hide();
+    }
 }
+
+
 function geoShowMetadata() { 
     var mainlayer = mainLayer.split("##");
     var laag = mainlayer[1].trim();    

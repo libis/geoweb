@@ -108,12 +108,15 @@
                                <select id="eig_popup_list" name="eig_popup_list" size="2" onchange=geo_link(this); onfocus="$(this).css({'background-color': 'white'});">
                             </select>
 </div>
+<div id="eig_wait_popup" style="display:none;z-index:1001;position:absolute;color:black;padding:10px;border:solid 4px #3775BB;background:yellow;text-align:center;top:0.5%;left:80%;">
+    <h style="font-weight:bold">Een ogenblik aub...</h>
+</div>
 <div id ="tijdslijn_control">
 <div id="dem_tijdslijn"></div>
 </div>
 <div id="map" class="map">
 </div>
- <script language="javascript">
+<script language="javascript">
 var  selGem = [];
 var  selNm = [];
 var  selVnm = [];

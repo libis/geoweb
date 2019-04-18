@@ -32,7 +32,7 @@ class lijstenController {
         $result = array();
         $index = 0;
 
-        $query="select distinct kadastergemeente from vw_minuutplan_percelen_oat order by kadastergemeente";
+        $query="select distinct kadastergemeente from mv_minuutplan_percelen_oat order by kadastergemeente";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -46,7 +46,7 @@ class lijstenController {
         $result = array();
         $index = 0;
 
-        $query="select distinct kadastergemeente from vw_minuutplan_percelen_oat where lower(kadastergemeente) like lower('%".$filter."%') order by kadastergemeente";
+        $query="select distinct kadastergemeente from mv_minuutplan_percelen_oat where lower(kadastergemeente) like lower('%".$filter."%') order by kadastergemeente";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -60,7 +60,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat order by voornamen";
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -75,7 +75,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat ";
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat ";
         
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -104,7 +104,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -180,7 +180,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -255,7 +255,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -332,7 +332,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -395,7 +395,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -471,7 +471,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -547,7 +547,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -622,7 +622,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from vw_minuutplan_percelen_oat ";
+        $query="select distinct naam from mv_minuutplan_percelen_oat ";
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -649,7 +649,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and voornamen = '".$voornaam."'";
+        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and voornamen = '".$voornaam."'";
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -663,7 +663,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and artikelnummer = '".$artikelnummer."'";;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and artikelnummer = '".$artikelnummer."'";;
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -679,7 +679,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from vw_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -769,7 +769,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from vw_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')";
+        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')";
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -831,7 +831,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat";
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat";
         $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -847,7 +847,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat ";
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -878,7 +878,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -958,7 +958,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1038,7 +1038,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1118,7 +1118,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1186,7 +1186,7 @@ class lijstenController {
         
         
         
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1276,7 +1276,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1351,7 +1351,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1426,7 +1426,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from vw_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1515,7 +1515,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from vw_minuutplan_percelen_oat ";
+        $query="select distinct beroep from mv_minuutplan_percelen_oat ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1543,7 +1543,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from vw_minuutplan_percelen_oat ";
+        $query="select distinct woonplaats from mv_minuutplan_percelen_oat ";
         
                 if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1573,7 +1573,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat ";
+        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1602,7 +1602,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct soort from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct soort from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
       if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1630,7 +1630,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct toponiem from vw_minuutplan_percelen_oat ";
+        $query="select distinct toponiem from mv_minuutplan_percelen_oat ";
 
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1659,7 +1659,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroep from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct beroep from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -1749,7 +1749,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from vw_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from mv_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1823,7 +1823,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from vw_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from mv_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1911,7 +1911,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-       $query="select distinct woonplaats from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+       $query="select distinct woonplaats from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2000,7 +2000,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat where lower(beroepsgroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat where lower(beroepsgroep) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -2091,7 +2091,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroepsgroep from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2182,7 +2182,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct naam from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2273,7 +2273,7 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct artikelnummer from vw_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {

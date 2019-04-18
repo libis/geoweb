@@ -32,7 +32,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select objkoppel from mv_minuutplan_percelen_oat";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -112,7 +112,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select objkoppel from mv_minuutplan_percelen_oat";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -203,7 +203,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select objkoppel from mv_minuutplan_percelen_oat";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -295,7 +295,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select objkoppel from mv_minuutplan_percelen_oat";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -388,7 +388,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select distinct objkoppel from mv_minuutplan_percelen_oat";
         $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle toponiemen") { $query .= " and toponiem = '".$toponiemen."'";  }
 
@@ -406,7 +406,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from vw_minuutplan_percelen_oat";
+        $query = "select distinct objkoppel from mv_minuutplan_percelen_oat";
         $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle grondgebruik") { $query .= " and soort = '".$grondgebruik."'";  }
 

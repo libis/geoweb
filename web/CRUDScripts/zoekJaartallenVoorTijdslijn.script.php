@@ -3,12 +3,13 @@ if(!defined('DS'))
     define('DS', DIRECTORY_SEPARATOR);
 $layer = $_POST['laag'];
 $scheme = $_POST['schema'];
+$selGem = $_POST['selGem'];
 $result="";
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demTijdslijnController.php');
 $tijdslijnController = new demTijdslijnController();
 
 if ($scheme === 'public'){
-    foreach ($tijdslijnController->getJaartallenVoorTijdslijnPercelen($scheme,$layer) as $key => $value)
+    foreach ($tijdslijnController->getJaartallenVoorTijdslijnPercelen($scheme,$layer,$selGem) as $key => $value)
     {
         if($result!="")
         {
