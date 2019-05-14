@@ -54,12 +54,12 @@
             "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client.git",
+                "url": "https://github.com/googleapis/google-api-php-client.git",
                 "reference": "cd4d61678bc26267f3e5371735ae3f579709ea30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/cd4d61678bc26267f3e5371735ae3f579709ea30",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client/zipball/cd4d61678bc26267f3e5371735ae3f579709ea30",
                 "reference": "cd4d61678bc26267f3e5371735ae3f579709ea30",
                 "shasum": ""
             },
@@ -113,12 +113,12 @@
             "version": "v0.62",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-api-php-client-services.git",
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
                 "reference": "a3c342e711aaf61f83b1ef9de7a6685446a409e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client-services/zipball/a3c342e711aaf61f83b1ef9de7a6685446a409e7",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/a3c342e711aaf61f83b1ef9de7a6685446a409e7",
                 "reference": "a3c342e711aaf61f83b1ef9de7a6685446a409e7",
                 "shasum": ""
             },
@@ -150,12 +150,12 @@
             "version": "v0.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/google/google-auth-library-php.git",
+                "url": "https://github.com/googleapis/google-auth-library-php.git",
                 "reference": "ec4edcb043e523267973fda308d9412d7db78e17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-auth-library-php/zipball/ec4edcb043e523267973fda308d9412d7db78e17",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/ec4edcb043e523267973fda308d9412d7db78e17",
                 "reference": "ec4edcb043e523267973fda308d9412d7db78e17",
                 "shasum": ""
             },

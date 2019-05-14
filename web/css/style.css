@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* compileCompressed: "../css/$1.min.css", compileExpanded: "../css/$1.css" */
-/* main: style.scss */
+/* main: stile.scss */
 /*!
  * Bootstrap v4.0.0-alpha.3 (http://getbootstrap.com)
  * Copyright 2011-2016 The Bootstrap Authors
@@ -80,7 +80,7 @@ strong {
 }
 
 dfn {
-  font-style: italic;
+  font-stile: italic;
 }
 
 h1 {
@@ -114,7 +114,7 @@ sup {
 }
 
 img {
-  border-style: none;
+  border-stile: none;
 }
 
 svg:not(:root) {
@@ -313,7 +313,7 @@ html {
 
 html {
   font-size: 16px;
-  -ms-overflow-style: scrollbar;
+  -ms-overflow-stile: scrollbar;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -347,7 +347,7 @@ abbr[data-original-title] {
 
 address {
   margin-bottom: 1rem;
-  font-style: normal;
+  font-stile: normal;
   line-height: inherit;
 }
 
@@ -594,14 +594,14 @@ mark,
   background-color: #fcf8e3;
 }
 
-.list-unstyled {
+.list-unstiled {
   padding-left: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 .list-inline {
   padding-left: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 .list-inline-item {
@@ -2895,6 +2895,8 @@ input[type="button"].btn-block {
   border-bottom: 0.3em solid;
 }
 
+
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -2908,12 +2910,12 @@ input[type="button"].btn-block {
   font-size: 1rem;
   color: #333;
   text-align: left;
-  list-style: none;
+  list-stile: none;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0rem;
-  height:200px;
+  height:150px;
     overflow:scroll;
     overflow-x:hidden;
 }
@@ -3535,7 +3537,7 @@ input[type="button"].btn-block {
 .nav {
   padding-left: 0;
   margin-bottom: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 .nav-link {
@@ -4213,7 +4215,7 @@ input[type="button"].btn-block {
 .breadcrumb {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  list-style: none;
+  list-stile: none;
   background-color: #eee;
   border-radius: 0rem;
 }
@@ -4764,7 +4766,7 @@ base::-moz-progress-bar,
 
 .media-list {
   padding-left: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 .list-group {
@@ -5175,7 +5177,7 @@ button.close {
   z-index: 1070;
   display: block;
   font-family: "Lato", sans-serif;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-break: auto;
@@ -5263,7 +5265,7 @@ button.close {
   width: 0;
   height: 0;
   border-color: transparent;
-  border-style: solid;
+  border-stile: solid;
 }
 
 .popover {
@@ -5275,7 +5277,7 @@ button.close {
   max-width: 276px;
   padding: 1px;
   font-family: "Lato", sans-serif;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
   letter-spacing: normal;
   line-break: auto;
@@ -5399,7 +5401,7 @@ button.close {
   width: 0;
   height: 0;
   border-color: transparent;
-  border-style: solid;
+  border-stile: solid;
 }
 
 .popover-arrow {
@@ -5564,7 +5566,7 @@ button.close {
   padding-left: 0;
   margin-left: -30%;
   text-align: center;
-  list-style: none;
+  list-stile: none;
 }
 
 .carousel-indicators li {
@@ -6130,7 +6132,7 @@ a.bg-danger:focus, a.bg-danger:hover {
 }
 
 .font-italic {
-  font-style: italic;
+  font-stile: italic;
 }
 
 .text-muted {
@@ -6285,7 +6287,7 @@ a.text-danger:focus, a.text-danger:hover {
   }
 }
 
-/* main: style.scss */
+/* main: stile.scss */
 .no-padding-left {
   padding-left: 0 !important;
 }
@@ -6318,7 +6320,7 @@ h3 {
   font-size: 1.6rem;
   font-family: Georgia, "Times New Roman", Times, serif;
   text-transform: none;
-  font-style: italic;
+  font-stile: italic;
   font-weight: 100;
 }
 
@@ -6390,7 +6392,7 @@ hr {
 
 .navbar-default .navbar-brand span {
   font-size: 1.8rem;
-  font-style: italic;
+  font-stile: italic;
   font-weight: 500;
   padding-left: 5px;
   padding-right: 10px;
@@ -6425,7 +6427,7 @@ hr {
 .navbar-default .navbar-nav li {
   margin-right: 20px;
   width: auto;
-  list-style: none;
+  list-stile: none;
 }
 
 @media (max-width: 991px) {
@@ -6479,6 +6481,70 @@ hr {
   color: #fff;
   height: 60px;
   font-size: 1.2rem;
+}
+
+.control-tile {
+    position: absolute;
+    left:330px;
+    background: none;
+    width: 331px;
+    margin: 1rem 1rem;
+    z-index: 2000;
+}
+
+.control-tile .control-tile-top {
+  position: absolute;
+  left: 0rem;
+  z-index: 1003;
+}
+.control-tile .control-tile-top button {
+  background: none;
+  background: #3775BB;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.control-tile .control-tile-top button span:before {
+  content: "\f0d7";
+  margin-left: 1px;
+  font-family: "FontAwesome";
+}
+
+.control-tile .control-tile-top button[aria-expanded="true"] span:before {
+  content: "\f0d8";
+  font-family: "FontAwesome";
+}
+
+.control-tile .control-tile-top span {
+  color: white;
+  font-weight: bold;
+}
+
+.control #control-form-tile {
+  padding: 3.5rem 1rem 1rem 1rem;
+  background: #f6f6f6;
+}
+
+.control #control-form-tile h2 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+}
+
+.control #control-form-tile label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.control #control-form-tile .wrapper {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #eee;
 }
 
 .control {
@@ -6680,7 +6746,7 @@ ul#flashes {
   margin: 0;
   margin-bottom: 15px;
   padding: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 ul#flashes li {
@@ -6877,7 +6943,7 @@ section.eigen .eigen-verhaal .img-in-text {
   margin-top: 0;
   font-weight: 300;
   color: #666;
-  font-style: italic;
+  font-stile: italic;
 }
 
 .container .nieuws .nieuws-item p {
@@ -6926,16 +6992,16 @@ section.eigen .eigen-verhaal .img-in-text {
 }
 
 .container .content address {
-  font-style: italic;
+  font-stile: italic;
 }
 
 .container .simple-nav {
   font-size: 1.3em;
   margin: 2em 0;
   padding: 0.3em 1em;
-  list-style: none;
+  list-stile: none;
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-style: italic;
+  font-stile: italic;
   border-left: 3px solid #3775BB;
 }
 
@@ -6996,7 +7062,7 @@ section.eigen .eigen-verhaal .img-in-text {
 
 footer {
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-style: italic;
+  font-stile: italic;
   background: #f7f7f7;
   font-size: 1.2em;
   padding: 3rem 0;
@@ -7024,7 +7090,7 @@ footer .footer-menu ul {
 }
 
 footer .footer-menu li {
-  list-style: none;
+  list-stile: none;
   display: inline;
   padding: 0 5px;
 }
@@ -7294,7 +7360,7 @@ ul#flashes {
   margin: 0;
   margin-bottom: 15px;
   padding: 0;
-  list-style: none;
+  list-stile: none;
 }
 
 ul#flashes li {
@@ -7748,7 +7814,7 @@ table.fixed td {
 
 .ol-attribution li {
   display: inline;
-  list-style: none;
+  list-stile: none;
   line-height: inherit;
 }
 
@@ -7865,7 +7931,7 @@ table.fixed td {
   cursor: move;
 }
 
-/* main: style.scss */
+/* main: stile.scss */
 .slick-slider {
   max-width: 1100px;
   margin: 0 auto;
@@ -7935,7 +8001,7 @@ table.fixed td {
   content: '←';
   content: "\f137";
   font-family: FontAwesome;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
 }
 
@@ -7943,7 +8009,7 @@ table.fixed td {
   content: '→';
   content: "\f138";
   font-family: FontAwesome;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
 }
 
@@ -7960,7 +8026,7 @@ table.fixed td {
   content: '→';
   content: "\f138";
   font-family: FontAwesome;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
 }
 
@@ -7968,7 +8034,7 @@ table.fixed td {
   content: '←';
   content: "\f137";
   font-family: FontAwesome;
-  font-style: normal;
+  font-stile: normal;
   font-weight: normal;
 }
 
@@ -7983,7 +8049,7 @@ table.fixed td {
   display: block;
   width: 100%;
   padding: 0;
-  list-style: none;
+  list-stile: none;
   text-align: center;
 }
 
@@ -8074,15 +8140,15 @@ table.fixed td {
   border-color: transparent transparent transparent #202020;
   transition: 100ms all ease;
   cursor: pointer;
-  border-style: solid;
+  border-stile: solid;
   border-width: 10px 0 10px 18px;
 }
 .button.paused {
-  border-style: double;
+  border-stile: double;
   border-width: 0px 0 0px 18px;
 
 .button.stop {
-  border-style: solid;
+  border-stile: solid;
   border-width: 0px 0 0px 18px;
 }
 .button:hover {
@@ -8090,5 +8156,4 @@ table.fixed td {
 }
 
 
-
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=stile.css.map */

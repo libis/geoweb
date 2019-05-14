@@ -129,7 +129,13 @@ $sid = session_id();
        </div><!-- /.container-fluid -->
      </nav>
   </header>
-
+<div id="eig_popup" style="display:none;z-index:1000;position:absolute;color:black;padding:10px;border:solid 2px #ddd;background:beige;text-align:center;">
+                               <select id="eig_popup_list" name="eig_popup_list" size="2" onchange=geo_link(this); onfocus="$(this).css({'background-color': 'white'});">
+                            </select>
+</div>
+<div id="eig_wait_popup" style="display:none;z-index:1001;position:absolute;color:black;padding:10px;border:solid 4px #3775BB;background:yellow;text-align:center;top:0.5%;left:80%;">
+    <h style="font-weight:bold">Een ogenblik aub...</h>
+</div>
 <script>
 openTijdslijn = false;
 thema = getQueryVariable("thema");
@@ -137,8 +143,21 @@ omgeving = 'aezel';
 hoofdlaag = null;
 legendLayer = null;
 keyValueLayerList = null;
+keyValueTilesList = null;
 geoKeyValueList = null;
 geoWmsPerceel = null;
+
+selTg = [];
+var  selGem = [];
+var  selNm = [];
+var  selVnm = [];
+var  selArt = [];
+var  selLg = [];
+var  selBgp = [];
+var  selBrp = [];
+var  selWpl = [];
+
+ 
 
 function eigenaars() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
@@ -146,7 +165,7 @@ function eigenaars() {
 }
 function eigenaars_beroepsgroepen() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_beroepsgroepen.php?thema="+thema,"_self");
+    window.open("./eigenaars_beroepsgroepen.php?thema="+thema+"_beroepsgroepen","_self");
 }
 function eigenaars_beroep() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
@@ -154,25 +173,40 @@ function eigenaars_beroep() {
 }
 function eigenaars_statistieken() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_statistieken.php?thema="+thema,"_self");
+    window.open("./eigenaars_statistieken.php?thema="+thema+"&laag="+hoofdlaag[1].trim(),"_self");
 }
 function eigenaars_woonplaats() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_woonplaats.php?thema="+thema,"_self");
+    window.open("./eigenaars_woonplaats.php?thema="+thema+"_woonplaatsen","_self");
 }
 
 function hideTimeItems() {
+    $("#dem_toon_tijdlijn").hide();
+    $('#dem_tijdslijn').hide();
+    $('#dem_player').hide();
+    $('#tijdslijn_vanaf').hide();
+    $('#tijdslijn_TotMet').hide();
+    $('#dp_vanaf').hide();
+    $('#dp_tot').hide();
+    $('#hist_reset_vanaf').hide();
+    $('#hist_reset_totMet').hide();
+    $('#dem_film_pause').hide();
+    
+      selGem = [];
+  setCookie('selGem',selGem);0
+      setCookie('selArt',selArt);
+    setCookie('selVnm',selVnm);
+    setCookie('selNm',selNm);
 
-                            $('#dem_tijdslijn').hide();
-                            $('#dem_player').hide();
-                            $('#tijdslijn_vanaf').hide();
-                            $('#tijdslijn_TotMet').hide();
-                            $('#dp_vanaf').hide();
-                            $('#dp_tot').hide();
-                            $('#hist_reset_vanaf').hide();
-                            $('#hist_reset_totMet').hide();
-                            $('#dem_film_pause').hide();
-                        }
+    setCookie('selLg',selLg);
+    setCookie('selGem',selGem);
+    setCookie('selBrp',selBrp);    
+    setCookie('selBgp',selBgp); 
+    setCookie('selWpl',selWpl); 
+
+    
+}
+
 $(function() {
     van = $( "#dp_vanaf" ).datepicker({
         defaultDate: "+1w",
@@ -207,5 +241,18 @@ $(function() {
         return date;
     }
 });
+
+function hideLagenbox() {
+   if (firstOpenLg == false) {
+        $("#lagenbox").css('display','none');
+    } else {
+        $('#eig_lagen_btn').attr('aria-expanded','false');
+    }
+   if (firstOpenTg == false) {
+        $("#tilesbox").css('display','none');
+    } else {
+        $('#eig_tiles_btn').attr('aria-expanded','false');
+    }    
+}
   
 </script>

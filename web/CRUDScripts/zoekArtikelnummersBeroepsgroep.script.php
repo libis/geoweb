@@ -4,7 +4,8 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
 
-
+$laag = $_POST['hoofdlaag'];
+$lijstenController->setOATView($laag[1]);
 $filter = $_GET['artnr'];
 $beroepsgroep= $_POST['selBgp'];
 $familienaam = $_POST['selNm'];

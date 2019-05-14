@@ -241,7 +241,7 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function demBerekenKleurenVoorLegende(toontijdslijn) 
+function demBerekenKleurenVoorLegende() 
 {
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLegendItems.script.php";
     $.post(targetUrl,{selLg}, function(data) {
@@ -263,22 +263,87 @@ function demBerekenKleurenVoorLegende(toontijdslijn)
                 kleurLegend[keyvaluearray[1]].push(rgb); 
                 i_count++;
             }
-            if (toontijdslijn) demToonTijdslijn();
+            demToonTijdslijn();
             
    });
 }
+
+
+function demGeoBerekenTijdsinterval(omgeving,min,max)
+{
+    var schema = 'themas';
+    if (omgeving == 'aezel') schema = 'public';
+        var poutputStart = [];// voorbereiding
+        var poutputEnd = [];// voorbereiding
+                
+        toontijdslijn = true;
+        interval =  (max - min) / tijdsvakken;
+        interval = parseInt(interval);
+        if (interval==0) interval =1;
+
+        modulus = min%interval;
+        min = min - modulus;
+        modulus = max%interval;
+        max = max-modulus;
+        maxCurr = max;
+        minCurr = min;
+        tmpYear = min;
+
+        var startYearToPush = ''; 
+        var endYearToPush = ''; 
+        i_count = min;
+        currYear = min + (10 * interval);
+
+        startYearToPush = '<option selected="selected" value="'+min+'">'+min+'</option>'
+
+        while  (i_count < max+1)
+        {
+            i_count = i_count+interval;
+            if (i_count < max) {
+                startYearToPush += '<option value="'+i_count+'">'+i_count+'</option>'
+                endYearToPush += '<option value="'+i_count+'">'+i_count+'</option>'    
+            }
+        }
+        endYearToPush += '<option selected="selected" value="'+max+'">'+max+'</option>'
+
+        $('#tijdslijn_vanaf').html('');
+        $('#tijdslijn_TotMet').html('');
+
+        poutputStart.push(startYearToPush);
+        poutputEnd.push(endYearToPush);
+
+        $('#tijdslijn_vanaf').html(poutputStart.join(''));
+        $('#tijdslijn_TotMet').html(poutputEnd.join(''));
+        $('#tijdslijn_vanaf').hide();
+        $('#tijdslijn_TotMet').hide();
+
+
+        $('#dp_vanaf').datepicker("setDate",minCurr+"-01-01");
+        $('#dp_vanaf').datepicker("option", "maxDate", maxCurr+"-12-30" );
+
+
+        $('#dp_tot').datepicker("setDate",maxCurr+"-12-31");        
+        $('#dp_tot').datepicker("option", "minDate", minCurr+"-01-02");
+        maxCurrDayDate = maxCurr+"-12-31";
+        minCurrDayDate = minCurr+"-01-01";
+        if (thema.indexOf('geo_percelen') == -1) {
+            demBerekenKleurenVoorLegende();
+        }  else {
+            demToonTijdslijn();
+        }      
+}
+
+
+
 function demBerekenTijdsinterval(omgeving,laag)
 {
-selGem = getCookie('selGem');    
+    selGem = getCookie('selGem');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
     
     var lg;
     var schema = 'themas';
-    var toontijdslijn = true;
-    //if (lg=selLg.length == 0) selLg=['Alle '];
     if (omgeving == 'aezel') schema = 'public';
     $.post(targetUrl,{schema,laag,selGem}, function(data) {    
-        //if (lg==true) selLg.splice(0,selLg.length);
         
         data = data.trim();
         var poutputStart = [];// voorbereiding
@@ -294,8 +359,7 @@ selGem = getCookie('selGem');
                 keyvaluearray=keyValueList[1].split("##");
                 max = Number(keyvaluearray[1]);
                 
-//                if (max != min){
-
+                    toontijdslijn = true;
                     interval =  (max - min) / tijdsvakken;
                     interval = parseInt(interval);
                     if (interval==0) interval =1;
@@ -345,11 +409,10 @@ selGem = getCookie('selGem');
                     $('#dp_tot').datepicker("option", "minDate", minCurr+"-01-02");
                     maxCurrDayDate = maxCurr+"-12-31";
                     minCurrDayDate = minCurr+"-01-01";
-//            }
             if (thema.indexOf('geo_percelen') == -1) {
-                demBerekenKleurenVoorLegende(toontijdslijn);
+                demBerekenKleurenVoorLegende();
             }  else {
-                if (toontijdslijn) demToonTijdslijn();
+                demToonTijdslijn();
             }      
             
         }
@@ -642,6 +705,7 @@ function spSlideshow() {
       laag = selLg[0];
       datum = minCurrDayDate;
   }
+  arguments = "?datum="+datum;
   $.post(targetUrl+arguments,{laag,schema}, function(data) {
     data = data.trim();
     if(data.length>0) {
@@ -659,7 +723,6 @@ function snSlideshow() {
     
   clearInterval(slideInterval);
   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVolgendeDatumHist.script.php";
-  arguments = "?datum="+minCurrDayDate;
   var schema = 'themas';
   var laag;
   var datum;

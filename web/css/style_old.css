@@ -447,6 +447,12 @@ ul#flashes li {
     height: 25px;
     border: none;
 }
+.tilesTextBox {
+    width: 185px;
+    margin-left: -210px;
+    height: 25px;
+    border: none;
+}
 .zoekknop {
     width: 30px;
     margin-left: 35px;

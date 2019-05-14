@@ -79,6 +79,9 @@ $sid = session_id();
      </nav>
   </header>
 <script>
+    selTg = [];
+hoofdlaag = null;
+mainLayer = null;
 openTijdslijn = false;
 var thema = getQueryVariable("thema");
 </script>

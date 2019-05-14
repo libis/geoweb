@@ -1,5 +1,4 @@
  vectorLayers = [];
- vectorLayersP = [];
  metadataID = "";
 
 
@@ -74,16 +73,49 @@ function histInitMap(omgeving,selLg){
     var scaleLineControl= new ol.control.ScaleLine();
     var layerArr = [];
     themalaag = selLg[0];
-    for (var i=0;i<selLg.length;i++)  {
-        var laag = omgeving+":"+selLg[i];
-    }
     var layers = [];
+
+    var omgeving;
+    var stijl;
+    var imgwms;
+    
+    
+
+    for (var i=1;i<selLg.length;i++)  {
+        
+        var laag = lagenprefix+":"+selLg[i];
+        for (var j=0;j<keyValueLayerList.length;j++){
+            keyvaluearray=keyValueLayerList[j].split("##");
+            if (keyvaluearray[1].indexOf(selLg[i]) > -1){
+              omgeving = keyvaluearray[2];
+              omgeving = omgeving.trim();
+              stijl = keyvaluearray[3];
+              laag = omgeving+":"+selLg[i];
+              stijl = stijl.trim();
+              laag = laag.trim();
+              j= keyValueLayerList.length;
+            }
+        }
+        imgwms = new ol.source.ImageWMS({
+          url: mapviewerIP+'/geoserver/ows',
+          params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
+          serverType: 'geoserver'
+        });
+        layerArr.push(imgwms);
+    }
+
+    for (var i=0;i<selTg.length;i++)  {
+        if (selTg[0]= 'Open Street Map') {
+        layers.push(new ol.layer.Tile({source: new ol.source.OSM()}));
+        }
+    }
     
     for (var i=0;i<layerArr.length;i++)  {
          var ly = new ol.layer.Image({source: layerArr[i]})
          layers.push(ly);
     }
-
+    
+    
 //scale
 
       scaleLineControl.setUnits('metric');
@@ -270,6 +302,7 @@ function histGetLayerInTime(selGem,vanaf,speler)
                 output.push([gebied,100/*gebFeatures.length*/,rgb]);
                 vectorSource = new ol.source.Vector();
                 vector_layer = new ol.layer.Vector({
+                    opacity: 0.6,
                   source: vectorSource,
                   style: new ol.style.Style({
                     stroke: new ol.style.Stroke({

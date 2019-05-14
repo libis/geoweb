@@ -19,6 +19,7 @@ class lijstenController {
    private $pcontroller;
    private $conn;
    private $conn_geonode;
+   private $cookie_name;
    
    function __construct()
    {
@@ -26,13 +27,33 @@ class lijstenController {
         $this->conn = $pcontroller->getConn();
         $this->conn_geonode = $pcontroller->getConn_geonode();
    }
+  
+   function setOATView($mainlayer){
+        $this->cookie_name = $mainlayer;
+   }
 
+public function    zoekExterneLinks() {
+        $result = array();
+        $index = 0;
+
+        $query="select distinct entiteit,tabelnaam,url from public.externe_links  order by entiteit";
+        
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$row[0]]=$row[1]."##".$row[2];
+        }
+        
+        pg_free_result($s);
+        return $result;    
+}
     public function getGemeenten()
     {
         $result = array();
         $index = 0;
 
-        $query="select distinct kadastergemeente from mv_minuutplan_percelen_oat order by kadastergemeente";
+        $query="select distinct kadastergemeente from ".$this->cookie_name."   order by kadastergemeente";
+        
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -46,7 +67,7 @@ class lijstenController {
         $result = array();
         $index = 0;
 
-        $query="select distinct kadastergemeente from mv_minuutplan_percelen_oat where lower(kadastergemeente) like lower('%".$filter."%') order by kadastergemeente";
+        $query="select distinct kadastergemeente from ".$this->cookie_name."   where lower(kadastergemeente) like lower('%".$filter."%') order by kadastergemeente";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -60,7 +81,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat order by voornamen";
+        $query="select distinct voornamen from ".$this->cookie_name."   order by voornamen";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
@@ -75,7 +96,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat ";
+        $query="select distinct voornamen from ".$this->cookie_name."   ";
         
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -104,7 +125,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from ".$this->cookie_name."   where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -180,7 +201,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from ".$this->cookie_name."   where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -251,11 +272,11 @@ class lijstenController {
         return $result;
     } 
     
-    public function getVoornamenBeroepsgroepFilter($filter,$voornaam,$naam,$artikelnummer,$beroepsgroep) {
+    public function getVoornamenBeroepsgroepFilter($filter,$kadastergemeente,$naam,$artikelnummer,$beroepsgroep) {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')" ;
+        $query="select distinct voornamen from ".$this->cookie_name."   where lower(voornamen) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -332,7 +353,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from ".$this->cookie_name."   where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -395,7 +416,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from ".$this->cookie_name."   where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -471,7 +492,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from ".$this->cookie_name."   where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -547,7 +568,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from ".$this->cookie_name."   where lower(naam) like lower('%".$filter."%')" ;
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -622,7 +643,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from mv_minuutplan_percelen_oat ";
+        $query="select distinct naam from ".$this->cookie_name."   ";
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -649,7 +670,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and voornamen = '".$voornaam."'";
+        $query="select distinct naam from ".$this->cookie_name."   where kadastergemeente = '".$filter."' and voornamen = '".$voornaam."'";
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -663,7 +684,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."' and artikelnummer = '".$artikelnummer."'";;
+        $query="select distinct naam from ".$this->cookie_name."   where kadastergemeente = '".$filter."' and artikelnummer = '".$artikelnummer."'";;
         $query .= " order by naam";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -679,7 +700,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct naam from mv_minuutplan_percelen_oat where lower(naam) like lower('%".$filter."%')" ;
+        $query="select distinct naam from ".$this->cookie_name."   where lower(naam) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -769,7 +790,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct voornamen from mv_minuutplan_percelen_oat where lower(voornamen) like lower('%".$filter."%')";
+        $query="select distinct voornamen from ".$this->cookie_name."   where lower(voornamen) like lower('%".$filter."%')";
      
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -831,7 +852,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat";
+        $query="select distinct artikelnummer from ".$this->cookie_name."  ";
         $query .= " order by artikelnummer";
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
@@ -847,7 +868,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat ";
+        $query="select distinct artikelnummer from ".$this->cookie_name."   ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -878,7 +899,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -958,7 +979,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1038,7 +1059,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1118,7 +1139,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1186,7 +1207,7 @@ class lijstenController {
         
         
         
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where lower(artikelnummer::text) like lower('%".$filter."%')" ;
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where lower(artikelnummer::text) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1276,7 +1297,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from ".$this->cookie_name."   where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1351,7 +1372,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from ".$this->cookie_name."   where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1426,7 +1447,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from mv_minuutplan_percelen_oat where lower(beroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroep from ".$this->cookie_name."   where lower(beroep) like lower('%".$filter."%')" ;
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1515,7 +1536,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroep from mv_minuutplan_percelen_oat ";
+        $query="select distinct beroep from ".$this->cookie_name."   ";
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1543,7 +1564,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from mv_minuutplan_percelen_oat ";
+        $query="select distinct woonplaats from ".$this->cookie_name."   ";
         
                 if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1573,7 +1594,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat ";
+        $query="select distinct beroepsgroep from ".$this->cookie_name."   ";
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1602,7 +1623,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct soort from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct soort from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
       if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
             foreach ($kadastergemeente as $value) {
@@ -1630,7 +1651,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct toponiem from mv_minuutplan_percelen_oat ";
+        $query="select distinct toponiem from ".$this->cookie_name."   ";
 
        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1659,7 +1680,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroep from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct beroep from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -1749,7 +1770,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from mv_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from ".$this->cookie_name."   where lower(woonplaats) like lower('%".$filter."%')" ;
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1823,7 +1844,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct woonplaats from mv_minuutplan_percelen_oat where lower(woonplaats) like lower('%".$filter."%')" ;
+        $query="select distinct woonplaats from ".$this->cookie_name."   where lower(woonplaats) like lower('%".$filter."%')" ;
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -1911,7 +1932,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-       $query="select distinct woonplaats from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+       $query="select distinct woonplaats from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2000,7 +2021,7 @@ class lijstenController {
     {
         $result = array();
         $index = 0;
-        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat where lower(beroepsgroep) like lower('%".$filter."%')" ;
+        $query="select distinct beroepsgroep from ".$this->cookie_name."   where lower(beroepsgroep) like lower('%".$filter."%')" ;
         
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -2091,7 +2112,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct beroepsgroep from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct beroepsgroep from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2182,7 +2203,7 @@ class lijstenController {
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct naam from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct naam from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2273,7 +2294,7 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         $result = array();
         $index = 0;
         $first = false;
-        $query="select distinct artikelnummer from mv_minuutplan_percelen_oat where kadastergemeente = '".$filter."'";
+        $query="select distinct artikelnummer from ".$this->cookie_name."   where kadastergemeente = '".$filter."'";
 //        if (strncasecmp($familienaam,"alle ",5) != 0) $query .=" and lower(naam) = lower('".$familienaam."')";
 //        if (strncasecmp($artikelnummer,"alle ",5) != 0) $query .=" and artikelnummer = '".$artikelnummer."'" ;
         if (count($familienaam) > 0) {
@@ -2378,18 +2399,83 @@ public function getStatArtikelnummers($filter,$familienaam,$artikelnummer,$woonp
         }
         pg_free_result($s);
         return $result;
+    }   
+    
+    public function getLagenGetString($filter,$thema,$hoofdlaag){
+        
+        $result = array();
+        $index = 0;
+
+        $query="select lagen.invoernaam,lagen.omgeving,stijlen.naam,lagen.naam from themas.lagen inner join themas.thema_lagen on lagen.laag_id = thema_lagen.laag_id
+                inner JOIN themas.thema on thema_lagen.thema_id = thema.thema_id
+                left join themas.stijlen on stijlen.stijl_id = thema_lagen.stijl_id
+                where themas.thema.naam = lower('".$thema."')
+                    and lower(lagen.invoernaam) like lower('%".$filter."%')
+                        and lagen.invoernaam != '".$hoofdlaag."'
+                order by rangorde";
+        
+        $s = pg_query($this->conn_geonode, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++] = $row[0]."##".$row[1]."##".$row[2];
+        }
+        pg_free_result($s);
+        return $result;
+    }   
+    
+    public function getTiles($filter)
+    {
+        $result = array();
+        $index = 0;
+
+        $query="select tiles.naam,tiles.invoernaam from themas.tiles inner join themas.thema_tiles on tiles.tile_id = themas.tiles.tile_id
+                inner JOIN themas.thema on thema_tiles.thema_id = thema.thema_id
+                where themas.thema.naam = lower('".$filter."')
+                order by thema_tiles.rangorde";
+        
+        $s = pg_query($this->conn_geonode, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++] = $row[0]."##".$row[1];
+        }
+        pg_free_result($s);
+        return $result;
     }    
+    
+    public function getTilesGetString($filter,$thema)
+    {
+        $result = array();
+        $index = 0;
+
+        $query="select tiles.naam,tiles.invoernaam from themas.tiles inner join themas.thema_tiles on tiles.tile_id = themas.tiles.tile_id
+                inner JOIN themas.thema on thema_tiles.thema_id = thema.thema_id
+                where lower(themas.thema.naam) = lower('".$thema."')
+                    and lower(tiles.naam) like lower('%".$filter."%')
+                order by thema_tiles.rangorde";
+        
+        $s = pg_query($this->conn_geonode, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $result[$index++] = $row[0]."##".$row[1];
+        }
+        pg_free_result($s);
+        return $result;
+    } 
 
     public function isTijdAanwezig($omgeving,$laag){
         if ($omgeving === 'aezel') $schema = 'public';
         else $schema = 'themas';
-        $query = "select begindatum from ".$schema.".".$laag." limit 1";
-        
-        if (pg_query($this->conn_geonode, $query) == false) {
-           $result = false;
-        } else {
-            $result = true;
-        }
+        $query = "select einddatum from ".$schema.".".$laag." limit 1";
+        $result = false;
+        $s = pg_query($this->conn_geonode, $query);
+            while($row = pg_fetch_row($s))
+            {
+                if ($row[0] == null) {
+                    $result = false;
+                } else {
+                    $result = true;
+                }
+            }
         return $result;
     }
 

@@ -7,15 +7,17 @@
            <button data-toggle="collapse" data-target="#legend-form"><span>Legende</span></button>
            <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
         </div>
-        <div id="legend-form" class="collapse">
-        </div>
         <div id="metadata-form" class="collapse">
           <div id="infobox" style="display:none" ></div>
+        </div>
+        <div id="legend-form" class="collapse">
         </div>
 </div>
 <div class="control">
   <div class="control-top">
      <button data-toggle="collapse" data-target="#control-form" ><span>Menu</span></button>
+<!--     <button data-toggle="collapse" data-target="#control-form-tile" ><span>Achtergrond</span></button>
+-->
   </div>
     
   <div id="control-form" class="collapse in" >
@@ -69,11 +71,18 @@
         </ul>
       </div>
         <div class="button-group">
-            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString();" maxlength="25"/>
-            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies voorgrond" onkeyup="demZoekLagenZoekString(thema);" maxlength="25"/>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Voorgrond<span class="caret"></span></button>
             <ul id=lagenbox class="dropdown-menu">
             </ul>
         </div>
+            <div class="button-group">
+            <input class="geotextbox tilesTextBox" name="tilesbox" placeholder="Kies tiles" onkeyup="demZoekTilesZoekString();" maxlength="25"/>
+            <button id="eig_tiles_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Achtergrond<span class="caret"></span></button>
+            <ul id=tilesbox class="dropdown-menu">
+            </ul>
+            </div>
+
       </div>
     <div>
         <div>
@@ -103,44 +112,60 @@
         </div>
       </div>      
   </div>
+    <!--
+    <div id="control-form-tile" class="collapse" >
+        <div id="multilayer" >
+            <div class="button-group">
+            <input class="geotextbox tilesTextBox" name="tilesbox" placeholder="Kies tiles" onkeyup="demZoekTilesZoekString();" maxlength="25"/>
+            <button id="eig_tiles_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Tiles<span class="caret"></span></button>
+            <ul id=tilesbox class="dropdown-menu">
+            </ul>
+            </div>
+            </div>
+        </div>
+    -->
 </div>
-<div id="eig_popup" style="display:none;z-index:1000;position:absolute;color:black;padding:10px;border:solid 2px #ddd;background:beige;text-align:center;">
-                               <select id="eig_popup_list" name="eig_popup_list" size="2" onchange=geo_link(this); onfocus="$(this).css({'background-color': 'white'});">
-                            </select>
+<!--
+<div class="control-tile">
+      <div class="control-tile-top">
+     <button data-toggle="collapse" data-target="#control-form-tile" ><span>Lagen</span></button>
+    </div>
+
+    <div id="control-form-tile" class="collapse in" >
+        <div id="multilayer">
+            <div class="button-group">
+            <input class="geotextbox tilesTextBox" name="tilesbox" placeholder="Kies tiles" onkeyup="demZoekTilesZoekString();" maxlength="25"/>
+            <button id="eig_tiles_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Tiles<span class="caret"></span></button>
+            <ul id=tilesbox class="dropdown-menu">
+            </ul>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="eig_wait_popup" style="display:none;z-index:1001;position:absolute;color:black;padding:10px;border:solid 4px #3775BB;background:yellow;text-align:center;top:0.5%;left:80%;">
-    <h style="font-weight:bold">Een ogenblik aub...</h>
-</div>
+-->
+
 <div id ="tijdslijn_control">
 <div id="dem_tijdslijn"></div>
 </div>
 <div id="map" class="map">
 </div>
 <script language="javascript">
-var  selGem = [];
-var  selNm = [];
-var  selVnm = [];
-var  selArt = [];
-var  selLg = [];
 
 var firstOpenGem = true;
 var firstOpenNm = true;
 var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenLg = true;
-
+var firstOpenTg = true;
 
      $(document).ready(function(){
-
-
-
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
      
      $("#dem_toon_kaart").hide();
      $("#dem_eig_legend_chk").hide();
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
-     $("#dem_toon_tijdlijn").hide();
 
     $('.familienaamTextBox').attr("placeholder","");
     $('.artTextBox').attr("placeholder","");
@@ -149,11 +174,10 @@ var firstOpenLg = true;
 
     hideTimeItems();
     demCheckStijlen(thema);
+    demZoekTiles(thema);
     demZoekLagen(thema);
-    demZoekGemeenten();
     getMapStartup(thema);
     
-  
     
 
 //legende wordt ingevuld in demZoekLagen!!
@@ -363,8 +387,28 @@ $(document).on('click','#lagenbox a',function(event){
       setCookie('selLg',selLg);
       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
    } else {
+      if (selLg == "") selLg = [];
       selLg.push(href.trim());
       setCookie('selLg',selLg);
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+   $( event.target ).blur();
+   return false;
+});
+
+$(document).on('click','#tilesbox a',function(event){
+
+   var $target = $( event.currentTarget ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selTg.indexOf( href.trim()))  > -1 ) {
+      selTg.splice( idx, 1 );
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+   } else {
+      if (selTg == "") selTg = [];
+      selTg.push(href.trim());
       setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
    }
    $( event.target ).blur();
@@ -473,19 +517,24 @@ $(document).on('click','#eig_lagen_btn',function(event){
     }
 });
 
+$(document).on('click','.tilesTextBox',function(event){
+    $('#tilesbox').slideToggle();
+    $(".tilesTextBox").val('').html();
+    firstOpenTg = false;
+});
+
+$(document).on('click','#eig_tiles_btn',function(event){
+    if (firstOpenTg == false) {
+        $('#tilesbox').slideToggle();
+    }
+});
+
 $('#map').contextmenu(function(evt) {
   openLinkMenu(evt);
 });
         
 });
 
-function hideLagenbox() {
-   if (firstOpenLg == false) {
-        $("#lagenbox").css('display','none');
-    } else {
-        $('#eig_lagen_btn').attr('aria-expanded','false');
-    }
-}
 
 function resetMap(){
      $('#map').empty();
@@ -499,13 +548,13 @@ function resetEigenaars()
 {
 resetMap();
      $("#dem_toon_kaart").hide();
-     $("#dem_toon_tijdlijn").hide();
      $("#dem_eig_reset").hide();
 
     $('#artikelnummerbox').slideUp();
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();
+    $('#tilesbox').slideUp();
     $('#artikelnummerbox').empty();
     $('#gemeentebox').empty();
     $('#familienaambox').empty();
@@ -529,8 +578,9 @@ resetMap();
 
     tijdlijn = false
     demVerwijderTijdslijn();
+    hideTimeItems();
 
-     demZoekGemeenten();
+     demZoekGemeenten(hoofdlaag[1].trim());
      getMapStartup(thema);
 }
 
@@ -566,6 +616,7 @@ function getEigenaars() {
     $('#gemeentebox').slideUp();
     $('#familienaambox').slideUp();
     $('#voornaambox').slideUp();	
+    $('#tilesbox').slideUp();	
     hideLagenbox();
     var html = $('#dem_tijdslijn').html();
     if ($('#dem_tijdslijn').html().length > 10){

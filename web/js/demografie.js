@@ -21,7 +21,7 @@ function demZoekVoornamen(selGem,selNm,selVnm,selArt)
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -93,7 +93,7 @@ function demZoekVoornamenWoonplaats()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selWpl,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -161,7 +161,7 @@ function demZoekVoornamenBeroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selBrp,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selBrp,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -229,7 +229,7 @@ function demZoekVoornamenBeroepsgroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lb=selBgp.length == 0) selBgp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selBgp,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selBgp,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -285,7 +285,7 @@ function demZoekVoornamenByGemeente(selGem)
     selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
         var poutput = [];
@@ -319,7 +319,7 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
     selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
         var poutput = [];
@@ -363,7 +363,7 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -432,7 +432,7 @@ function demZoekFamilienamenWoonplaats()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selWpl,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selWpl,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -501,7 +501,7 @@ function demZoekFamilienamenBeroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selBrp,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBrp,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -570,7 +570,7 @@ function demZoekFamilienamenBeroepsgroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lb=selBgp.length == 0) selBgp=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selBgp,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBgp,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -638,7 +638,7 @@ function demZoekArtikelnummers()
     if (la=selArt.length == 0) selArt=['Alle '];
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -706,7 +706,7 @@ function demZoekArtikelnummersWoonplaats()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selWpl}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -774,7 +774,7 @@ function demZoekArtikelnummersBeroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selBrp}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selBrp}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -842,7 +842,7 @@ function demZoekArtikelnummersBeroepsgroep()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBgp.length == 0) selBgp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selBgp}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selBgp}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -900,7 +900,7 @@ function demZoekArtikelnummersByGemeente(selGem)
    selGem = getCookie('selGem');
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersByGemeente.script.php";
    if (lg=selGem.length == 0) selGem=['Alle '];
-   $.post(targetUrl,{selGem}, function(data) {
+   $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -950,7 +950,7 @@ function demZoekBeroepen()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -1018,7 +1018,7 @@ function demZoekWoonplaatsen()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -1086,7 +1086,7 @@ function demZoekBeroepsgroepen()
     if (lv=selVnm.length == 0) selVnm=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBgp.length == 0) selBgp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selVnm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selVnm.splice(0,selVnm.length);
@@ -1142,7 +1142,7 @@ function demZoekBeroepenByGemeente()
    selGem = getCookie('selGem');    
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);
         data = data.trim();
         if(data.length>0)
@@ -1176,7 +1176,7 @@ function demZoekWoonplaatsenByGemeente()
        selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);        
        data = data.trim();
         if(data.length>0)
@@ -1210,7 +1210,7 @@ function demZoekBeroepsgroepenByGemeente()
     selGem = getCookie('selGem');
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         if(data.length>0)
         {
@@ -1255,7 +1255,7 @@ function demZoekFamilienamenStat()
     if (lv=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selBrp,selWpl,selArt,selBgp}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBrp,selWpl,selArt,selBgp}, function(data) {    
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selBgp.splice(0,selBgp.length);
         if (lb==true) selBrp.splice(0,selBrp.length);
@@ -1328,7 +1328,7 @@ function demZoekArtikelnummersStat()
     if (lv=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selWpl,selBrp,selBgp}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selBrp,selBgp}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selWpl.splice(0,selWpl.length);
@@ -1398,7 +1398,7 @@ function demZoekBeroepenStat()
     if (lb=selGem.length == 0) selGem=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selWpl.length == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selWpl,selBgp,selNm,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selWpl,selBgp,selNm,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lb==true) selGem.splice(0,selGem.length);
@@ -1468,7 +1468,7 @@ function demZoekBeroepsgroepenStat()
     if (lv=selWpl.length == 0) selWpl=['Alle '];
     if (lg=selGem.length == 0) selGem=['Alle '];
     if (lb=selBrp.length == 0) selBrp=['Alle '];
-    $.post(targetUrl+argumenten,{selGem,selNm,selWpl,selBrp,selArt}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selBrp,selArt}, function(data) {    
         if (ln==true) selNm.splice(0,selNm.length);
         if (la==true) selArt.splice(0,selArt.length);
         if (lv==true) selWpl.splice(0,selWpl.length);
@@ -1538,7 +1538,7 @@ function demZoekWoonplaatsenStat()
     if (lb=selBrp.length == 0) selBrp=['Alle '];
     if (lg=selBgp.length == 0) selBgp=['Alle '];
     if (lw=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{selBrp,selBgp,selNm,selArt,selGem}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selBrp,selBgp,selNm,selArt,selGem}, function(data) {    
         if (la==true) selArt.splice(0,selArt.length);
         if (ln==true) selNm.splice(0,selNm.length);
         if (lb==true) selBrp.splice(0,selBrp.length);
@@ -1617,7 +1617,7 @@ function demZoekStatGrondbezitters()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
         if (la==true) selArt.splice(0,selArt.length);
         if (ln==true) selNm.splice(0,selNm.length);
         if (lb==true) selBrp.splice(0,selBrp.length);
@@ -1676,7 +1676,7 @@ function demZoekStatGrondbezittersPerGem()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {
         if (la==true) selArt.splice(0,selArt.length);
         if (ln==true) selNm.splice(0,selNm.length);
         if (lb==true) selBrp.splice(0,selBrp.length);
@@ -1731,7 +1731,7 @@ function demZoekStatGrondbezittersBeroep()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -1784,7 +1784,7 @@ function demZoekStatGrondbezittersBeroepPerGem()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -1838,7 +1838,7 @@ function demZoekStatGrondbezittersBeroepsgroep()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -1892,7 +1892,7 @@ function demZoekStatGrondbezittersBeroepsgroepPerGem()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selNm,selArt,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -1946,7 +1946,7 @@ function demZoekStatGrondbezittersWoonplaats()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2000,7 +2000,7 @@ function demZoekStatGrondbezittersWoonplaatsPerGem()
     if (lw=selWpl.length == 0) selWpl=['Alle '];
     if (ln=selNm.length == 0) selNm=['Alle '];
     if (la=selArt.length == 0) selArt=['Alle '];
-    $.post(targetUrl,{selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem,selArt,selNm,selBrp,selWpl,selBgp}, function(data) {
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2048,7 +2048,7 @@ function demZoekStatBarGrondbezitters()
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Eigenaar');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2115,7 +2115,7 @@ function demZoekStatBarGrondbezittersBeroep()
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroep');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2175,7 +2175,7 @@ function demZoekStatBarGrondbezittersBeroepsgroep()
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Beroepsgroep');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2229,7 +2229,7 @@ function demZoekStatBarGrondbezittersWoonplaats()
     var stat = new google.visualization.DataTable();
     stat.addColumn('string', 'Woonplaats');
     stat.addColumn('number', 'Oppervlakte(m²)');
-    $.post(targetUrl,{selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
+    $.post(targetUrl,{hoofdlaag,selGem,selBrp,selWpl,selBgp,selNm,selArt}, function(data) {  
         if (lb==true) selBrp.splice(0,selBrp.length);
         if (lg==true) selBgp.splice(0,selBgp.length);
         if (lw==true) selWpl.splice(0,selWpl.length);  
@@ -2271,7 +2271,7 @@ function demZoekGrondgebruikByGemeente(selGem)
 {
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGrondgebruikByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
         if(data.length>0)
@@ -2305,7 +2305,7 @@ function demZoekToponiemenByGemeente(selGem)
 {
     targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekToponiemenByGemeente.script.php";
     if (lg=selGem.length == 0) selGem=['Alle '];
-    $.post(targetUrl,{selGem}, function(data) {
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==true) selGem.splice(0,selGem.length);   
         data = data.trim();
         if(data.length>0)
@@ -2335,6 +2335,81 @@ function demZoekToponiemenByGemeente(selGem)
     });
 }
 */
+
+
+function demZoekTiles(thema) {
+    
+   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekTiles.script.php";
+   argumenten = '?thema='+thema;
+   $.post(targetUrl+argumenten, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueLayerList = data.split("%%");
+            i_count = 0;
+        
+            var targetToPush = '';  
+            
+            while(i_count<keyValueLayerList.length)
+            {
+                keyvaluearray=keyValueLayerList[i_count].split("##");
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += keyvaluearray[2];//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#tilesbox').html('');
+        $('#tilesbox').html(poutput.join(''));
+        $('.tilesTextBox').attr("placeholder","Kies achtergrond");        
+    });
+}
+
+
+function demZoekTilesZoekString(){
+
+
+    var laag = $(".tilesTextBox").val();
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekTilesZoekString.script.php";
+   argumenten = '?thema='+thema+'&laag='+laag;
+   $.post(targetUrl+argumenten, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        i_count = 0;
+        i_count2 = 0;
+
+        var targetToPush = '';  
+        
+       if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+        
+            for(i_count2=0;i_count2<keyValueList.length;i_count2++)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count2;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+            }
+            poutput.push(targetToPush);
+            
+        } 
+        $('#tilesbox').html('');
+        $('#tilesbox').html(poutput.join(''));
+        $('.tilesTextBox').attr("placeholder","Zoek achtergrond");        
+    });
+    
+}
+
 function demZoekLagen(thema) {
     
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagen.script.php";
@@ -2352,20 +2427,28 @@ function demZoekLagen(thema) {
             while(i_count<keyValueLayerList.length)
             {
                 keyvaluearray=keyValueLayerList[i_count].split("##");
-                if ((i_count == 0) && (thema.indexOf('geo') == 0)){
+                if (i_count == 0) {
                     mainLayer = keyValueLayerList[0];
                     hoofdlaag = mainLayer.split("##");
-                    var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+hoofdlaag[2].trim()+':'+hoofdlaag[1].trim()+'&amp;STYLE='+hoofdlaag[3]+'">';
-                    $("#legend-form").html(imag);
+                    hoofdlaag[1] = hoofdlaag[1].trim();
+                    hoofdlaag[2] = hoofdlaag[2].trim();                    
+                    if (thema.indexOf('geo') == 0){
 
-                    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
-                    argumenten = '?laag='+hoofdlaag[1].trim()+'&omgeving='+hoofdlaag[2].trim();
-                    $.post(targetUrl+argumenten, function(data) {
-                        if (data == true) {
-                            openTijdslijn = true;
-                            tijdlijn = false;
-                        }                            
-                    });
+                        var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+hoofdlaag[2].trim()+':'+hoofdlaag[1].trim()+'&amp;STYLE='+hoofdlaag[3]+'">';
+                        $("#legend-form").html(imag);
+
+                        targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
+                        argumenten = '?laag='+hoofdlaag[1]+'&omgeving='+hoofdlaag[2];
+                        $.post(targetUrl+argumenten, function(data) {
+                            if (data == true) {
+                                openTijdslijn = true;
+                                tijdlijn = false;
+                            }                            
+                            demZoekGemeenten();              
+                        });
+                    } else {
+                        openLaag(hoofdlaag[2],hoofdlaag[1]);
+                    }
                 } else {
                     targetToPush += '<li><a href="#" class="small" data-value="';
                     targetToPush += keyvaluearray[2];//id
@@ -2380,7 +2463,7 @@ function demZoekLagen(thema) {
         }
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek laag");        
+        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
     });
 }
 
@@ -2426,11 +2509,52 @@ function demZoekLagenGeoserver() {
         poutput.push(targetToPush);
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek laag");        
+        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
     });
 }
 
-function demZoekLagenZoekString(selLg)
+
+function demZoekLagenZoekString(thema){
+
+            selLg = getCookie('selLg');
+
+    var laag = $(".lagenTextBox").val();
+    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagenZoekString.script.php";
+   argumenten = '?thema='+thema+'&laag='+laag+'&hoofdlaag='+hoofdlaag[1];
+   $.post(targetUrl+argumenten, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        i_count = 0;
+        i_count2 = 0;
+
+        var targetToPush = '';  
+        
+       if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+        
+            for(i_count2=0;i_count2<keyValueList.length;i_count2++)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count2;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+            }
+            poutput.push(targetToPush);
+            
+        } 
+        $('#lagenbox').html('');
+        $('#lagenbox').html(poutput.join(''));
+        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+    });
+    
+}
+
+function demZoekLagenZoekStringGeoServer(selLg)
 {
     selLg = getCookie('selLg');
     var formatter = new ol.format.WMSCapabilities();
@@ -2492,7 +2616,7 @@ function demZoekGemeenten()
 {
     
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeenten.script.php";
-   $.post(targetUrl, function(data) {
+   $.post(targetUrl,{hoofdlaag}, function(data) {
         data = data.trim();
         var poutput = [];// voorbereiding
         if(data.length>0)
@@ -2529,7 +2653,7 @@ function demZoekGemeentenZoekString()
    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeenten.script.php";
    var filter = $(".gemeenteTextBox").val();
    argumenten = '?gemeente='+filter;
-   $.post(targetUrl+argumenten, function(data) {
+   $.post(targetUrl+argumenten,{hoofdlaag}, function(data) {
         data = data.trim();
         var poutput = [];// voorbereiding        // I want a list of names to use in my queries
         var targetToPush = '';  

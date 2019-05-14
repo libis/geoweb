@@ -181,7 +181,8 @@ var firstOpenBgp = true;
      $("#eig_legende_spam").hide();
      $("#dem_eig_reset").hide();
      
-     demZoekGemeenten();
+         demZoekLagen(thema);
+
   });
 
 function resetStatistieken()

@@ -4,6 +4,8 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demStatisticsController.php');
 $statController = new demStatisticsController();
 
+$laag = $_POST['hoofdlaag'];
+$statController->setOATView($laag[1]);
 
 $gemeente = $_POST['selGem'];
 $naam = $_POST['selNm'];

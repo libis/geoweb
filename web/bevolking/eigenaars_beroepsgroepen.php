@@ -10,16 +10,17 @@
              <button data-toggle="collapse" data-target="#legend-form"><span>Legende</span></button>
              <button data-toggle="collapse" data-target="#metadata-form"><span>Metadata</span></button>
           </div>
-          <div id="legend-form" class="collapse">
-          </div>
           <div id="metadata-form" class="collapse">
             <div id="infobox" style="display:none" ></div>
+          </div>
+          <div id="legend-form" class="collapse">
           </div>
 </div>   
 <div class="control">
   <div class="control-top">
      <button data-toggle="collapse" data-target="#control-form"><span>Menu</span></button>
-  </div>
+<!--     <button data-toggle="collapse" data-target="#control-form-tile" ><span>Achtergrond</span></button>  -->
+</div>
   <div id="control-form" class="collapse in">
     <h2>Beroepsgroep Eigenaar </h2>
 
@@ -30,7 +31,7 @@
             <button id ="dem_toon_tijdlijn" onclick="tijdsloop();">
                 Toon tijdlijn
             </button>
-        <button id ="dem_eig_reset" onclick="resetEigenaarsBeroepsgroep(;">
+        <button id ="dem_eig_reset" onclick="resetEigenaarsBeroepsgroep();">
               Reset
           </button>
       </div>
@@ -44,7 +45,6 @@
                 <button id ="dem_film_ff"  onclick="ffSlideshow();"<i class="material-icons">skip_next</i></button>
             </div>
         </div>
-    </div>
       <div id="multilayer">
       <div class="button-group">
         <input class="geotextbox gemeenteTextBox" name="gemeentebox" placeholder="Zoek gemeente" onkeyup="demZoekGemeentenZoekString();" maxlength="20"/>
@@ -77,11 +77,17 @@
         </ul>
       </div>
         <div class="button-group">
-            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(selLg);" maxlength="25"/>
-            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies voorgrond" onkeyup="demZoekLagenZoekString(thema);" maxlength="25"/>
+            <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Voorgrond<span class="caret"></span></button>
             <ul id=lagenbox class="dropdown-menu">
             </ul>
         </div>
+                                <div class="button-group">
+            <input class="geotextbox tilesTextBox" name="tilesbox" placeholder="Kies tiles" onkeyup="demZoekTilesZoekString();" maxlength="25"/>
+            <button id="eig_tiles_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Achtergrond<span class="caret"></span></button>
+            <ul id=tilesbox class="dropdown-menu">
+            </ul>
+            </div>
     <div>
         <div>
             <div class="select_tijd">
@@ -111,19 +117,27 @@
       </div>             
       </div>     
   </div>
+   <!--  
+    <div id="control-form-tile" class="collapse" >
+        <div id="multilayer" >
+            <div class="button-group">
+            <input class="geotextbox tilesTextBox" name="tilesbox" placeholder="Kies tiles" onkeyup="demZoekTilesZoekString();" maxlength="25"/>
+            <button id="eig_tiles_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Tiles<span class="caret"></span></button>
+            <ul id=tilesbox class="dropdown-menu">
+            </ul>
+            </div>
+            </div>
+        </div>  
+   -->
 </div>
+
 <div id ="tijdslijn_control">
 <div id="dem_tijdslijn"></div>
 </div>
 <div id="map" class="map"></div>
  <script language="javascript">
 
-var  selGem = [];
-var  selNm = [];
-var  selVnm = [];
-var  selArt = [];
-var  selBgp = [];
-var selLg=[];
+
 setCookie('selLg',selLg);
 var firstOpenGem = true;
 var firstOpenNm = true;
@@ -131,7 +145,7 @@ var firstOpenVnm = true;
 var firstOpenArt = true;
 var firstOpenBgp = true;
 var firstOpenLg = true;
-
+var firstOpenTg = true;
 
    $(document).ready(function(){
      $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
@@ -149,7 +163,7 @@ var firstOpenLg = true;
     hideTimeItems();
     demCheckStijlen(thema);
     demZoekLagen(thema);
-    demZoekGemeenten();
+    demZoekTiles(thema);
     getMapStartup(thema);  
      
 
@@ -402,6 +416,25 @@ $(document).on('click','#lagenbox a',function(event){
    return false;
 });
 
+$(document).on('click','#tilesbox a',function(event){
+
+   var $target = $( event.currentTarget ),
+       href = $target.text(),
+       $inp = $target.find( 'input' ),
+       idx;
+
+   if (( idx = selTg.indexOf( href.trim()))  > -1 ) {
+      selTg.splice( idx, 1 );
+      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
+   } else {
+      if (selTg == "") selTg = [];
+      selTg.push(href.trim());
+      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
+   }
+   $( event.target ).blur();
+   return false;
+});
+
 
 $(document).on('click','.gemeenteTextBox',function(event){
     $('#gemeentebox').slideToggle();
@@ -542,15 +575,25 @@ $(document).on('click','#eig_lagen_btn',function(event){
         $('#lagenbox').slideToggle();
     }
 });
+
+$(document).on('click','.tilesTextBox',function(event){
+    $('#tilesbox').slideToggle();
+    $(".tilesTextBox").val('').html();
+    firstOpenTg = false;
 });
 
-function hideLagenbox() {
-   if (firstOpenLg == false) {
-        $("#lagenbox").css('display','none');
-    } else {
-        $('#eig_lagen_btn').attr('aria-expanded','false');
+$(document).on('click','#eig_tiles_btn',function(event){
+    if (firstOpenTg == false) {
+        $('#tilesbox').slideToggle();
     }
-}
+});
+
+$('#map').contextmenu(function(evt) {
+  openLinkMenu(evt);
+});
+   
+});
+
 function resetMap(){
      $('#map').empty();
      $("#dem_eig_legend_chk").hide();
@@ -597,8 +640,9 @@ function resetEigenaarsBeroepsgroep()
 
     tijdlijn = false
     demVerwijderTijdslijn();
+    hideTimeItems();
         
-    demZoekGemeenten();
+    demZoekGemeenten(hoofdlaag[1].trim());
     getMapStartup(thema);
 }
 

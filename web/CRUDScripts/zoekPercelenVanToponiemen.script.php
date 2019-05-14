@@ -4,7 +4,8 @@ if(!defined('DS'))
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'demMapController.php');
 $demMapController = new demMapController();
 
-
+$laag = $_POST['hoofdlaag'];
+$demMapController->setOATView($laag[1]);
 $gemeente = $_GET['gemeente'];
 $toponiemen = $_GET['toponiemen'];
 $result="";

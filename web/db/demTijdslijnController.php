@@ -83,6 +83,7 @@ function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selGem)
             foreach ($selGem as $value) {
                 if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
+                    
                     $query .= " (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
@@ -99,7 +100,7 @@ function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selGem)
             $result[$index++]= $row[0];
         }
         pg_free_result($s);
-        $query= "select max(to_char(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+        $query= "select max(to_char(to_date(substr(to_char(einddatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
         $query .= " where ";
 
             $first = true;
@@ -205,12 +206,12 @@ public function getMetadataGeo($schema,$laag,$filter,$begindatum){
 
         
         
-        $query="select distinct \"artikelnummer\",\"voornamen\",\"naam\",\"woonplaats\",\"beroep\",\"tekst\",\"toponiem\" from ".$schema.".".$laag." where \"artikelnummer\" = '".$filter."' and begindatum <= '".$begindatum."' and einddatum > '".$begindatum."' order by \"artikelnummer\"";
+        $query="select distinct \"kadastergemeente\",\"artikelnummer\",\"voornamen\",\"naam\",\"woonplaats\",\"beroep\",\"tekst\",\"toponiem\" from ".$schema.".".$laag." where \"artikelnummer\" = '".$filter."' and begindatum <= '".$begindatum."' and einddatum > '".$begindatum."' order by \"artikelnummer\"";
  
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {
-            $result[$index++]= $row[0].'##'.$row[1].'##'.$row[2].'##'.$row[3].'##'.$row[4].'##'.$row[5].'##'.$row[6];
+            $result[$index++]= $row[0].'##'.$row[1].'##'.$row[2].'##'.$row[3].'##'.$row[4].'##'.$row[5].'##'.$row[6].'##'.$row[7];
         }
         pg_free_result($s);
         return $result;

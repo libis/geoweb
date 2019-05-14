@@ -20,6 +20,9 @@ class demMapController {
     
    private $pcontroller;
    private $conn;
+   private $oat_view;
+   private $cookie_name;
+   
    
    function __construct()
    {
@@ -27,12 +30,18 @@ class demMapController {
         $this->conn = $pcontroller->getConn();
    }
    
+    function setOATView($mainlayer){
+
+        $this->cookie_name = $mainlayer;
+    }
+
+   
    function getEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer){
     
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select objkoppel from ".$this->cookie_name."  ";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -112,7 +121,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select objkoppel from ".$this->cookie_name."  ";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -203,7 +212,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select objkoppel from ".$this->cookie_name."  ";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -295,7 +304,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select objkoppel from ".$this->cookie_name."  ";
 
         if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
             $first = true;
@@ -388,7 +397,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select distinct objkoppel from ".$this->cookie_name."  ";
         $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle toponiemen") { $query .= " and toponiem = '".$toponiemen."'";  }
 
@@ -406,7 +415,7 @@ class demMapController {
         $result = array();
         $index = 0;       
        
-        $query = "select distinct objkoppel from mv_minuutplan_percelen_oat";
+        $query = "select distinct objkoppel from ".$this->cookie_name."  ";
         $query .= " where kadastergemeente = '".$kadastergemeente."'";
         if ($naam != "Alle grondgebruik") { $query .= " and soort = '".$grondgebruik."'";  }
 
