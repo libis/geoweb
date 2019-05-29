@@ -395,6 +395,19 @@ ul#flashes li {
     border: none;
 }
 
+.voornamenTextBox  {
+    width: 185px;
+    margin-left: -210px;
+    height: 25px;
+    border: none;
+}
+
+.naamTextBox {
+    width: 185px;
+    margin-left: -210px;
+    height: 25px;
+    border: none;
+}
 .voornaamTextBox  {
     width: 185px;
     margin-left: -210px;

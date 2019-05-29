@@ -111,13 +111,13 @@ var brp="";
             brp = $inp.context.value;
         
             if (($('#dem_gemeente_familienaam').val() === "Alle namen") || ($('#dem_gemeente_familienaam').val() === "")) {
-                    demZoekFamilienamenBeroep(gem,nm,vnm,art,brp);
+                    demZoekFamilienamenBeroep();
             }
             if (($('#dem_gemeente_artikelnummer').val() === "Alle artikelnummers") || ($('#dem_gemeente_artikelnummer').val() === "")) {
-                    demZoekArtikelnummersBeroep(gem,nm,vnm,art,brp);
+                    demZoekArtikelnummersBeroep();
             }
             if (($('#dem_gemeente_voornaam').val() === "Alle voornamen") || ($('#dem_gemeente_voornaam').val() === "")){
-                    demZoekVoornamenBeroep(gem,nm,vnm,art,brp);
+                    demZoekVoornamenBeroep();
             }
             
         }
@@ -215,10 +215,10 @@ $('#dem_gemeente_artikelnummer').val('');
         $('#dem_gemeente_familienaam').attr("placeholder","Even geduld...");
         $('#dem_gemeente_artikelnummer').attr("placeholder","Even geduld..");
 
-    demZoekBeroepenByGemeente(gem);
-    demZoekArtikelnummersByGemeente(gem);
-    demZoekFamilienamenByGemeente(gem);
-    demZoekVoornamenByGemeente(gem);
+    demZoekBeroepenByGemeente();
+    demZoekArtikelnummersByGemeente();
+    demZoekFamilienamenByGemeente();
+    demZoekVoornamenByGemeente();
                  brp = "Alle beroepen";
                  art = "Alle artikelnummers";
                  vnm = "Alle voornamen";

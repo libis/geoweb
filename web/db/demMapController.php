@@ -36,7 +36,7 @@ class demMapController {
     }
 
    
-   function getEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer){
+   function getEigenaars($kadastergemeente,$naam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats){
     
         $result = array();
         $index = 0;       
@@ -104,9 +104,48 @@ class demMapController {
             }
             if ($first == false){ $query .= ")"; }
         }        
-        
-        
-        
+         if (($beroep != NULL) || (count($beroep)) > 0) {
+            $first = true;
+            foreach ($beroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
+         if (($woonplaats != NULL) || (count($woonplaats)) > 0) {
+            $first = true;
+            foreach ($woonplaats as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (woonplaats = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or woonplaats = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }        
+         if (($beroepsgroep != NULL) || (count($beroepsgroep)) > 0) {
+            $first = true;
+            foreach ($beroepsgroep as $value) {
+                if (strncasecmp($value,"alle ",5) != 0) {
+                if ($first == true){
+                    $query .= " and (beroepsgroep = '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or beroepsgroep = '".$value."'";
+                }
+                }
+            }
+            if ($first == false){ $query .= ")"; }
+        }          
         $s = pg_query($this->conn, $query);
         while($row = pg_fetch_row($s))
         {

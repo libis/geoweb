@@ -10,9 +10,13 @@ $gemeente = $_POST['selGem'];
 $naam = $_POST['selNm'];
 $artikelnr = $_POST['selArt'];
 $voornaam = $_POST['selVnm'];
+$beroep = $_POST['selBrp'];
+$beroepsgroep = $_POST['selBgp'];
+$woonplaats = $_POST['selWpl'];
+
 $result="";
 
-foreach ($demMapController->getEigenaars($gemeente,$naam,$voornaam,$artikelnr) as $key => $value)
+foreach ($demMapController->getEigenaars($gemeente,$naam,$voornaam,$artikelnr,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
 {
     if($result!="")
     {

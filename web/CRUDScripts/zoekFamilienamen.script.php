@@ -7,12 +7,16 @@ $laag = $_POST['hoofdlaag'];
 $lijstenController->setOATView($laag[1]);
 
 $filter = $_GET['naam'];
-$voornaam = $_POST['selVnm'];
+$artikelnummers = $_POST['selArt'];
+$familienaam = $_POST['selNm'];
 $gemeente = $_POST['selGem'];
-$artikelnummer = $_POST['selArt'];
+$voornaam = $_POST['selVnm'];
+$beroep = $_POST['selBrp'];
+$beroepsgroep = $_POST['selBgp'];
+$woonplaats = $_POST['selWpl'];
 $result="";
 
-foreach ($lijstenController->getFamilenamenFilterEig($filter,$gemeente,$voornaam,$artikelnummer) as $key => $value)
+foreach ($lijstenController->getFamilenamenFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
 {
     if($result!="")
     {

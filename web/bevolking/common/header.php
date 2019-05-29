@@ -148,28 +148,32 @@ geoKeyValueList = null;
 geoWmsPerceel = null;
 
 selTg = [];
-var  selGem = [];
-var  selNm = [];
-var  selVnm = [];
-var  selArt = [];
-var  selLg = [];
-var  selBgp = [];
-var  selBrp = [];
-var  selWpl = [];
+selLg = [];
+selTpn =[];
+selGem = [];
+selNm = [];
+selVnm = [];
+selArt = [];
+selBgp = [];
+selBrp = [];
+selWpl = [];
 
  
 
 function eigenaars() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars.php?thema="+thema,"_self");
+    //window.open("./eigenaars.php?thema="+thema,"_self");
+    window.open("./geoheader.php?thema="+thema+'&menu=eigenaars',"_self");
 }
 function eigenaars_beroepsgroepen() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_beroepsgroepen.php?thema="+thema+"_beroepsgroepen","_self");
+//    window.open("./eigenaars_beroepsgroepen.php?thema="+thema+"_beroepsgroepen","_self");
+    window.open("./geoheader.php?thema="+thema+'&menu=beroepsgroepen',"_self");
 }
 function eigenaars_beroep() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
+//    window.open("./eigenaars_beroep.php?thema="+thema+"_beroep","_self");
+    window.open("./geoheader.php?thema="+thema+'&menu=beroepen',"_self");
 }
 function eigenaars_statistieken() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
@@ -177,7 +181,8 @@ function eigenaars_statistieken() {
 }
 function eigenaars_woonplaats() {
     if (thema.indexOf('_',5) > -1) {thema = thema.substring(0,thema.indexOf('_',5));}   
-    window.open("./eigenaars_woonplaats.php?thema="+thema+"_woonplaatsen","_self");
+//    window.open("./eigenaars_woonplaats.php?thema="+thema+"_woonplaatsen","_self");
+    window.open("./geoheader.php?thema="+thema+'&menu=woonplaatsen',"_self");
 }
 
 function hideTimeItems() {
@@ -193,17 +198,6 @@ function hideTimeItems() {
     $('#dem_film_pause').hide();
     
       selGem = [];
-  setCookie('selGem',selGem);0
-      setCookie('selArt',selArt);
-    setCookie('selVnm',selVnm);
-    setCookie('selNm',selNm);
-
-    setCookie('selLg',selLg);
-    setCookie('selGem',selGem);
-    setCookie('selBrp',selBrp);    
-    setCookie('selBgp',selBgp); 
-    setCookie('selWpl',selWpl); 
-
     
 }
 

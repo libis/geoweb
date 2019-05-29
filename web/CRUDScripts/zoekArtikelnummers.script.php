@@ -10,9 +10,12 @@ $artikelnummers = $_POST['selArt'];
 $familienaam = $_POST['selNm'];
 $gemeente = $_POST['selGem'];
 $voornaam = $_POST['selVnm'];
+$beroep = $_POST['selBrp'];
+$beroepsgroep = $_POST['selBgp'];
+$woonplaats = $_POST['selWpl'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam) as $key => $value)
+foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
 {
     if($result!="")
     {

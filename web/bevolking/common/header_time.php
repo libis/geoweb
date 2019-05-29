@@ -80,6 +80,7 @@ $sid = session_id();
   </header>
 <script>
     selTg = [];
+    selLg = [];
 hoofdlaag = null;
 mainLayer = null;
 openTijdslijn = false;

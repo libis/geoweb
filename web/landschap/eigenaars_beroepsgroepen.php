@@ -109,13 +109,13 @@ var bgp="";
             bgp = $inp.context.value;
         
             if (($('#dem_gemeente_familienaam').val() === "Alle namen") || ($('#dem_gemeente_familienaam').val() === "")) {
-                    demZoekFamilienamenBeroepsgroep(gem,nm,vnm,art,bgp);
+                    demZoekFamilienamenBeroepsgroep();
             }
             if (($('#dem_gemeente_artikelnummer').val() === "Alle artikelnummers") || ($('#dem_gemeente_artikelnummer').val() === "")) {
-                    demZoekArtikelnummersBeroepsgroep(gem,nm,vnm,art,bgp);
+                    demZoekArtikelnummersBeroepsgroep();
             }
             if (($('#dem_gemeente_voornaam').val() === "Alle voornamen") || ($('#dem_gemeente_voornaam').val() === "")){
-                    demZoekVoornamenBeroepsgroep(gem,nm,vnm,art,bgp);
+                    demZoekVoornamenBeroepsgroep();
             }
             
         }

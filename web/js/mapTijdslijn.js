@@ -200,9 +200,10 @@ function showMetadata() {
 function histGetLayerInTime(selGem,vanaf,speler)
 {
 
+if ((selLg.length <= 1) && (selTg.length == 0)) opacity = 1; else opacity = 0.6;
    
     if (thema.indexOf('geo') == 0) {
-        geoGetMap(vanaf,speler);
+        geoGetMap(vanaf,speler,false);
     } else {
         
     //show feature
@@ -302,7 +303,7 @@ function histGetLayerInTime(selGem,vanaf,speler)
                 output.push([gebied,100/*gebFeatures.length*/,rgb]);
                 vectorSource = new ol.source.Vector();
                 vector_layer = new ol.layer.Vector({
-                    opacity: 0.6,
+                    opacity: opacity,
                   source: vectorSource,
                   style: new ol.style.Style({
                     stroke: new ol.style.Stroke({

@@ -182,85 +182,74 @@ class demstatisticsController {
         $query = "select sum(sqm),naam || ' ' || voornamen from ( ";
         $query .= "select naam,voornamen,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where naam is not null and voornamen is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }         
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -312,71 +301,62 @@ class demstatisticsController {
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }          
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -410,85 +390,74 @@ class demstatisticsController {
         $query = "select sum(sqm),beroep  from ( ";
         $query .= "select beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where beroep is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }          
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -520,85 +489,74 @@ class demstatisticsController {
         $query = "select sum(sqm),beroep || ' - ' ||kadastergemeente from ( 
     select kadastergemeente,beroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   
         where naam is not null and voornamen is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -631,85 +589,74 @@ class demstatisticsController {
         $query = "select sum(sqm),beroepsgroep  from ( ";
         $query .= "select beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where beroepsgroep is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL)  {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }          
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen!= NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -743,85 +690,74 @@ function getGrondbezitBeroepsgroepPerGem($kadastergemeente,$naam,$artikelnr,$ber
         select kadastergemeente,beroepsgroep,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where beroepsgroep is not null ";
         
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
-                    $query .= " and (artnr =  '".$value."'"; 
+                   $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -853,85 +789,74 @@ function getGrondbezitBeroepsgroepPerGem($kadastergemeente,$naam,$artikelnr,$ber
         $query = "select sum(sqm),woonplaats  from ( ";
         $query .= "select woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where woonplaats is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }          
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }
@@ -964,85 +889,74 @@ function getGrondbezitWoonplaatsPerGem($kadastergemeente,$naam,$artikelnr,$beroe
         $query = "select sum(sqm),woonplaats || ' - ' || kadastergemeente from ( ";
         $query .= "select  kadastergemeente,woonplaats,sum(ST_Area(ST_Transform(geom,'28992'))) As sqm from ".$this->cookie_name."   ";
         $query .= "where woonplaats is not null ";
-        if (($kadastergemeente != NULL) || (count($kadastergemeente)) > 0) {
+        if ($kadastergemeente != NULL) {
             $first = true;
             foreach ($kadastergemeente as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (kadastergemeente =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or kadastergemeente =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         } 
-        if (count($naam) > 0) {
+        if ($naam != NULL) {
             $first = true;
             foreach ($naam as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (naam =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or naam =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }        
-        if (count($artikelnr) > 0) {
+        if ($artikelnr != NULL) {
             $first = true;
             foreach ($artikelnr as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (artnr =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or artnr =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
-        }          if (count($woonplaatsen) > 0) {
+        }          
+        if ($woonplaatsen != NULL) {
             $first = true;
             foreach ($woonplaatsen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (woonplaats =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or woonplaats =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepen) > 0) {
+        if ($beroepen != NULL) {
             $first = true;
             foreach ($beroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroep =  '".$value."'";
                 }
-                }
             }
             if ($first == false){ $query .= ")"; }
         }
-        if (count($beroepsgroepen) > 0) {
+        if ($beroepsgroepen != NULL) {
             $first = true;
             foreach ($beroepsgroepen as $value) {
-                if (strncasecmp($value,"alle ",5) != 0) {
                 if ($first == true){
                     $query .= " and (beroepsgroep =  '".$value."'"; 
                     $first = false;
                 } else {
                     $query .= " or beroepsgroep =  '".$value."'";
-                }
                 }
             }
             if ($first == false){ $query .= ")"; }

@@ -2,6 +2,24 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/db/lijstenController.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekBeroepenByGemeente.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/mapBeroep.js</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/js/demografie.js</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/tijdslijn.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/bevolking/eigenaars_statistieken.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezitters.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statBarGrondbezittersBeroep.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekLagen.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekFamilienamenStat.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekWoonplaatsenStat.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekBeroepsgroepenStat.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/statGrondbezittersBeroep.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/geo.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekBeroepenStat.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekArtikelnummersStat.script.php</file>
+            <file>file:/C:/Users/StephanP/aezel_websites/geoweb/web/CRUDScripts/zoekLagenHist.script.php</file>
+        </group>
     </open-files>
 </project-private>

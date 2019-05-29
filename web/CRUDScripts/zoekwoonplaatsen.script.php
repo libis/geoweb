@@ -10,10 +10,13 @@ $filter = $_GET['woonplaats'];
 $familienaam = $_POST['selNm'];
 $voornaam = $_POST['selVnm'];
 $artikelnummer = $_POST['selArt'];
+$beroep = $_POST['selBrp'];
+$beroepsgroep = $_POST['selBgp'];
+$woonplaats = $_POST['selWpl'];
 $gemeente = $_GET['selGem'];
 $result="";
 
-foreach ($lijstenController->getWoonplaatsen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer) as $key => $value)
+foreach ($lijstenController->getWoonplaatsen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
 {
     if($result!="")
     {

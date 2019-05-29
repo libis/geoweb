@@ -14,7 +14,7 @@ $beroepen = $_POST['selBrp'];
 $beroepsgroepen = $_POST['selBgp'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaam,$beroep,$beroepsgroepen,$woonplaatsen) as $key => $value)
+foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaam,$beroepen,$beroepsgroepen,$woonplaatsen) as $key => $value)
 {
     if($result!="")
     {

@@ -212,10 +212,10 @@ $('#dem_gemeente_artikelnummer').val('');
         $('#dem_gemeente_familienaam').attr("placeholder","Even geduld...");
         $('#dem_gemeente_artikelnummer').attr("placeholder","Even geduld..");
 
-    demZoekWoonplaatsenByGemeente(gem);
-    demZoekArtikelnummersByGemeente(gem);
-    demZoekFamilienamenByGemeente(gem);
-    demZoekVoornamenByGemeente(gem);
+    demZoekWoonplaatsenByGemeente();
+    demZoekArtikelnummersByGemeente();
+    demZoekFamilienamenByGemeente();
+    demZoekVoornamenByGemeente();
                  wpl = "Alle woonplaatsen";
                  art = "Alle artikelnummers";
                  vnm = "Alle voornamen";

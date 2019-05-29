@@ -86,7 +86,7 @@
       </div>
       <div id="multilayer">
         <div class="button-group">
-            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" onkeyup="demZoekLagenZoekString(thema);" maxlength="25"/>
+            <input class="geotextbox lagenTextBox" name="lagenbox" placeholder="Kies lagen" maxlength="25"/> <!--onkeyup="demZoekLagenZoekString(thema,thema.substring(5));"--> 
             <button id="eig_lagen_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Lagen<span class="caret"></span></button>
             <ul id=lagenbox class="dropdown-menu">
             </ul>
@@ -123,7 +123,6 @@
     selLg = [];
     selGem = [];
     setCookie('selGem',selGem);
-    setCookie('selLg',selLg);
 
     firstOpenLg = true;
     firstOpenGem = true;
@@ -131,7 +130,7 @@
     omgeving = 'geonode';
 
    demZoekTiles(thema);
-   demZoekLagen(thema);
+   demZoekLagen(thema,thema.substring(5));
     //demZoekTijdslijnLagen();
 
     //getMapStartup();
@@ -157,29 +156,6 @@ $(document).on('click','.lagenTextbox',function(event){
     $(".lagenTextbox").val('').html();
     firstOpenLg = false;    
 });
-/*
-
-$(document).on('click','#lagenbox a',function(event){
-
-   var $target = $( event.currentTarget ),
-       href = $target.text(),
-       $inp = $target.find( 'input' ),
-       idx;
-
-   if (( idx = selLg.indexOf( href.trim()))  > -1 ) {
-      selLg.splice( idx, 1 );
-      setCookie('selLg',selLg);
-      setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-   } else {
-      if (selLg == "") selLg = [];
-      selLg.push(href.trim());
-      setCookie('selLg',selLg);
-      setTimeout( function() { $inp.prop( 'checked', true ) }, 0);
-   }
-   $( event.target ).blur();
-   return false;
-});
-*/
 
 
 
@@ -360,19 +336,12 @@ $(document).on('click','#eig_lagen_btn',function(event){
 
 });
 
-function openLaag(omgeving,laag) {
+function openLaag(omgeving) {
 
-    if (( idx = selLg.indexOf( laag))  > -1 ) {
-       selLg.splice( idx, 1 );
-       setTimeout( function() { $inp.prop( 'checked', false ) }, 0);
-    } else {
-       selLg.splice(0,selLg.length)
-       selLg.push(laag);
        $('#dem_tijdslijn').show();
        $('#dem_toon_kaart').show();
        $('#dem_eig_reset').show();
        $('#dem_player').show();
-    }
     
     if (selLg.length > 0) {
 
