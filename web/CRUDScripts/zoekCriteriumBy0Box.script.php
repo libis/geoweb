@@ -3,18 +3,15 @@ if(!defined('DS'))
     define('DS', DIRECTORY_SEPARATOR);
 include_once(dirname(__FILE__).DS.'..'.DS.'db'.DS.'lijstenController.php');
 $lijstenController = new lijstenController();
+
 $laag = $_POST['hoofdlaag'];
 $lijstenController->setOATView($laag[1]);
 
-$gemeente = $_POST['selGem'];
-$filter = $_GET['artnr'];
-$familienaam = $_POST['selNm'];
-$beroepen = $_POST['selBrp'];
-$beroepsgroepen = $_POST['selBgp'];
-$woonplaatsen = $_POST['selWpl'];
+$selOBox = $_POST['sel0Box'];
+$criterium = $_GET['criterium'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaam,$beroepen,$beroepsgroepen,$woonplaatsen) as $key => $value)
+foreach ($lijstenController->getCriteriumFilterBy0Box($selOBox,$criterium) as $key => $value)
 {
     if($result!="")
     {
@@ -25,5 +22,3 @@ foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaa
 echo $result;
 
 ?>
-
-

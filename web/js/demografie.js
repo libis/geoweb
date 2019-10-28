@@ -1,7 +1,7 @@
 function demZoekMenu(thema,menu){
     
     argumenten = '?thema='+thema;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekMenu.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekMenu.script.php";
     
     $.post(targetUrl+argumenten, function(data) {    
         data = data.trim();
@@ -44,11 +44,13 @@ function demZoekMenu(thema,menu){
 function openMenu(thema,menu){
     
     argumenten = '?thema='+thema+'&menu='+menu;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekCrit.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekCrit.script.php";
     
     //reset lagen en tiles
     selLg.splice(0,selLg.length);
     selTg.splice(0,selTg.length);
+    selCrit.splice(0,selCrit.length);
+    
     
     $('#geo_menu_title').html('');
     $('#geo_menu_title').html('<h2>'+menu[0].toUpperCase()+menu.substring(1)+'</h2>');       
@@ -65,16 +67,20 @@ function openMenu(thema,menu){
             while(i_count<keyValueList.length)
             {
                 keyvaluearray=keyValueList[i_count].split("##");
-                if (keyvaluearray[1].toLowerCase().indexOf('emeent') > -1) { 
-                    flGem =true;
+                //if (keyvaluearray[1].toLowerCase().indexOf('emeent') > -1) { 
+                if (i_count==0) {                     
+                    //flGem =true;
                     if (keyvaluearray[2] != "") {
                         //in geval er een vaste gemeente gekozen wordt...
-                        flGem = false;
-                        selGem.push(keyvaluearray[2]);
+                        //flGem = false;
+                        //selGem.push(keyvaluearray[2]);
+                        selCrit.push([keyvaluearray[1].toLowerCase(),[keyvaluearray[2]],false,true]);
                         i_count++;
                         continue;
                     }
                 }
+                //INITIALISATIE criteriaLijst met criterium kolom naam, geselecteerde criterium items en aangeklikte criteriumboxvlag
+                selCrit.push([keyvaluearray[1].toLowerCase(),[],true,false]);
                 if (keyvaluearray[1].toLowerCase().indexOf('voorna') > -1) flVnm =true;
                 if (keyvaluearray[1].toLowerCase().indexOf('naam') > -1) flNm = true;
                 if (keyvaluearray[1].toLowerCase().indexOf('topo') > -1) flTpn = true;
@@ -82,11 +88,20 @@ function openMenu(thema,menu){
                 if (keyvaluearray[1].toLowerCase().indexOf('beroepsgroe') > -1) flBgp = true;
                 if (keyvaluearray[1].toLowerCase().indexOf('beroep') > -1) flBrp = true;
                 if (keyvaluearray[1].toLowerCase().indexOf('woonpl') > -1) flWpl = true;
-
+                if (keyvaluearray[1].toLowerCase().indexOf('vak') > -1) flVak = true;
+                if (keyvaluearray[1].toLowerCase().indexOf('graf') > -1) flGrf = true;
+/*
                 targetToPush += '<div class="button-group">'; 
-                targetToPush += '<input class="geotextbox '+keyvaluearray[1]+'TextBox" name="'+keyvaluearray[1]+'box" placeholder="Zoek '+keyvaluearray[1]+'" onkeyup="demZoek'+keyvaluearray[1]+'();" maxlength="20"/>';
-                targetToPush += '<button id="'+keyvaluearray[1]+'_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">'+keyvaluearray[1]+'<span class="caret"></span></button>';
+                targetToPush += '<input class="geotextbox '+keyvaluearray[1]+'TextBox" name="'+keyvaluearray[1]+'box" placeholder="Kies '+keyvaluearray[1]+'" onkeyup="demZoek'+keyvaluearray[1]+'();" maxlength="20"/>';
+                targetToPush += '<button id="'+keyvaluearray[1]+'_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">'+keyvaluearray[1].substr(0,1).toUpperCase()+keyvaluearray[1].substr(1)+'<span class="caret"></span></button>';
                 targetToPush += '<ul id='+keyvaluearray[1]+'box class="dropdown-menu">';
+                targetToPush += '</ul>';
+                targetToPush += '</div>';
+*/
+                targetToPush += '<div class="button-group">'; 
+                targetToPush += '<input class="geotextbox '+i_count+'TextBox" name="'+keyvaluearray[1]+'box" placeholder="Kies '+keyvaluearray[1]+'" onkeyup="demZoek('+i_count+');" maxlength="20"/>';
+                targetToPush += '<button id="'+i_count+'_btn" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">'+keyvaluearray[1].substr(0,1).toUpperCase()+keyvaluearray[1].substr(1)+'<span class="caret"></span></button>';
+                targetToPush += '<ul id='+i_count+'box name='+i_count+' class="dropdown-menu">';
                 targetToPush += '</ul>';
                 targetToPush += '</div>';
                 i_count++;
@@ -97,26 +112,291 @@ function openMenu(thema,menu){
         resetGeo();
         demZoekLagen(thema,menu);
         demZoekTiles(thema);
-        getMapStartup(thema);   
+         
         }        
     });    
 
     
 }
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+function demZoek(criteriumNr)
+{
+    if (criteriumNr == 0) {
+        demZoekHoofdCriterium();
+        return;
+    }
+    var criterium = selCrit[criteriumNr][0];
+    var crit = $("."+criteriumNr+"TextBox").val();
+    
+    argumenten = '?filter='+crit+'&criterium='+criterium;
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekCriterium.script.php";
+    $.post(targetUrl+argumenten,{hoofdlaag,selCrit}, function(data) {    
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            i_count2 = 0;
+        
+            var targetToPush = ''; 
+            while(i_count2<selCrit[criteriumNr][1].length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += [selCrit[criteriumNr][1]][i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
+            }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selCrit[criteriumNr][1] )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+        }
+        poutput.push(targetToPush);
+        $('#'+criteriumNr+'box').html('');
+        $('#'+criteriumNr+'box').html(poutput.join(''));
+        $('.'+criteriumNr+'TextBox').attr("placeholder","Kies "+selCrit[criteriumNr][0]);
+        });
+        
+}
+
+function demZoekCriteriumBy0Box(boxNr){
+    
+    var criterium = selCrit[boxNr][0];
+    var sel0Box = selCrit[0];
+    var targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekCriteriumBy0Box.script.php";
+    var argumenten = "?criterium="+criterium;
+    
+    $.post(targetUrl+argumenten,{hoofdlaag,sel0Box}, function(data) {
+        data = data.trim();
+        var poutput = [];
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count =0;
+            var targetToPush = '';  
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+                
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count+1 ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#'+boxNr+'box').html('');
+        $('#'+boxNr+'box').html(poutput.join(''));
+        $('.'+boxNr+'TextBox').attr("placeholder","Kies "+selCrit[boxNr][0]);
+    });    
+}
+
+
+function demZoekVak()
+{
+    
+    var vak = $(".vakTextBox").val();
+    argumenten = '?vak='+vak;
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVak.script.php";
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            i_count2 = 0;
+        
+            var targetToPush = ''; 
+            while(i_count2<selVak.length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += selVak[i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
+            }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selVak )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+            poutput.push(targetToPush);
+            
+            
+        }
+        $('#vakbox').html('');
+        $('#vakbox').html(poutput.join(''));
+        });
+        
+}
+
+
+function demZoekVakByGemeente()
+{
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVakByGemeente.script.php";
+    if ((lg=selGem.length) == 0) selGem=['Alle '];
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
+       if (lg==0) selGem.splice(0,selGem.length);   
+        data = data.trim();
+        var poutput = [];
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count =0;
+            var targetToPush = '';  
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+                
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count+1 ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#vakbox').html('');
+        $('#vakbox').html(poutput.join(''));
+        $('.vakTextBox').attr("placeholder","Kies vak");
+    });
+}
+
+function demZoekGraf_van()
+{
+    
+    var graf_van = $(".graf_vanTextBox").val();
+    argumenten = '?graf_van='+graf_van;
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekGraf_van.script.php";
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+            i_count2 = 0;
+        
+            var targetToPush = ''; 
+            while(i_count2<selGrf.length)
+            {            
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+                targetToPush += selGrf[i_count2] ;//Item
+                targetToPush += '</a></li>';                  
+               
+                i_count++;                
+                i_count2++;                
+            }
+            i_count2 = 0;
+            while(i_count2<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+                if ((jQuery.inArray( keyvaluearray[1], selGrf )) == -1) {
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                  
+                }
+                i_count++;
+                i_count2++;
+            }
+            poutput.push(targetToPush);
+            
+            
+        }
+        $('#graf_vanbox').html('');
+        $('#graf_vanbox').html(poutput.join(''));
+        });
+        
+}
+
+
+function demZoekGraf_vanByGemeente()
+{
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekGraf_vanByGemeente.script.php";
+    if ((lg=selGem.length) == 0) selGem=['Alle '];
+    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
+       if (lg==0) selGem.splice(0,selGem.length);   
+        data = data.trim();
+        var poutput = [];
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count =0;
+            var targetToPush = '';  
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+                
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count+1 ;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1] ;//Item
+                targetToPush += '</a></li>';                
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#graf_vanbox').html('');
+        $('#graf_vanbox').html(poutput.join(''));
+        $('.graf_vanTextBox').attr("placeholder","Kies graf van");
+    });
+}
+
 
 function demZoekvoornamen()
 {
     
     var voornaam = $(".voornamenTextBox").val();
     argumenten = '?voornaam='+voornaam;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamen.script.php";
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVoornamen.script.php";
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         data = data.trim();
         var poutput = [];// voorbereiding
         if(data.length>0)
@@ -164,200 +444,10 @@ function demZoekvoornamen()
         
 }
 
-
-
-function demZoekVoornamenWoonplaats()
-{
-   var voornaam = $(".voornamenTextBox").val();
-   argumenten = '?voornaam='+voornaam;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenWoonplaats.script.php";
-    
-    var lg,lv,ln,la,lw;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lw=selWpl.length) == 0) selWpl=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lw==0) selWpl.splice(0,selWpl.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selVnm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selVnm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selVnm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#voornamenbox').html('');
-        $('#voornamenbox').html(poutput.join(''));
-        });
-}
-
-function demZoekVoornamenBeroep()
-{
-   var voornaam = $(".voornamenTextBox").val();
-   argumenten = '?voornaam='+voornaam;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroep.script.php";
-    
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lb=selBgp.length) == 0) selBrp=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selBrp,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lb==0) selBrp.splice(0,selBrp.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selVnm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selVnm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selVnm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#voornamenbox').html('');
-        $('#voornamenbox').html(poutput.join(''));
-        });
-}
-
-function demZoekVoornamenBeroepsgroep()
-{
-   var voornaam = $(".voornamenTextBox").val();
-   argumenten = '?voornaam='+voornaam;
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenBeroepsgroep.script.php";
-    
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lb=selBgp.length) == 0) selBgp=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selBgp,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lb==0) selBgp.splice(0,selBgp.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selVnm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selVnm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selVnm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#voornamenbox').html('');
-        $('#voornamenbox').html(poutput.join(''));
-        });
-}
 
 function demZoekVoornamenByGemeente()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVoornamenByGemeente.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVoornamenByGemeente.script.php";
     if ((lg=selGem.length) == 0) selGem=['Alle '];
     $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);   
@@ -384,13 +474,13 @@ function demZoekVoornamenByGemeente()
         }
         $('#voornamenbox').html('');
         $('#voornamenbox').html(poutput.join(''));
-        $('.voornamenTextBox').attr("placeholder","Zoek voornaam");
+        $('.voornamenTextBox').attr("placeholder","Kies voornaam");
     });
 }
 
 function demZoekFamilienamenByGemeente(/*selGem*/)
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenByGemeente.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenByGemeente.script.php";
     if ((lg=selGem.length) == 0) selGem=['Alle '];
     $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);   
@@ -418,35 +508,16 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
         }
         $('#naambox').html('');
         $('#naambox').html(poutput.join(''));
-        $('.naamTextBox').attr("placeholder","Zoek naam");
+        $('.naamTextBox').attr("placeholder","Kies naam");
     });
 }    
 
     function demZoekFamilienamen()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamen.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekFamilienamen.script.php";
     var naam = $(".naamTextBox").val();
     argumenten = '?naam='+naam;
-    /*
-    var lg,lv,ln,la,lb,lbg,lw;
-    if ((lbg=selBgp.length)==0) selBgp=['Alle '];
-    if ((lb=selBgp.length) == 0) selBrp=['Alle '];
-    if ((lw=selWpl.length) == 0) selWpl=['Alle '];
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-        */
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {  
-        /*
-        if (lb==0) selBrp.splice(0,selBrp.length);
-        if (lbg==0) selBgp.splice(0,selBgp.length);
-        if (lw==0) selWpl.splice(0,selWpl.length);
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        */
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {  
        
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -495,10 +566,10 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
 
    function demZoeknaam()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamen.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekFamilienamen.script.php";
     var naam = $(".naamTextBox").val();
     argumenten = '?naam='+naam;
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -545,206 +616,15 @@ function demZoekFamilienamenByGemeente(/*selGem*/)
         });
 }
 
-
-function demZoekFamilienamenWoonplaats()
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenWoonplaats.script.php";
-    var naam = $(".naamTextBox").val();
-    argumenten = '?naam='+naam;
-    var lg,lv,ln,la,lw;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lw=selWpl.length) == 0) selWpl=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selWpl,selVnm,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lw==0) selWpl.splice(0,selWpl.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selNm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selNm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selNm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#naambox').html('');
-        $('#naambox').html(poutput.join(''));
-        });
-}
-
-
-function demZoekFamilienamenBeroep()
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenBeroep.script.php";
-    var naam = $(".naamTextBox").val();
-    argumenten = '?naam='+naam;
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lb=selBgp.length) == 0) selBrp=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBrp,selVnm,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lb==0) selBrp.splice(0,selBrp.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selNm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selNm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selNm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#naambox').html('');
-        $('#naambox').html(poutput.join(''));
-        });
-
-}
-
-function demZoekFamilienamenBeroepsgroep()
-{
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenBeroepsgroep.script.php";
-    var naam = $(".naamTextBox").val();
-    argumenten = '?naam='+naam;
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lb=selBgp.length) == 0) selBgp=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBgp,selVnm,selArt}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lb==0) selBgp.splice(0,selBgp.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selNm.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selNm[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selNm )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        
-        $('#naambox').html('');
-        $('#naambox').html(poutput.join(''));
-        });
-}
 
 
 function demZoekartikelnummer()
 {
    var artnr = $(".artikelnummerTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummers.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummers.script.php";
     argumenten='?artnr='+artnr;
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         data = data.trim();
         var poutput = [];// voorbereiding
         if(data.length>0)
@@ -790,200 +670,11 @@ function demZoekartikelnummer()
 }
  
 
-function demZoekArtikelnummersWoonplaats()
-{
-   var artnr = $(".artikelnummerTextBox").val();
-   
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersWoonplaats.script.php";
-    argumenten='?artnr='+artnr;
-    var lg,lv,ln,la,lw;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    if ((lw=selWpl.length) == 0) selWpl=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selWpl}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        if (lw==0) selWpl.splice(0,selWpl.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selArt.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selArt[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selArt )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#artikelnummerbox').html('');
-        $('#artikelnummerbox').html(poutput.join(''));
-        });
-}
-
-function demZoekArtikelnummersBeroep()
-{
-   var artnr = $(".artikelnummerTextBox").val();
-   
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersBeroep.script.php";
-    argumenten='?artnr='+artnr;
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    if ((lb=selBgp.length) == 0) selBrp=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selBrp}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        if (lb==0) selBrp.splice(0,selBrp.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selArt.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selArt[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selArt )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#artikelnummerbox').html('');
-        $('#artikelnummerbox').html(poutput.join(''));
-        });
-}
-
-function demZoekArtikelnummersBeroepsgroep()
-{
-   var artnr = $(".artikelnummerTextBox").val();
-   
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersBeroepsgroep.script.php";
-    argumenten='?artnr='+artnr;
-    var lg,lv,ln,la,lb;
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
-    if ((lb=selBgp.length) == 0) selBgp=['Alle '];
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selBgp}, function(data) {    
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lg==0) selGem.splice(0,selGem.length);
-        if (lb==0) selBgp.splice(0,selBgp.length);
-        
-        data = data.trim();
-        var poutput = [];// voorbereiding
-        if(data.length>0)
-        {
-            keyValueList = data.split("%%");
-            i_count = 0;
-            i_count2 = 0;
-        
-            var targetToPush = ''; 
-            while(i_count2<selArt.length)
-            {            
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
-                targetToPush += selArt[i_count2] ;//Item
-                targetToPush += '</a></li>';                  
-               
-                i_count++;                
-                i_count2++;                
-            }
-            i_count2 = 0;
-            while(i_count2<keyValueList.length)
-            {
-                keyvaluearray=keyValueList[i_count2].split("##");
-                if ((jQuery.inArray( keyvaluearray[1], selArt )) == -1) {
-
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += i_count ;//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1] ;//Item
-                targetToPush += '</a></li>';                  
-                }
-                i_count++;
-                i_count2++;
-            }
-            poutput.push(targetToPush);
-        }
-        $('#artikelnummerbox').html('');
-        $('#artikelnummerbox').html(poutput.join(''));
-        });
-}
-
 
 function demZoekArtikelnummersByGemeente()
 {
 
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersByGemeente.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersByGemeente.script.php";
    if ((lg=selGem.length) == 0) selGem=['Alle '];
    $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);
@@ -1012,7 +703,7 @@ function demZoekArtikelnummersByGemeente()
         }
         $('#artikelnummerbox').html('');
         $('#artikelnummerbox').html(poutput.join(''));
-        $('.artikelnummerTextBox').attr("placeholder","Zoek artikelnummer");
+        $('.artikelnummerTextBox').attr("placeholder","Kies artikelnummer");
         });
         
 } 
@@ -1022,9 +713,9 @@ function demZoekberoep()
 {
    var beroep = $(".beroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepen.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepen.script.php";
     argumenten='?beroep='+beroep;
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -1074,9 +765,9 @@ function demZoekwoonplaats()
 {
    var woonplaats = $(".woonplaatsTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekwoonplaatsen.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekwoonplaatsen.script.php";
     argumenten='?woonplaats='+woonplaats;
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -1126,10 +817,10 @@ function demZoekberoepsgroep()
 {
    var beroepsgroep = $(".beroepsgroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepen.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepen.script.php";
     argumenten='?beroepsgroep='+beroepsgroep;
 
-    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
+    $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
         
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -1177,7 +868,7 @@ function demZoekberoepsgroep()
 
 function demZoekBeroepenByGemeente()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepenByGemeente.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepenByGemeente.script.php";
     if ((lg=selGem.length) == 0) selGem=['Alle '];
     $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);
@@ -1204,13 +895,13 @@ function demZoekBeroepenByGemeente()
         }
         $('#beroepbox').html('');
         $('#beroepbox').html(poutput.join(''));
-        $('.beroepTextBox').attr("placeholder","Zoek beroep");
+        $('.beroepTextBox').attr("placeholder","Kies beroep");
     });
 }
 
 function demZoekWoonplaatsenByGemeente()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenByGemeente.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenByGemeente.script.php";
     if ((lg=selGem.length) == 0) selGem=['Alle '];
     $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);        
@@ -1237,13 +928,13 @@ function demZoekWoonplaatsenByGemeente()
         }
         $('#woonplaatsbox').html('');
         $('#woonplaatsbox').html(poutput.join(''));
-        $('.woonplaatsTextBox').attr("placeholder","Zoek woonplaats");
+        $('.woonplaatsTextBox').attr("placeholder","Kies woonplaats");
     });
 }
 
 function demZoekBeroepsgroepenByGemeente()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenByGemeente.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenByGemeente.script.php";
     if ((lg=selGem.length) == 0) selGem=['Alle '];
     $.post(targetUrl,{hoofdlaag,selGem}, function(data) {
        if (lg==0) selGem.splice(0,selGem.length);   
@@ -1269,13 +960,13 @@ function demZoekBeroepsgroepenByGemeente()
         }
         $('#beroepsgroepbox').html('');
         $('#beroepsgroepbox').html(poutput.join(''));
-        $('.beroepsgroepTextBox').attr("placeholder","Zoek beroepsgroep");
+        $('.beroepsgroepTextBox').attr("placeholder","Kies beroepsgroep");
     });
 }
 
 function demZoekFamilienamenStat()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenStat.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekFamilienamenStat.script.php";
     var naam = $(".naamTextBox").val();
     argumenten = '?naam='+naam;
     $.post(targetUrl+argumenten,{hoofdlaag,selGem,selBrp,selWpl,selArt,selBgp}, function(data) {    
@@ -1332,7 +1023,7 @@ function demZoekArtikelnummersStat()
 {
    var artnr = $(".artikelnummerTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersStat.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekArtikelnummersStat.script.php";
     argumenten='?artnr='+artnr;
     $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selBrp,selBgp}, function(data) {    
         
@@ -1384,7 +1075,7 @@ function demZoekArtikelnummersStat()
 function demZoekBeroepenStat()
 {
     
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepenStat.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepenStat.script.php";
     var beroep = $(".beroepTextBox").val();   
     argumenten = '?beroep='+beroep;
     $.post(targetUrl+argumenten,{hoofdlaag,selGem,selWpl,selBgp,selNm,selArt}, function(data) {    
@@ -1438,7 +1129,7 @@ function demZoekBeroepsgroepenStat()
 {
    var beroepsgroep = $(".beroepsgroepTextBox").val();
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenStat.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekBeroepsgroepenStat.script.php";
     argumenten='?beroepsgroep='+beroepsgroep;
     $.post(targetUrl+argumenten,{hoofdlaag,selGem,selNm,selWpl,selBrp,selArt}, function(data) {    
         data = data.trim();
@@ -1489,7 +1180,7 @@ function demZoekBeroepsgroepenStat()
 function demZoekWoonplaatsenStat()
 {
    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenStat.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekWoonplaatsenStat.script.php";
     var woonplaats = $(".woonplaatsTextBox").val();
     argumenten = '?woonplaats='+woonplaats;
     $.post(targetUrl+argumenten,{hoofdlaag,selBrp,selBgp,selNm,selArt,selGem}, function(data) {    
@@ -1544,7 +1235,7 @@ function demZoekStatGrondbezitters()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezitters.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezitters.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1585,7 +1276,7 @@ function demZoekStatGrondbezittersPerGem()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersPerGem.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersPerGem.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1624,7 +1315,7 @@ function demZoekStatGrondbezittersBeroep()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroep.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroep.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1660,7 +1351,7 @@ function demZoekStatGrondbezittersBeroepPerGem()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepPerGem.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepPerGem.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1697,7 +1388,7 @@ function demZoekStatGrondbezittersBeroepsgroep()
 {
     var output=[];
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroep.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroep.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1734,7 +1425,7 @@ function demZoekStatGrondbezittersBeroepsgroepPerGem()
 {
     var output=[];
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroepPerGem.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersBeroepsgroepPerGem.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1771,7 +1462,7 @@ function demZoekStatGrondbezittersWoonplaats()
 {
     var output=[];
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaats.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaats.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1808,7 +1499,7 @@ function demZoekStatGrondbezittersWoonplaatsPerGem()
 {
     var output=[];
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaatsPerGem.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statGrondbezittersWoonplaatsPerGem.script.php";
     var options = {
             'legend':'left',
             'is3D':true,
@@ -1845,7 +1536,7 @@ function demZoekStatBarGrondbezitters()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezitters.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statBarGrondbezitters.script.php";
     var lb,lw,lg,la,ln;
     if ((lb=selBgp.length) == 0) selBrp=['Alle '];
     if ((lg=selBgp.length) == 0) selBgp=['Alle '];
@@ -1906,7 +1597,7 @@ function demZoekStatBarGrondbezittersBeroep()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroep.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroep.script.php";
     var lb,lw,lg,la,ln;
     if ((lb=selBgp.length) == 0) selBrp=['Alle '];
     if ((lg=selBgp.length) == 0) selBgp=['Alle '];
@@ -1960,7 +1651,7 @@ function demZoekStatBarGrondbezittersBeroepsgroep()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroepsgroep.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersBeroepsgroep.script.php";
     var lb,lw,lg,la,ln;
     if ((lb=selBgp.length) == 0) selBrp=['Alle '];
     if ((lg=selBgp.length) == 0) selBgp=['Alle '];
@@ -2014,7 +1705,7 @@ function demZoekStatBarGrondbezittersWoonplaats()
 {
     
     var output=[];
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersWoonplaats.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/statBarGrondbezittersWoonplaats.script.php";
     var lb,lw,lg,la,ln;
     if ((lb=selBgp.length) == 0) selBrp=['Alle '];
     if ((lg=selBgp.length) == 0) selBgp=['Alle '];
@@ -2064,34 +1755,39 @@ function demZoekStatBarGrondbezittersWoonplaats()
 
 function demZoekTiles(thema) {
     
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekTiles.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekTiles.script.php";
    argumenten = '?thema='+thema;
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
         var poutput = [];// voorbereiding
         if(data.length>0)
         {
-            keyValueLayerList = data.split("%%");
+            keyValueTilesList = data.split("%%");
             i_count = 0;
         
             var targetToPush = '';  
             
-            while(i_count<keyValueLayerList.length)
+            while(i_count<keyValueTilesList.length)
             {
-                keyvaluearray=keyValueLayerList[i_count].split("##");
-                targetToPush += '<li><a href="#" class="small" data-value="';
-                targetToPush += keyvaluearray[2];//id
-
-                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
-                targetToPush += keyvaluearray[1]  ;//Item
-                targetToPush += '</a></li>';      
+                keyvaluearray=keyValueTilesList[i_count].split("##");
+                    targetToPush += '<li><a href="#" class="small" data-value="';
+                    targetToPush += keyvaluearray[2];//id
+                    targetToPush += '" tabIndex="-1"><input type="checkbox" ';
+                    if (keyvaluearray[3] == 't') {
+                        targetToPush += 'checked=true';
+                        selTg.push(keyvaluearray[1].trim());
+                    }
+                    targetToPush += '>&nbsp;';
+                    targetToPush += keyvaluearray[1].trim();//Item
+                    targetToPush += '</a></li>';       
                 i_count++;
             }
             poutput.push(targetToPush);
         }
         $('#tilesbox').html('');
         $('#tilesbox').html(poutput.join(''));
-        $('.tilesTextBox').attr("placeholder","Kies achtergrond");        
+        $('.tilesTextBox').attr("placeholder","Kies achtergrond");   
+         getMapStartup(thema); 
     });
 }
 
@@ -2099,7 +1795,7 @@ function demZoekTiles(thema) {
 function demZoekTilesZoekString()
 {
     var laag = $(".tilesTextBox").val();
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekTilesZoekString.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekTilesZoekString.script.php";
    argumenten = '?thema='+thema+'&laag='+laag;
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
@@ -2129,14 +1825,14 @@ function demZoekTilesZoekString()
         } 
         $('#tilesbox').html('');
         $('#tilesbox').html(poutput.join(''));
-        $('.tilesTextBox').attr("placeholder","Zoek achtergrond");        
+        $('.tilesTextBox').attr("placeholder","Kies achtergrond");        
     });
     
 }
 
 function demZoekLagen(thema,menu) 
 {
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagen.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekLagen.script.php";
    argumenten = '?thema='+thema+'&menu='+menu;
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
@@ -2158,25 +1854,35 @@ function demZoekLagen(thema,menu)
                     hoofdlaag[2] = hoofdlaag[2].trim();                    
                     if (thema.indexOf('geo') == 0){
 
-                        var imag = '<img src="'+mapviewerIP+'/geoserver/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+hoofdlaag[2].trim()+':'+hoofdlaag[1].trim()+'&amp;STYLE='+hoofdlaag[3]+'">';
+                        var imag = '<img src="'+mapviewerIP+'/wms?Service=WMS&amp;REQUEST=GetLegendGraphic&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=50&amp;HEIGHT=10&amp;LAYER='+hoofdlaag[2].trim()+':'+hoofdlaag[1].trim()+'&amp;STYLE='+hoofdlaag[3]+'">';
                         $("#legend-form").html(imag);
 
-                        targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
+                        targetUrl=websiteIP+websitePath+"/CRUDScripts/isTijdAanwezig.script.php";
                         argumenten = '?laag='+hoofdlaag[1]+'&omgeving='+hoofdlaag[2];
                         $.post(targetUrl+argumenten, function(data) {
                             if (data == true) {
                                 openTijdslijn = true;
                                 tijdlijn = false;
-                            }                            
-                            if (selGem.length == 0) {
-                                demZoekGemeentenInit();
-                            } else {
-                                //in geval er een vaste gemeente is geconfigureerd
-                                ZoekGerelateerdeLijstenGem();
-                            }             
+                            } 
+                            if (menu != 'statistieken'){
+                                if (selCrit[0][1].length == 0) {
+                                    demZoekHoofCriteriumInit();
+                                } else {
+                                    //in geval er een vaste gemeente is geconfigureerd
+                                    ZoekGerelateerdeLijsten0Box();
+                                }             
+                            } else {                            
+                                if (selGem.length == 0) {
+                                    demZoekGemeentenInit();
+                                } else {
+                                    //in geval er een vaste gemeente is geconfigureerd
+                                    ZoekGerelateerdeLijstenGem();
+                                }             
+                            }
+                            
                         });
                     } else {
-                        selLg.push(keyvaluearray[1]);
+                        selLg.push(keyvaluearray[1].trim());
                     }
                 } else {
                     targetToPush += '<li><a href="#" class="small" data-value="';
@@ -2199,14 +1905,14 @@ function demZoekLagen(thema,menu)
         }
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+        $('.lagenTextBox').attr("placeholder","Kies voorgrond");        
     });
 }
 
 
 function demZoekLagenHist(thema) 
 {
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagenHist.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekLagenHist.script.php";
    argumenten = '?thema='+thema;
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
@@ -2226,7 +1932,7 @@ function demZoekLagenHist(thema)
                     hoofdlaag = mainLayer.split("##");
                     hoofdlaag[1] = hoofdlaag[1].trim();
                     hoofdlaag[2] = hoofdlaag[2].trim();                    
-                    selLg.push(keyvaluearray[1]);
+                    selLg.push(keyvaluearray[1].trim());
                 } else {
                     targetToPush += '<li><a href="#" class="small" data-value="';
                     targetToPush += keyvaluearray[2];//id
@@ -2246,14 +1952,14 @@ function demZoekLagenHist(thema)
         }
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+        $('.lagenTextBox').attr("placeholder","Kies voorgrond");        
     });
 }
 
 
 function demCheckStijlen(thema) {
     
-    targetUrlStijlen="http://"+websiteIP+websitePath+"/CRUDScripts/checkStijlen.script.php";
+    targetUrlStijlen=websiteIP+websitePath+"/CRUDScripts/checkStijlen.script.php";
     argumentenStijlen = '?thema='+thema;
    
     $.post(targetUrlStijlen+argumentenStijlen, function(data){
@@ -2263,7 +1969,7 @@ function demCheckStijlen(thema) {
 
 function demZoekLagenGeoserver() {
     var formatter = new ol.format.WMSCapabilities();
-    var endpoint = mapviewerIP+ '/geoserver/wms';
+    var endpoint = mapviewerIP+ '/wms';
 
     // async call to geoserver 
     $.get(endpoint + '?request=GetCapabilities',function(data) {
@@ -2293,7 +1999,7 @@ function demZoekLagenGeoserver() {
         poutput.push(targetToPush);
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+        $('.lagenTextBox').attr("placeholder","Kies voorgrond");        
     });
 }
 
@@ -2301,7 +2007,7 @@ function demZoekLagenZoekString(thema,menu){
 
 
     var laag = $(".lagenTextBox").val();
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagenZoekString.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekLagenZoekString.script.php";
    argumenten = '?thema='+thema+'&menu='+menu+'&laag='+laag+'&hoofdlaag='+hoofdlaag[1];
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
@@ -2331,7 +2037,7 @@ function demZoekLagenZoekString(thema,menu){
         } 
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+        $('.lagenTextBox').attr("placeholder","Kies voorgrond");        
     });
     
 }
@@ -2340,7 +2046,7 @@ function demZoekLagenHistZoekString(thema){
 
 
     var laag = $(".lagenTextBox").val();
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLagenHistZoekString.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekLagenHistZoekString.script.php";
    argumenten = '?thema='+thema+'&laag='+laag;
    $.post(targetUrl+argumenten, function(data) {
         data = data.trim();
@@ -2370,7 +2076,7 @@ function demZoekLagenHistZoekString(thema){
         } 
         $('#lagenbox').html('');
         $('#lagenbox').html(poutput.join(''));
-        $('.lagenTextBox').attr("placeholder","Zoek voorgrond");        
+        $('.lagenTextBox').attr("placeholder","Kies voorgrond");        
     });
     
 }
@@ -2378,7 +2084,7 @@ function demZoekLagenHistZoekString(thema){
 function demZoekLagenZoekStringGeoServer(selLg)
 {
     var formatter = new ol.format.WMSCapabilities();
-    var endpoint = mapviewerIP+ '/geoserver/wms';    
+    var endpoint = mapviewerIP+ '/wms';    
     var laag = $(".lagenTextBox").val();
     // async call to geoserver 
     $.get(endpoint + '?request=GetCapabilities',function(data) {
@@ -2432,10 +2138,101 @@ function demZoekLagenZoekStringGeoServer(selLg)
         });
 }
 
+
+function demZoekHoofCriteriumInit() {
+    
+    
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekHoofdCriterium.script.php";
+   
+   argumenten = '?criterium='+selCrit[0][0]+'&filter=';
+   $.post(targetUrl+argumenten,{hoofdlaag}, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding
+        if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+            i_count = 0;
+        
+            var targetToPush = '';  
+            
+            while(i_count<keyValueList.length)
+            {
+                keyvaluearray=keyValueList[i_count].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                i_count++;
+            }
+            poutput.push(targetToPush);
+        }
+        $('#0box').html('');
+        $('#0box').html(poutput.join(''));
+        $('.0TextBox').attr("placeholder","Kies een "+selCrit[0][0]+"...");        
+    });    
+}
+
+function demZoekHoofdCriterium()
+{
+
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekHoofdCriterium.script.php";
+   var filter = $(".0TextBox").val();
+   var criterium = selCrit[0][0];
+   argumenten = '?criterium='+criterium+'&filter='+filter;
+   $.post(targetUrl+argumenten,{hoofdlaag}, function(data) {
+        data = data.trim();
+        var poutput = [];// voorbereiding        // I want a list of names to use in my queries
+        var targetToPush = '';  
+        i_count = 0;
+        i_count2 = 0;
+
+            
+        while(i_count2<selCrit[0][1].length)
+        {            
+            targetToPush += '<li><a href="#" class="small" data-value="';
+            targetToPush += i_count;//id
+
+            targetToPush += '" tabIndex="-1"><input type="checkbox" checked/>&nbsp;';
+            targetToPush += selCrit[0][1][i_count2] ;//Item
+            targetToPush += '</a></li>';                  
+
+            i_count++;                
+            i_count2++;                
+        }
+        
+        
+       if(data.length>0)
+        {
+            keyValueList = data.split("%%");
+        
+            for(i_count2=0;i_count2<keyValueList.length;i_count2++)
+            {
+                keyvaluearray=keyValueList[i_count2].split("##");
+
+                targetToPush += '<li><a href="#" class="small" data-value="';
+                targetToPush += i_count;//id
+
+                targetToPush += '" tabIndex="-1"><input type="checkbox"/>&nbsp;';
+                targetToPush += keyvaluearray[1]  ;//Item
+                targetToPush += '</a></li>';      
+                i_count++;
+            }
+            
+        }        
+        poutput.push(targetToPush);
+        $('#0box').html('');
+        $('#0box').html(poutput.join(''));
+        });
+}
+
+
 function demZoekGemeentenInit()
 {
     
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeenten.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeenten.script.php";
    $.post(targetUrl,{hoofdlaag}, function(data) {
         data = data.trim();
         var poutput = [];// voorbereiding
@@ -2469,7 +2266,7 @@ function demZoekGemeentenInit()
 function demZoekGemeentenZoekString()
 {
 
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeenten.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekGemeenten.script.php";
    var filter = $(".gemeenteTextBox").val();
    argumenten = '?gemeente='+filter;
    $.post(targetUrl+argumenten,{hoofdlaag}, function(data) {
@@ -2521,7 +2318,7 @@ function demZoekGemeentenZoekString()
 function demZoekgemeente()
 {
 
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeenten.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekGemeenten.script.php";
    var filter = $(".gemeenteTextBox").val();
    argumenten = '?gemeente='+filter;
    $.post(targetUrl+argumenten,{hoofdlaag}, function(data) {
@@ -2611,3 +2408,6 @@ function getCookie(cname) {
         }
         return(result);
     }
+
+
+

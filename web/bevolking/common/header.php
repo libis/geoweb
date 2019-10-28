@@ -133,6 +133,10 @@ $sid = session_id();
                                <select id="eig_popup_list" name="eig_popup_list" size="2" onchange=geo_link(this); onfocus="$(this).css({'background-color': 'white'});">
                             </select>
 </div>
+<div id="eig_prop_popup" style="display:none;z-index:1001;position:absolute;color:black;padding:10px;border:solid 2px #ddd;background:beige;text-align:center;">
+                               <select id="eig_prop_popup_list" name="eig_prop_popup_list" size="3" onchange=geo_prop_link(this); onfocus="$(this).css({'background-color': 'white'});">
+                            </select>
+</div>
 <div id="eig_wait_popup" style="display:none;z-index:1001;position:absolute;color:black;padding:10px;border:solid 4px #3775BB;background:yellow;text-align:center;top:0.5%;left:80%;">
     <h style="font-weight:bold">Een ogenblik aub...</h>
 </div>

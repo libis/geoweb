@@ -149,8 +149,6 @@
     $('#dem_film_pause').hide();
 
 
-
-
 $(document).on('click','.lagenTextbox',function(event){
     $('#gemeentebox').slideUp();
     $(".lagenTextbox").val('').html();

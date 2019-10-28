@@ -1,4 +1,5 @@
 vectorLayers = [];
+markerVectorLayer = "";
  
 function geoRemoveLayersMap() {
     for(var i=0;i<vectorLayers.length;i++){
@@ -7,13 +8,13 @@ function geoRemoveLayersMap() {
     vectorLayers = [];
 } 
  
-function demMinMax(omgeving,laag,selGem,selLg){
+function demMinMax(omgeving,laag,selCrit0,selLg){
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
     
     var schema = 'themas';
     if (omgeving == 'aezel') schema = 'public';
-    $.post(targetUrl,{schema,laag,selGem}, function(data) {    
+    $.post(targetUrl,{schema,laag,selCrit0}, function(data) {    
         
         data = data.trim();
         if(data.length>0)
@@ -46,46 +47,52 @@ function demMinMax(omgeving,laag,selGem,selLg){
 }
    
 function demGetEigenaars(){
-    var enkelgemeente = false;
-   
-    var lg,lv,ln,la,lb,lbg,lw;
-    if ((lbg=selBgp.length) == 0) selBgp=['Alle '];
-    if ((lb=selBrp.length) == 0) selBrp=['Alle '];
-    if ((lw=selWpl.length) == 0) selWpl=['Alle '];
-    if ((ln=selNm.length) == 0) selNm=['Alle '];
-    if ((la=selArt.length) == 0) selArt=['Alle '];
-    if ((lv=selVnm.length) == 0) selVnm=['Alle '];
-    if ((lg=selGem.length) == 0) selGem=['Alle '];
+    var enkelgemeente = true;
+   /*
+    var lg,lv,ln,la,lb,lbg,lw,ly,lz;
+    lbg=selBgp.length;
+    lb=selBrp.length ;
+    lw=selWpl.length ;
+    ln=selNm.length ;
+    la=selArt.length;
+    lv=selVnm.length ;
+    lg=selGem.length ;
+    ly=selGrf.length ;
+    lz=selVak.length ;
+    */
    
     geoKeyValueList = new Array;
 
+    for (i=1;i<selCrit.length;i++){
+        if (selCrit[i][1].length>0){
+            enkelgemeente = false;
+            break;
+        }
+    }
+/*
     if ((ln==0) &&
      (lbg==0) &&
      (lb==0) &&
      (lw==0) &&
      (la==0) &&
+     (ly==0) &&
+     (lz==0) &&
      (lv==0)) {
         enkelgemeente = true;
     }
-
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaars.script.php";
+*/
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekPercelenVanEigenaars.script.php";
     $('#map').html('');
 
-        $.post(targetUrl,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl}, function(data) {    
-        if (lb==0) selBrp.splice(0,selBrp.length);
-        if (lbg==0) selBgp.splice(0,selBgp.length);
-        if (lw==0) selWpl.splice(0,selWpl.length);
-        if (ln==0) selNm.splice(0,selNm.length);
-        if (la==0) selArt.splice(0,selArt.length);
-        if (lv==0) selVnm.splice(0,selVnm.length);
-        if (lg==0) selGem.splice(0,selGem.length);
+//        $.post(targetUrl,{hoofdlaag,selGem,selNm,selVnm,selArt,selBgp,selBrp,selWpl,selVak,selGrf}, function(data) {    
+        $.post(targetUrl,{hoofdlaag,selCrit}, function(data) {    
             data = data.trim();
             if(data.length>0) {
                 geoKeyValueList = data.split("%%");
 //                if  (geoKeyValueList.length < 250)
                 {
                     if (openTijdslijn) {
-                        minMax=demMinMax(hoofdlaag[2].trim(),hoofdlaag[1].trim(),selGem,selLg); 
+                        minMax=demMinMax(hoofdlaag[2].trim(),hoofdlaag[1].trim(),selCrit[0],selLg); 
                     } else {
                         geoInitMap(selLg);
                         geoGetMap(null,false,enkelgemeente);
@@ -104,11 +111,12 @@ function geoInitMap(selLg)
     var omgeving;
     var stijl;
     var imgwms;
-    for (var i=0;i<selLg.length;i++)  {
-        
-        var laag = lagenprefix+":"+selLg[i];
-        for (var j=0;j<keyValueLayerList.length;j++){
+
+    
+        for (var j=keyValueLayerList.length-1;j>-1;j--){
             keyvaluearray=keyValueLayerList[j].split("##");
+            for (var i=0;i<selLg.length;i++)  {
+                var laag = lagenprefix+":"+selLg[i];
             if (keyvaluearray[1].indexOf(selLg[i]) > -1){
               omgeving = keyvaluearray[2];
               omgeving = omgeving.trim();
@@ -116,16 +124,17 @@ function geoInitMap(selLg)
               laag = omgeving+":"+selLg[i];
               stijl = stijl.trim();
               laag = laag.trim();
-              j= keyValueLayerList.length;
+              i= selLg.length;
+                imgwms = new ol.source.ImageWMS({
+                  url: mapviewerIP+'/ows',
+                  params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.0','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625'/*,'SRS':'EPSG:28992'*/},
+                  projection: {'code':'EPSG:28992',units:'m',},
+                  serverType: 'geoserver'
+                });
+                layerArr.push(imgwms);              
             }
         }
-        imgwms = new ol.source.ImageWMS({
-          url: mapviewerIP+'/geoserver/ows',
-          params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.0','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625'/*,'SRS':'EPSG:28992'*/},
-          projection: {'code':'EPSG:28992',units:'m',},
-          serverType: 'geoserver'
-        });
-        layerArr.push(imgwms);
+
     }
 
     var mainlayer = mainLayer.split("##");
@@ -136,7 +145,7 @@ function geoInitMap(selLg)
     stijl = mainlayer[3];
     stijl = stijl.trim();
     geoWmsPerceel = new ol.source.ImageWMS({
-      url: mapviewerIP+'/geoserver/ows',
+      url: mapviewerIP+'/ows',
       params: {'LAYERS':laag,'STYLES':stijl,'VERSION':'1.1.0','serverType':'geoserver','BBOX':'178300.1875,312667.875,203591.78125,362804.15625'/*,'SRS':'EPSG:28992'*/},
       projection: {'code':'EPSG:28992'},
       serverType: 'geoserver'
@@ -174,11 +183,13 @@ function geoInitMap(selLg)
 
 // get feature info
     map.on('singleclick', function(evt) {
-
     feat = map.getFeaturesAtPixel(evt.pixel);
-    geoShowMetadata();
+        geoShowMetadata(evt);
     });     
     
+    map.on('wheel', function(e) {    
+        getLocation();
+    });
 }
     
 function openLinkMenu(evt) {
@@ -193,7 +204,7 @@ function openLinkMenu(evt) {
             var eigenschappen = feat[i].getProperties();
             var poutput = [];// voorbereiding
     
-            targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekExterneLinks.script.php";
+            targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekExterneLinks.script.php";
         
             $.post(targetUrl, function(data) {
                 data = data.trim();
@@ -224,17 +235,76 @@ function openLinkMenu(evt) {
     }
 }
 
+
+function openPropMenu(evt) {
+    
+    var mainlayer = mainLayer.split("##");
+    var laag = mainlayer[1].trim();    
+    var namen=[];
+
+    targetToPush = '<div><h style="font-weight:bold">Kies persoon:</h></div>';
+    targetToPush += '<select style="border:0px;outline:0px" id="eig_prop_popup_list" name="eig_prop_popup_list" ';
+    targetToPush += 'size="'+(feat.length+1)+'" ';
+    targetToPush += 'onchange=geo_prop_link(this); onfocus="$(this).css({\'background-color\': \'white\'});';
+    targetToPush += '">';
+
+    
+    for (var i=0;i< feat.length;i++) {
+        var featlaag = feat[i].getId();
+        if (featlaag.indexOf(laag) >= 0) {
+            var eigenschappen = feat[i].getProperties();
+            
+            if (i==0) {
+                namen.push(eigenschappen.voornamen + eigenschappen.naam);
+                targetToPush += '<option value="';
+                targetToPush += i; 
+                if (i==0) targetToPush += '" selected>'
+                else targetToPush += '">';
+                targetToPush += eigenschappen.voornamen+" "+eigenschappen.naam;// value
+                targetToPush += '</option>';     
+            } else {
+                if (namen.indexOf(eigenschappen.voornamen + eigenschappen.naam) < 0) {
+                    namen.push(eigenschappen.voornamen + eigenschappen.naam);
+                    targetToPush += '<option value="';
+                    targetToPush += i; 
+                    if (i==0) targetToPush += '" selected>'
+                    else targetToPush += '">';
+                    targetToPush += eigenschappen.voornamen+" "+eigenschappen.naam;// value
+                    targetToPush += '</option>';     
+                }
+            }            
+            var poutput = [];// voorbereiding
+        }
+    }
+    targetToPush += '</select>';     
+
+    poutput.push(targetToPush);
+    $('#eig_prop_popup').html('');
+    $('#eig_prop_popup').html(poutput.join(''));
+//    $('#eig_prop_popup').attr('size', i)        
+    $("#eig_prop_popup").css({top: '1px'});
+    $("#eig_prop_popup").animate({ scrollTop: 0 }, "fast");
+    $("#eig_prop_popup").show();
+    geoShowMetaDataFinal(0);
+}
+
+function geo_prop_link(select) {
+
+    geoShowMetaDataFinal(select.options[select.selectedIndex].value);
+    //$("#eig_prop_popup").hide();
+}
+
 function geo_link(select) {
 
     $("#eig_wait_popup").show();
     $("#eig_popup").hide();
 
     var item = select.options[select.selectedIndex].text;
-    if (item.indexOf('aart')> -1) {
+    if (item.indexOf('aart')> -1) { 
         
-        targetUrl="http://"+websiteIP+websitePath+"/gdrive/openFile.php";
-        argumenten = '?adacode=NL-LI-RMD00-100-001-1842-a02';
-//        argumenten = '?adacode='+select.options[select.selectedIndex].value;
+        targetUrl=websiteIP+websitePath+"/gdrive/openFile.php";
+//        argumenten = '?adacode=NL-LI-RMD00-100-001-1842-a02';
+        argumenten = '?adacode='+select.options[select.selectedIndex].value;
         $.post(targetUrl+argumenten, function(data) {
             $("#eig_wait_popup").hide();
             
@@ -245,9 +315,9 @@ function geo_link(select) {
             i_count = 0;
             keyValueList = data.split("%%");
             keyvaluearray=keyValueList[i_count].split("##");
-            newwindow = window.open("http://"+websiteIP+websitePath+"/"+keyvaluearray[0], "_blank");
+            newwindow = window.open(websiteIP+websitePath+"/"+keyvaluearray[0], "_blank");
             newwindow.onload = function () {
-            targetUrl="http://"+websiteIP+websitePath+"/gdrive/verwijderFile.php";
+            targetUrl=websiteIP+websitePath+"/gdrive/verwijderFile.php";
             $.post(targetUrl+argumenten,{keyvaluearray}, function(data) {
                  });
              }
@@ -263,18 +333,143 @@ function isLetter(str) {
   return str.length === 1 && str.match(/[a-z]/i);
 }
 
-function geoShowMetadata() { 
+function geoShowMetadata(evt) { 
     var mainlayer = mainLayer.split("##");
     var laag = mainlayer[1].trim();    
+    var aantal = 0;
+    var index = 0;
+    var namen=[];
     
     for (var i=0;i< feat.length;i++) {
         var featlaag = feat[i].getId();
         if (featlaag.indexOf(laag) >= 0) {
             var eigenschappen = feat[i].getProperties();
 
- var artikelnummer = eigenschappen.artikelnummer;
-    artikelnummer = parseInt(eigenschappen.tekst);
-            
+            if (i==0) {
+                namen.push(eigenschappen.voornamen + eigenschappen.naam);
+                aantal=1;
+                index=i;
+            } else {
+                if (namen.indexOf(eigenschappen.voornamen + eigenschappen.naam) <0 ) {
+                    namen.push(eigenschappen.voornamen + eigenschappen.naam);
+                    aantal++;
+                }
+            }
+        }
+    }
+    if (aantal > 1){
+        openPropMenu(evt);
+    } else if (aantal == 1) {
+        $('#eig_prop_popup').hide();
+        geoShowMetaDataFinal(index);
+    }
+}
+    
+function geoShowMetaDataFinal(index) {   
+    var mainlayer = mainLayer.split("##");
+    var laag = mainlayer[1].trim();      
+    
+            var featlaag = feat[index].getId();
+            if (featlaag.indexOf(laag) >= 0) {
+                var eigenschappen = feat[index].getProperties();
+                if (eigenschappen.datumgraf != null){
+                    geoShowGrafMetadata(eigenschappen);
+
+                } else {
+
+                    var artikelnummer = eigenschappen.artikelnummer;
+                    artikelnummer = parseInt(eigenschappen.tekst);
+
+                    var poutput = [];// voorbereiding
+                    var targetToPush = '<table class="fixed">';
+
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'gemeente:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.gemeente;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'artikelnummer:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.artikelnummer;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'voornaam:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.voornamen;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'naam:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.naam;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'woonplaats:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.woonplaats;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'beroep:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.beroep;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'perceelnummer:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    var last = eigenschappen.oobjnr.lastIndexOf('/')+1;
+                    var ind=last;
+                    while (isLetter(eigenschappen.oobjnr.substr(ind,1))) {
+                        ind=ind+1;
+                        if (ind == eigenschappen.oobjnr.length) break;
+                    }
+                    var sub  = eigenschappen.oobjnr.substr(last,ind-last)+'-'+eigenschappen.oobjnr.substr(ind);
+                    targetToPush += sub;
+
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '<tr>';
+                    targetToPush += '<td>';
+                    targetToPush += 'toponiem:';
+                    targetToPush += '</td>';                        
+                    targetToPush += '<td>';
+                    targetToPush += eigenschappen.toponiem;
+                    targetToPush += '</td>';                        
+                    targetToPush += '</tr>';                        
+                    targetToPush += '</table>';                        
+                    poutput.push(targetToPush);
+                    $('#infobox').html('');
+                    $('#infobox').html(poutput.join(''));                
+                    $('#infobox').show();
+                    $('#metadata-form').collapse('show');
+                    metadataID = eigenschappen.artikelnummer;
+                }
+            }
+};
+    
+function geoShowGrafMetadata(eigenschappen){
+    
+    
+    
             var poutput = [];// voorbereiding
             var targetToPush = '<table class="fixed">';
             
@@ -283,15 +478,7 @@ function geoShowMetadata() {
             targetToPush += 'gemeente:';
             targetToPush += '</td>';                        
             targetToPush += '<td>';
-            targetToPush += eigenschappen.gemeente;
-            targetToPush += '</td>';                        
-            targetToPush += '</tr>';                        
-            targetToPush += '<tr>';
-            targetToPush += '<td>';
-            targetToPush += 'artikelnummer:';
-            targetToPush += '</td>';                        
-            targetToPush += '<td>';
-            targetToPush += eigenschappen.artikelnummer;
+            targetToPush += eigenschappen.kadastergemeente;
             targetToPush += '</td>';                        
             targetToPush += '</tr>';                        
             targetToPush += '<tr>';
@@ -312,42 +499,58 @@ function geoShowMetadata() {
             targetToPush += '</tr>';                        
             targetToPush += '<tr>';
             targetToPush += '<td>';
-            targetToPush += 'woonplaats:';
+            targetToPush += 'begraafdatum:';
             targetToPush += '</td>';                        
             targetToPush += '<td>';
-            targetToPush += eigenschappen.woonplaats;
-            targetToPush += '</td>';                        
-            targetToPush += '</tr>';                        
-            targetToPush += '<tr>';
-            targetToPush += '<td>';
-            targetToPush += 'beroep:';
-            targetToPush += '</td>';                        
-            targetToPush += '<td>';
-            targetToPush += eigenschappen.beroep;
+            targetToPush += eigenschappen.begraafdatum;
             targetToPush += '</td>';                        
             targetToPush += '</tr>';                        
             targetToPush += '<tr>';
             targetToPush += '<td>';
-            targetToPush += 'perceelnummer:';
+            targetToPush += 'datum graf:';
             targetToPush += '</td>';                        
             targetToPush += '<td>';
-            var last = eigenschappen.oobjnr.lastIndexOf('/')+1;
-            var ind=last;
-            while (isLetter(eigenschappen.oobjnr.substr(ind,1))) {
-                ind=ind+1;
-                if (ind == eigenschappen.oobjnr.length) break;
-            }
-            var sub  = eigenschappen.oobjnr.substr(last,ind-last)+'-'+eigenschappen.oobjnr.substr(ind);
-            targetToPush += sub;
-            
+            targetToPush += eigenschappen.datumgraf;
             targetToPush += '</td>';                        
             targetToPush += '</tr>';                        
             targetToPush += '<tr>';
             targetToPush += '<td>';
-            targetToPush += 'toponiem:';
+            targetToPush += 'details:';
             targetToPush += '</td>';                        
             targetToPush += '<td>';
-            targetToPush += eigenschappen.toponiem;
+            targetToPush += eigenschappen.details;
+            targetToPush += '</td>';                        
+            targetToPush += '</tr>';                        
+            targetToPush += '<tr>';
+            targetToPush += '<td>';
+            targetToPush += 'nummer:';
+            targetToPush += '</td>';                        
+            targetToPush += '<td>';
+            targetToPush += eigenschappen.nummer;
+            targetToPush += '</td>';                        
+            targetToPush += '</tr>';  
+            targetToPush += '<tr>';
+            targetToPush += '<td>';
+            targetToPush += 'vak:';
+            targetToPush += '</td>';                        
+            targetToPush += '<td>';
+            targetToPush += eigenschappen.vak;
+            targetToPush += '</td>';                        
+            targetToPush += '</tr>';                        
+            targetToPush += '<tr>';
+            targetToPush += '<td>';
+            targetToPush += 'religie:';
+            targetToPush += '</td>';                        
+            targetToPush += '<td>';
+            targetToPush += eigenschappen.religie;
+            targetToPush += '</td>';                        
+            targetToPush += '</tr>';                        
+            targetToPush += '<tr>';
+            targetToPush += '<td>';
+            targetToPush += 'opmerking:';
+            targetToPush += '</td>';                        
+            targetToPush += '<td>';
+            targetToPush += eigenschappen.opmerking;
             targetToPush += '</td>';                        
             targetToPush += '</tr>';                        
             targetToPush += '</table>';                        
@@ -355,12 +558,8 @@ function geoShowMetadata() {
             $('#infobox').html('');
             $('#infobox').html(poutput.join(''));                
             $('#infobox').show();
-            $('#metadata-form').collapse('show');
-            metadataID = eigenschappen.artikelnummer;
-        }
-    }
-};
-    
+           $('#metadata-form').collapse('show');
+}    
     
 function geoDBShowMetadata(metadataID) {
 
@@ -374,7 +573,7 @@ function geoDBShowMetadata(metadataID) {
     datum = datum +'5';
     if (omgeving.indexOf('aezel') == -1) schema = 'themas';
     
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekMetadataGeo.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekMetadataGeo.script.php";
     argumenten = '?metadataId='+metadataID+'&begindatum='+datum;
     
     
@@ -514,29 +713,28 @@ function geoGetMap(vanaf,speler,enkelGemeente) {
        var i_count2 = 0;
         var targetToPush="";
         var first = true;
-        while(i_count2<selGem.length)
+        while(i_count2<selCrit[0][1].length)
         {            
             if (first != true) {
                 targetToPush += ",'";
-                targetToPush += selGem[i_count2] ;//Item
+                targetToPush += selCrit[0][1][i_count2] ;//Item
                 targetToPush += "'";
 
             } else {
                 first = false;
                 targetToPush += "('";
-                targetToPush += selGem[i_count2] ;//Item
+                targetToPush += selCrit[0][1][i_count2] ;//Item
                 targetToPush += "'";
             }
             i_count2++;                
         }
         targetToPush +=")";
-        geoWmsPerceel.updateParams({'cql_filter': "kadastergemeente in "+targetToPush});        
+        geoWmsPerceel.updateParams({'cql_filter': ""+selCrit[0][0]+" in "+targetToPush});        
         
 
     if ((geoKeyValueList.length == 1) ) {
 
         keyvaluearray=geoKeyValueList[i_count].split("##");
-//        geoWmsPerceel.updateParams({'cql_filter': "kadastergemeente = '"+gemeente+"'"});
 
         if (keyvaluearray[0] == 'gemeente'){
 
@@ -607,11 +805,11 @@ function geoGetMap(vanaf,speler,enkelGemeente) {
   }
 
         // generate a GetFeature request voor hele gemeente 
-        if (selGem.length > 1) {
+        if (selCrit[0][1].length > 1) {
             i_count=0;
-            while(i_count<selGem.length)
+            while(i_count<selCrit[0][1].length)
             {
-                farrayGem[i_count] = ol.format.filter.equalTo('kadastergemeente', selGem[i_count]);
+                farrayGem[i_count] = ol.format.filter.equalTo(selCrit[0][0], selCrit[0][1][i_count]);
                 i_count++;
             }              
             featureGemRequest = new ol.format.WFS().writeGetFeature({
@@ -629,7 +827,7 @@ function geoGetMap(vanaf,speler,enkelGemeente) {
             featurePrefix: 'aezel',            
             featureTypes: [laag],
             outputFormat: 'application/json',
-            filter: ol.format.filter.equalTo('kadastergemeente', selGem[0])
+            filter: ol.format.filter.equalTo(selCrit[0][0], selCrit[0][1][0])
             });
         }
 
@@ -660,7 +858,7 @@ geoRemoveLayersMap();
 getLocation();
 if ((enkelGemeente == false) && (geoKeyValueList.length < 250)){
         // then post the request and add the received features to a layer
-        fetch(mapviewerIP+'/geoserver/wfs', {
+        fetch(mapviewerIP+'/wfs', {
         method: 'POST',
         body: new XMLSerializer().serializeToString(featureRequest)
       }).then(function(response) {
@@ -677,7 +875,7 @@ if ((enkelGemeente == false) && (geoKeyValueList.length < 250)){
       }
       
       // then post the request and add the received features to a layer
-      fetch(mapviewerIP+'/geoserver/wfs', {
+      fetch(mapviewerIP+'/wfs', {
         method: 'POST',
         body: new XMLSerializer().serializeToString(featureGemRequest)
       }).then(function(response) {
@@ -693,7 +891,12 @@ if ((enkelGemeente == false) && (geoKeyValueList.length < 250)){
         }
       });
       
-      
+    if (speler) { 
+        player = true;
+        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    }
+};
+
 function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -701,27 +904,35 @@ function getLocation() {
 }
 
 function showPosition(position) {
-  Latitude =  position.coords.latitude;
+  Latitude =  position.coords.latitude; 
   Longitude = position.coords.longitude; 
-
   
-//Adding a marker on the map
-var marker = new ol.Feature({
-  geometry: new ol.geom.Point(
-    ol.proj.fromLonLat([position.coords.longitude,position.coords.latitude])
-  ),  // Cordinates of New York's Town Hall
-});
-var vectorSource = new ol.source.Vector({
-  features: [marker]
-});
-var markerVectorLayer = new ol.layer.Vector({
-  source: vectorSource,
-});
-map.addLayer(markerVectorLayer);      
-}
-      
-    if (speler) { 
-        player = true;
-        $('#dem_tijdslijn').timeliny('goToYear', currentSlide);
+    //Adding a marker on the map
+    var marker = new ol.Feature({
+      geometry: new ol.geom.Point(
+        ol.proj.fromLonLat([position.coords.longitude,position.coords.latitude])
+    //    ol.proj.fromLonLat([5.9992688,51.1789409])
+            ),  // Cordinates of New York's Town Hall
+        });
+
+
+          var markerStyle = new ol.style.Style({
+            image: new ol.style.Icon(/** @type {module:ol/style/Icon~Options} */ ({
+              anchor: [0.5, 0.9],
+              anchorXUnits: 'fraction',
+              anchorYUnits: 'fraction',
+              opacity: 1,
+              scale:0.05,
+              src: '../img/hier.png'
+            }))
+          });
+        marker.setStyle(markerStyle);
+        var vectorSource = new ol.source.Vector({
+          features: [marker]
+        });
+        if (markerVectorLayer) map.removeLayer(markerVectorLayer);
+        markerVectorLayer = new ol.layer.Vector({
+          source: vectorSource,
+        });
+        map.addLayer(markerVectorLayer);      
     }
-};

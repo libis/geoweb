@@ -13,9 +13,12 @@ $voornaam = $_POST['selVnm'];
 $beroep = $_POST['selBrp'];
 $beroepsgroep = $_POST['selBgp'];
 $woonplaats = $_POST['selWpl'];
+$vak = $_POST['selVak'];
+$graf_van = $_POST['selGrf'];
+
 $result="";
 
-foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
+foreach ($lijstenController->getArtikelnummersFilterEig($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats,$vak,$graf_van) as $key => $value)
 {
     if($result!="")
     {

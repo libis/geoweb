@@ -70,7 +70,7 @@ function getJaartallenVoorTijdslijn($scheme,$theme)
     return $result;
 }   
     
-
+/*
 function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selGem)
 {
     $result = array();
@@ -126,6 +126,63 @@ function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selGem)
     return $result;
 }   
     
+*/
+function getJaartallenVoorTijdslijnPercelen($scheme,$theme,$selCrit0)
+{
+    $result = array();
+    $index = 0;
+        //$query = "select min(\"begindatum\") from ".$scheme.".".$theme."";
+        $query= "select min(to_char(to_date(substr(to_char(begindatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+            $first = true;
+            if (sizeof($selCrit0[1]) > 0){
+                $query .= " where ";
+                
+            foreach ($selCrit0[1] as $value) {
+                if ($first == true){
+                    
+                    $query .= " (".$selCrit0[0]." =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or ".$selCrit0[0]." =  '".$value."'";
+                }
+            }
+            $query .= ")";
+            }
+
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $begindatum = $row[0];
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+        $query= "select max(to_char(to_date(substr(to_char(einddatum::integer,'999999999'),1,9),'YYYYMMDD'),'YYYY')) from ".$scheme.".".$theme."";
+            $first = true;
+            if (sizeof($selCrit0[1]) > 0){
+                $query .= " where ";
+                
+            foreach ($selGem as $value) {
+                if ($first == true){
+                    
+                    $query .= " (".selCrit0[0]." =  '".$value."'"; 
+                    $first = false;
+                } else {
+                    $query .= " or ".selCrit0[0]." =  '".$value."'";
+                }
+            }
+            $query .= ")";
+            }
+
+        $s = pg_query($this->conn, $query);
+        while($row = pg_fetch_row($s))
+        {
+            $eindatum = $row[0];
+            $result[$index++]= $row[0];
+        }
+        pg_free_result($s);
+    return $result;
+}   
+
 function getLegendItems($layer)
 {
     $result = array();

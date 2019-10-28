@@ -6,15 +6,11 @@ $lijstenController = new lijstenController();
 $laag = $_POST['hoofdlaag'];
 $lijstenController->setOATView($laag[1]);
 
-$gemeente = $_POST['selGem'];
-$filter = $_GET['artnr'];
-$familienaam = $_POST['selNm'];
-$beroepen = $_POST['selBrp'];
-$beroepsgroepen = $_POST['selBgp'];
-$woonplaatsen = $_POST['selWpl'];
+$criterium = $_GET['criterium'];
+$filter = $_GET['filter'];
 $result="";
 
-foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaam,$beroepen,$beroepsgroepen,$woonplaatsen) as $key => $value)
+foreach ($lijstenController->getHoofdCriteriumFilter($filter,$criterium) as $key => $value)
 {
     if($result!="")
     {
@@ -25,5 +21,3 @@ foreach ($lijstenController->getArtikelnummersStat($filter,$gemeente,$familienaa
 echo $result;
 
 ?>
-
-

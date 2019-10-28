@@ -14,9 +14,11 @@ $beroep = $_POST['selBrp'];
 $beroepsgroep = $_POST['selBgp'];
 $woonplaats = $_POST['selWpl'];
 $gemeente = $_GET['selGem'];
+$vak = $_POST['selVak'];
+$graf_van = $_POST['selGrf'];
 $result="";
 
-foreach ($lijstenController->getWoonplaatsen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats) as $key => $value)
+foreach ($lijstenController->getWoonplaatsen($filter,$gemeente,$familienaam,$voornaam,$artikelnummer,$beroep,$beroepsgroep,$woonplaats,$vak,$graf_van) as $key => $value)
 {
     if($result!="")
     {

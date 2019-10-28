@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>LGGI - Geografisch kaartenbestand</title>
+         <link rel="shortcut icon" href="favicon.ico" >
         <script type="text/javascript" src="js/demografie.js"></script>
     </head>
 <script>

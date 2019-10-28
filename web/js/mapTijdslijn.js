@@ -4,7 +4,7 @@
 
 function histShowMetadata(metadataID) {
 
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekMetadataHist.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekMetadataHist.script.php";
     argumenten = '?metadataId='+metadataID+'&begindatum='+minCurrDayDate;
     ;
     $.post(targetUrl+argumenten,{selLg}, function(data) {
@@ -97,7 +97,7 @@ function histInitMap(omgeving,selLg){
             }
         }
         imgwms = new ol.source.ImageWMS({
-          url: mapviewerIP+'/geoserver/ows',
+          url: mapviewerIP+'/ows',
           params: {'LAYERS':laag,'STYLES':stijl, 'VERSION':'1.1.1','serverType':'geoserver','BBOX':'178300.1875,312,667.875,203591.78125,362804.15625','SRS':'EPSG:28992'},
           serverType: 'geoserver'
         });
@@ -254,7 +254,7 @@ if ((selLg.length <= 1) && (selTg.length == 0)) opacity = 1; else opacity = 0.6;
 
 
           // then post the request and add the received features to a layer
-          fetch(mapviewerIPHist+'/geoserver/wfs', {
+          fetch(mapviewerIP+'/wfs', {
             method: 'POST',
             body: new XMLSerializer().serializeToString(featureRequest)
           }).then(function(response) {

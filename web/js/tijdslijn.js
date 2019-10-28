@@ -24,7 +24,7 @@ function tijdsloop() {
 
 function histZoekGemeenten()
 {
-   targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeentenHist.script.php";
+   targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekAlleGemeentenHist.script.php";
    $.post(targetUrl,{selLg}, function(data) {
     data = data.trim();
     var poutput = [];// voorbereiding
@@ -55,7 +55,7 @@ function histZoekGemeenten()
 
 function histZoekGemeentenZoekString()
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekGemeentenHist.script.php";
     var filter = $(".gemeenteTextBox").val();
     argumenten = '?gemeente='+filter;
     $.post(targetUrl+argumenten,{selLg},function(data) {
@@ -103,7 +103,7 @@ function histZoekGemeentenZoekString()
 
 function demZoekTijdslijnLagen() {
     var formatter = new ol.format.WMSCapabilities();
-    var endpoint = mapviewerIPHist+ '/geoserver/wms';
+    var endpoint = mapviewerIP+ '/wms';
 
     // async call to geoserver 
     $.get(endpoint + '?request=GetCapabilities',function(data) {
@@ -243,7 +243,7 @@ function hexToRgb(hex) {
 
 function demBerekenKleurenVoorLegende() 
 {
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekLegendItems.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekLegendItems.script.php";
     $.post(targetUrl,{selLg}, function(data) {
             keyValueList = data.split("%%");
             i_count =0;
@@ -338,7 +338,7 @@ function demGeoBerekenTijdsinterval(omgeving,min,max)
 function demBerekenTijdsinterval(omgeving,laag)
 {
     selGem = getCookie('selGem');    
-    targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
+    targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekJaartallenVoorTijdslijn.script.php";
     
     var lg;
     var schema = 'themas';
@@ -691,7 +691,7 @@ function ffSlideshow() {
 function spSlideshow() {
 
   clearInterval(slideInterval);
-  targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVorigeDatumHist.script.php";
+  targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVorigeDatumHist.script.php";
   arguments = "?datum="+minCurrDayDate;
   var schema = 'themas';
   var laag;
@@ -722,7 +722,7 @@ function spSlideshow() {
 function snSlideshow() {
     
   clearInterval(slideInterval);
-  targetUrl="http://"+websiteIP+websitePath+"/CRUDScripts/zoekVolgendeDatumHist.script.php";
+  targetUrl=websiteIP+websitePath+"/CRUDScripts/zoekVolgendeDatumHist.script.php";
   var schema = 'themas';
   var laag;
   var datum;
